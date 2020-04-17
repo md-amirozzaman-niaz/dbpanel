@@ -1,0 +1,20 @@
+{
+    "name": "niaz/dbpanel",
+    "description": "database panel for laravel application",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "niaz",
+            "email": "md.amirozzaman@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "orchestra/testbench": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Niaz\\DBpanel":"src/"
+        }
+    }
+}
