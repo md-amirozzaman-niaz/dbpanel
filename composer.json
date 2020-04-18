@@ -15,7 +15,6 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": [],
             "providers":[
                 "Niaz\\DBpanel\\DBpanelServiceProvider\\"
             ]
