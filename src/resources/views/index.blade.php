@@ -69,7 +69,7 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">Uri</div>
                     </div>
-                    <input type="url" class="form-control brr-0" id="uri" value="/users/articles">
+                    <input type="url" class="form-control brr-0" id="uri" value="/users">
                 </div>
             </div>  <div class="col-md-9 p-0">
             <div class="input-group">
@@ -77,7 +77,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text brr-0">Query</div>
                 </div>
-                <input type="url" class="form-control" id="query" value="?id=20-24&return_col=id,name,title,body">
+                <input type="url" class="form-control" id="query" value="?id=20-24&return_col=id,name,email">
             </div>
         </div>
             <div class="col-md-1 p-0">
@@ -103,8 +103,7 @@
           </form>
         </div>
     </body>
-    <script src="js/app.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
     <script>window.getData = function(){
         let url= document.getElementById('uri').value+document.getElementById('query').value;
         let dataDom = document.getElementById('data');
