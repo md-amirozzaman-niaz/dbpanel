@@ -4,7 +4,7 @@ namespace Niaz\DBpanel;
 
 use Illuminate\Support\ServiceProvider;
 
-class DBpanelServicePorvider extends ServiceProvider{
+class DBpanelServiceProvider extends ServiceProvider{
 
     public function boot(){
         $this->loadRoutesFrom(__DIR__.'/routes/web.php');
