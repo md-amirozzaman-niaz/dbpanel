@@ -16,7 +16,7 @@
     "extra": {
         "laravel": {
             "providers":[
-                "Niaz\\DBpanel\\DBpanelServiceProvider\\"
+                "Niaz\\DBpanel\\DBpanelServiceProvider"
             ]
         }
     }
