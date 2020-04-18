@@ -60,12 +60,10 @@
     </head>
     <body>
         <div class="container-fluid">
-            
-        
+       
         <form class="row pt-2">
             <div class="col-md-12 row m-0">
-                <div class="col-md-2 p-0">    <div class="input-group">
-                
+                <div class="col-md-2 p-0">    <div class="input-group">                
                     <div class="input-group-prepend">
                         <div class="input-group-text">Uri</div>
                     </div>
