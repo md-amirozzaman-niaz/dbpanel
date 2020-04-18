@@ -12,5 +12,13 @@
         "psr-4": {
             "Niaz\\DBpanel\\":"src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [],
+            "providers":[
+                "Niaz\\DBpanel\\DBpanelServicePorvider\\"
+            ]
+        }
     }
 }
