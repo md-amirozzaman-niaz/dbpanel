@@ -12,6 +12,9 @@ class DBpanelServicePorvider extends ServiceProvider{
         $this->mergeConfigFrom(
             __DIR__.'/config/dbpanel.php', 'dbpanel'
         );
+        $this->publishes([
+            __DIR__.'/config/dbpanel.php' => config_path('dbpanel.php')
+        ], 'config');
     }
 
     public function register(){
