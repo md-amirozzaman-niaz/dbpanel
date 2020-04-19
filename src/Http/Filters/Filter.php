@@ -16,11 +16,11 @@ class Filter
     public function loadTable($model=null){
         
 
-            $tableName = Str::of($model)->plural();
+            $tableName = Str::plural($model);
             if($this->hasTable($tableName)){
                 session(['filter_table'=>$tableName]);
 
-                $modelClass= Str::of($tableName)->studly()->singular();
+                $modelClass= Str::studly(Str::singular($tableName));
                 $modelNamespace = config('dbpanel.model').'\\'.$modelClass;
                 $this->table = new $modelNamespace;
                 $this->filter=true;
@@ -32,11 +32,11 @@ class Filter
         if($this->filter){
             $pipe = app(Pipeline::class);
             $query = $pipe->send($this->table->query())->through([
-                \App\Http\Filters\Type\Sort::class,
-                \App\Http\Filters\Type\Active::class,
-                \App\Http\Filters\Type\Lookup::class,
-                \App\Http\Filters\Type\Id::class,
-                \App\Http\Filters\Type\Date::class
+                \Niaz\DBpanel\Http\Filters\Type\Sort::class,
+                \Niaz\DBpanel\Http\Filters\Type\Active::class,
+                \Niaz\DBpanel\Http\Filters\Type\Lookup::class,
+                \Niaz\DBpanel\Http\Filters\Type\Id::class,
+                \Niaz\DBpanel\Http\Filters\Type\Date::class
                 ])->thenReturn();
             $this->status =['filter' => session('filters'),'Columns' =>Schema::getColumnListing($this->table->getTable())];
                 session()->forget('filters');
