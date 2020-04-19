@@ -15,15 +15,28 @@
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github-gist.min.css" integrity="sha256-xKngFRXh54wtbQtuYDjv4R5dJSjZAjRiq5u0dlUxAM0=" crossorigin="anonymous" />
          {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" /> --}}
         <style>
+            label{
+                padding: 16px;
+                background-color: #f6f8fa;
+                border: 1px solid #d1d5da;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+                width: 100%;
+                margin-bottom: 0px;
+            }
             body{
                 background: #f8f8f8;
     font-family: monospace;
+    font-size:12px;
             }
             #output{
                 height:70vh;
                 width:100%;
                 border:none;
 
+            }
+            #uri{
+                border-left: 1px solid #e3e3e3;
             }
             #data{
                 height:70vh;
@@ -40,11 +53,12 @@
             .btn{
 
                 /* background: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5); */
-                border: 1px solid #d2d2d2;
-                border-left: 0px;
-                color: #8a8a8a;
-                border-top-left-radius: 0px;
-                border-bottom-left-radius: 0px;
+                background: aliceblue;
+                color: #24292e;
+                background-color: #eff3f6;
+                background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
+                font-size: 13px;
+                padding: 7px;
             }
             .brr-0{
                 border-radius: 0 !important;
@@ -52,22 +66,44 @@
             }
             .window{
                 border: 1px solid #ced4da;
-                border-radius: 5px;
                 padding: 10px;
                 background: #fff;
+                border-top: 0px;
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }
+            .input-group-text{
+                color: #24292e;
+    background-color: #eff3f6;
+    background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
+    font-size: 13px;
+    
+            }
+            .form-control{
+                font-size:14px;
+            }
+            .btn{
+                border: 1px solid #d2d2d2;
+                border-left: 0px;
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;
+                color: #24292e;
+                background-color: #eff3f6;
+                background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
+                font-size: 13px;
+                padding: 7px;
             }
         </style>
     </head>
     <body>
-        <div class="container-fluid">
-       
+        <div class="container-fluid">       
         <form class="row pt-2">
             <div class="col-md-12 row m-0">
                 <div class="col-md-2 p-0">    <div class="input-group">                
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Uri</div>
+                        <div class="input-group-text">Table</div>
                     </div>
-                    <input type="url" class="form-control brr-0" id="uri" value="/users">
+                    <input type="url" class="form-control brr-0" id="uri" value="users">
                 </div>
             </div>  <div class="col-md-9 p-0">
             <div class="input-group">
@@ -75,12 +111,12 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text brr-0">Query</div>
                 </div>
-                <input type="url" class="form-control" id="query" value="?id=20-24&return_col=id,name,email">
+                <input type="url" class="form-control" id="query" value="id=20-24&return_col=id,name,email">
             </div>
         </div>
             <div class="col-md-1 p-0">
             <input type="button" class="btn btn-block" onclick="getData()" value="Get Data"></div>
-        </div><div class="col-md-8 mt-2 ">
+        </div><div class="col-md-8 mt-2 pr-0">
             <div class="form-group">
                 <label>Data<span class="badge badge-primary ml-2" id="total"></span></label>
               <pre spellcheck="false" class="window"><code id="data">No data</code></pre>
@@ -103,7 +139,7 @@
     </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
     <script>window.getData = function(){
-        let url= document.getElementById('uri').value+document.getElementById('query').value;
+        let url= "/"+document.getElementById('uri').value+"?"+document.getElementById('query').value;
         let dataDom = document.getElementById('data');
         let tableDom = document.getElementById('table');
         let requestDom = document.getElementById('request');
