@@ -1,7 +1,7 @@
 <?php
-namespace App\Http\Filters\Type;
+namespace Niaz\DBpanel\Http\Filters\Type;
 
-use App\Http\Filters\BaseFilter;
+use Niaz\DBpanel\Http\Filters\BaseFilter;
 
 class Id extends BaseFilter
 {
