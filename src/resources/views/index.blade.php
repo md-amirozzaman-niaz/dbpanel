@@ -103,7 +103,13 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">Table</div>
                     </div>
-                    <input type="url" class="form-control brr-0" id="uri" value="users">
+                    <select type="url" class="form-control brr-0" id="uri">
+                     @foreach($tables as $key=>$table)
+                        @foreach($table as $key=>$name)
+                            <option>{{$name}}</option>
+                        @endforeach
+                     @endforeach
+                    </select>
                 </div>
             </div>  <div class="col-md-9 p-0">
             <div class="input-group">

@@ -12,8 +12,9 @@ class DBpanelController extends Controller
     //
 
     public function index(){
-
-        return view('dbpanel::index');
+        $tables= DB::select('SHOW TABLES');
+        // dd($tables);
+        return view('dbpanel::index')->with(['tables'=>$tables]);
             
     }
 
