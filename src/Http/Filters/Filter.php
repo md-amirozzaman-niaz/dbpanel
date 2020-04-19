@@ -5,24 +5,27 @@ namespace Niaz\DBpanel\Http\Filters;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 class Filter
 {
     protected $model;
     protected $status;
     protected $filter = false;
     protected $table;
+    protected $database;
     protected $joinTable;
 
-    public function loadTable($model=null){
+    public function loadTable($table=null){
         
 
-            $tableName = Str::plural($model);
-            if($this->hasTable($tableName)){
-                session(['filter_table'=>$tableName]);
+            // $tableName = Str::plural($model);
+            if($this->hasTable($table)){
+                session(['filter_table'=>$table]);
 
-                $modelClass= Str::studly(Str::singular($tableName));
-                $modelNamespace = config('dbpanel.model').'\\'.$modelClass;
-                $this->table = new $modelNamespace;
+                // $modelClass= Str::studly(Str::singular($tableName));
+                // $modelNamespace = config('dbpanel.model').'\\'.$modelClass;
+                $this->table=$table;
+                $this->database = DB::table($table);
                 $this->filter=true;
             }
         return $this;
@@ -31,14 +34,14 @@ class Filter
     public function query(){
         if($this->filter){
             $pipe = app(Pipeline::class);
-            $query = $pipe->send($this->table->query())->through([
+            $query = $pipe->send($this->database)->through([
                 \Niaz\DBpanel\Http\Filters\Type\Sort::class,
                 \Niaz\DBpanel\Http\Filters\Type\Active::class,
                 \Niaz\DBpanel\Http\Filters\Type\Lookup::class,
                 \Niaz\DBpanel\Http\Filters\Type\Id::class,
                 \Niaz\DBpanel\Http\Filters\Type\Date::class
                 ])->thenReturn();
-            $this->status =['filter' => session('filters'),'Columns' =>Schema::getColumnListing($this->table->getTable())];
+            $this->status =['filter' => session('filters'),'Columns' =>Schema::getColumnListing($this->table)];
                 session()->forget('filters');
                 session()->forget('status');
 
