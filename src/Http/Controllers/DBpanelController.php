@@ -3,7 +3,7 @@
 namespace Niaz\DBpanel\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Niaz\DBpanel\Http\Filter;
+use Niaz\DBpanel\Http\Filters\Filter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
