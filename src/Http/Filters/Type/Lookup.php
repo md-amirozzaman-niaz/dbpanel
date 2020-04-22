@@ -1,15 +1,15 @@
 <?php
-namespace App\Http\Filters\Type;
+namespace Niaz\DBpanel\Http\Filters\Type;
 
-use App\Http\Filters\BaseFilter;
+use Niaz\DBpanel\Http\Filters\BaseFilter;
 use Illuminate\Support\Facades\Schema;
 
 class Lookup extends BaseFilter
 {
     protected function applyFilter($builder){
-        $column = request()->has('lookup_column') ? request('lookup_column') : 'title';
-        if ((request()->has('lookup_column') && !Schema::hasColumn(session('filter_table'), request('lookup_column')))) {
-            session()->push('status.lookup', request('lookup_column').' is not exist!');
+        $column = request()->has('lookup_col') ? request('lookup_col') : 'title';
+        if ((request()->has('lookup_col') && !Schema::hasColumn(session('filter_table'), request('lookup_col')))) {
+            session()->push('status.lookup', request('lookup_col').' is not exist!');
             return $builder;
         }
         $op = strpos(request($this->filterName()),'!') === 0 ? 'not like' : 'like';

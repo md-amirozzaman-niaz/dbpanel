@@ -3,7 +3,7 @@
 namespace Niaz\DBpanel\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Filters\Filter;
+use Niaz\DBpanel\Http\Filters\Filter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -12,8 +12,9 @@ class DBpanelController extends Controller
     //
 
     public function index(){
-
-        return view('dbpanel::index');
+        $tables= DB::select('SHOW TABLES');
+        // dd($tables);
+        return view('dbpanel::index')->with(['tables'=>$tables]);
             
     }
 
@@ -26,6 +27,7 @@ class DBpanelController extends Controller
         $filtered_data = $filtered->getData();
 
         $count = !is_string($filtered_data) ? count($filtered_data) : 'Error';
+        // return view('dbpanel::data')->with(['users'=> $filtered_data]);
         return ['result'=> $filtered_data , 'filter_status' => $filter->status(), 'request' => request()->all(),'total' => $count ];
     }
 }

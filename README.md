@@ -13,16 +13,32 @@ Visit Route:
 ```
 /dbpanel
 ```
-Enter a `table` name in Uri field and pass any query with some `key` name as follows:
+Select a `table` name from table option and enter some query string with some `key` name as follows:
 
-+ return_col `id,name,email`, `name`
+#### id
 + id `5` ,`5-100`
+
+#### sort
 + sort `asc`, `desc` 
-+ sort_column `name`, `email`
-+ active `0`,`1`
++ sort_col `name`, `email`
+
+#### is
++ is `0`,`1`
++ is_col `active`,`is_active`, `is_admin`
+
+#### date
 + date `2020-04-12`
 + end_date `2020-07-31`
-+ date_column `date`, `created_at`, `updated_at`
++ date_col `date`, `created_at`, `updated_at`
+
+#### lookup/search
 + lookup `gmail%`,`%gmail`, `%gmail%`, `!%.com%`
-+ lookup_column `email`
-+ per_page `5`, `10`, `25`
++ lookup_col `email`
+
+#### where
++ where `column_name`, `product_price`,`discount`,`total`, `product_id,product_price`
++ where_val `your_value`, `<50`,`>50`, `~100`, `435,>400`
+
+#### return column list
++ return_col `id,name,email`, `name`
+
