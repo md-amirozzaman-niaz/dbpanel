@@ -2,7 +2,7 @@
 namespace Niaz\DBpanel\Http\Filters\Type;
 
 use Niaz\DBpanel\Http\Filters\BaseFilter;
-
+use Illuminate\Support\Facades\Schema;
 class Id extends BaseFilter
 {
     protected function applyFilter($builder){
@@ -10,7 +10,14 @@ class Id extends BaseFilter
         $check = strpos(request($this->filterName()),'-');
         $method = $check>-1 ? 'whereBetween' : 'where';
         $constraint = $check>-1 ? $range  : request($this->filterName());
-        session()->push('filters',$this->filterName());
-        return $builder->$method('id', $constraint);
+        session(['filters.id'=>request($this->filterName())]);
+
+        //if table has 
+        if(Schema::hasColumn(session('filter_table'),'id')){
+            return $builder->$method('id', $constraint);
+        }
+        else{
+            return $builder;
+        }
     }
 }
