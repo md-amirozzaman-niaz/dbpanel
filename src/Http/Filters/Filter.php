@@ -25,7 +25,7 @@ class Filter
             // $tableName = Str::plural($model);
             if($this->hasTable($table)){
                 session(['filter_table'=>$table]);
-
+                
                 // $modelClass= Str::studly(Str::singular($table));
                 // $modelNamespace = config('dbpanel.model').'\\'.$modelClass;
                 // $model = new $modelNamespace;
@@ -37,6 +37,7 @@ class Filter
                 $this->table=$table;
                 $this->totalRows = DB::table($table)->get()->count();
                 $this->lastID= $this->totalRows > 0 ? DB::table($table)->orderBy($indexes[ 'primary' ]->getColumns()[0],'desc')->first()->id : '';
+
                 $this->database = DB::table($table);
                 $this->filter=true;
             }
