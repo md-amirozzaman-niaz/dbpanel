@@ -771,7 +771,7 @@ kbd,code{
             // }
         
     }
-    window.getData = function(pageNo=null){
+    window.getData = function(pageNo=1){
         let url= "/"+document.getElementById('uri').value+"?"+document.getElementById('query').value+"&per_page="+document.getElementById('per_page').value+"&page="+pageNo;
         let dataDom = document.getElementById('data');
         let tableDom = document.getElementById('table');
