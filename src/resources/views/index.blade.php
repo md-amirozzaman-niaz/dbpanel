@@ -12,8 +12,9 @@
         <!-- Styles -->
          <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
          {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/a11y-dark.min.css" integrity="sha256-7L/IK7qUTcgTXtfLAxip5Eo+hnp+pSe5htBCh5pYg6o=" crossorigin="anonymous" /> --}}
-         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github-gist.min.css" integrity="sha256-xKngFRXh54wtbQtuYDjv4R5dJSjZAjRiq5u0dlUxAM0=" crossorigin="anonymous" /> --}}
-         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" />
+         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/shades-of-purple.min.css" integrity="sha256-U+HfsMv32Nk4Vgh4v5SAdJaVBCEY2vUhWIISOZ14h4g=" crossorigin="anonymous" /> --}}
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github-gist.min.css" integrity="sha256-xKngFRXh54wtbQtuYDjv4R5dJSjZAjRiq5u0dlUxAM0=" crossorigin="anonymous" />
+         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" /> --}}
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/fontawesome.min.css" integrity="sha256-CuUPKpitgFmSNQuPDL5cEfPOOJT/+bwUlhfumDJ9CI4=" crossorigin="anonymous" />
         <style>
             label{
@@ -26,8 +27,8 @@
                 margin-bottom: 0px;
             }
             body{
-                background: #fdfdfd;
-    font-family: monospace;
+                background: #e8e8e8;
+    /* font-family: monospace; */
     font-size:12px;
             }
             #output{
@@ -36,18 +37,11 @@
                 border:none;
 
             }
-            #uri{
-                border-left: 1px solid #e3e3e3;
+            
+            #data,#table{
+                height:65vh;
             }
-            #data{
-                height:60vh;
-            }
-            #table{
-                height:60vh;
-            }
-            #query{
-                border-radius: 0;
-            }
+            
             #request{
                 height: calc(35vh - 66px);
             }
@@ -68,7 +62,8 @@
             .window{
                 border: 1px solid #ced4da;
                 padding: 10px;
-                background: #f8f8f8;
+                /* background: #f6f8fa; */
+                background: #fff;                
                 border-top: 0px;
                 border-bottom-left-radius: 3px;
                 border-bottom-right-radius: 3px;
@@ -99,8 +94,6 @@
                 z-index: 12;
                 background: #f2f2f2;
                 border-left: 1px solid #999;
-                padding: 15px;
-                padding-top:0px;
                 transition: 800ms;
                 right: -79.5%;
                 width: 80%;
@@ -108,6 +101,7 @@
             .info-table{
                 height: calc(100vh - 60px);
                 overflow-y: scroll;
+                padding: 10px;
             }
             .info-container.active{
                 right:0px;
@@ -117,11 +111,11 @@
                 width: 31px;
                 padding: 0.62em;
                 margin-top: 8px;
-                margin-left: -46px;
+                margin-left: -31px;
                 z-index: 15;
                 cursor: pointer;
                 background: #f2f2f2;
-                border: 1px solid #9e9e9e;
+                border: 1px solid #c5c5c5;
                 border-right: 0px;
                 border-radius: 5px;
                 border-bottom-right-radius: 0px;
@@ -137,6 +131,27 @@
                 background-color: #5d646d;
                 border-color: #454646;
             }
+            .input-group-text {
+                font-weight: 600;
+    margin-right: 1px;
+            }
+            h1 {
+    font-size: 1.5rem;
+}
+h3 {
+    font-size: 1.25rem;
+}
+h4 {
+    font-size: 1rem;
+}
+.badge-primary {
+    color: #fff;
+    background-color: #BA68C8;
+}
+.markdown-body{
+    background: #fbfafa;
+    padding: 15px;
+}
         </style>
     </head>
     <body>
@@ -165,7 +180,7 @@
             <div class="tab-content p-2" style="background:#fff;" id="myTabContent">
                 <div class="info-table tab-pane fade show active" id="data-type" role="tabpanel" aria-labelledby="data-type-tab">
                
-                    <table class="table table-striped">
+                    <table class="table ">
                         <thead>
                         <tr>
                         <th>Command</th>
@@ -175,11 +190,11 @@
                         <tbody>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Alias of <code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">bigIncrements</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'id'</span><span class="token punctuation">)</span></code>.</td>
+                        <td>Alias of <kbd><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">bigIncrements</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'id'</span><span class="token punctuation">)</span></kbd>.</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">foreignId</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'user_id'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Alias of <code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">unsignedBigInteger</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'user_id'</span><span class="token punctuation">)</span></code>.</td>
+                        <td>Alias of <kbd><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">unsignedBigInteger</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'user_id'</span><span class="token punctuation">)</span></kbd>.</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">bigIncrements</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'id'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
@@ -283,11 +298,11 @@
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">morphs</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'taggable'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Adds <code class=" language-php">taggable_id</code> UNSIGNED BIGINT and <code class=" language-php">taggable_type</code> VARCHAR equivalent columns.</td>
+                        <td>Adds <kbd>taggable_id</kbd> UNSIGNED BIGINT and <kbd>taggable_type</kbd> VARCHAR equivalent columns.</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">uuidMorphs</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'taggable'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Adds <code class=" language-php">taggable_id</code> CHAR(36) and <code class=" language-php">taggable_type</code> VARCHAR(255) UUID equivalent columns.</td>
+                        <td>Adds <kbd>taggable_id</kbd> CHAR(36) and <kbd>taggable_type</kbd> VARCHAR(255) UUID equivalent columns.</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">multiLineString</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'positions'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
@@ -303,15 +318,15 @@
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">nullableMorphs</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'taggable'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Adds nullable versions of <code class=" language-php"><span class="token function">morphs</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code> columns.</td>
+                        <td>Adds nullable versions of <kbd ><span class="token function">morphs</span><span class="token punctuation">(</span><span class="token punctuation">)</span></kbd> columns.</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">nullableUuidMorphs</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'taggable'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Adds nullable versions of <code class=" language-php"><span class="token function">uuidMorphs</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code> columns.</td>
+                        <td>Adds nullable versions of <kbd><span class="token function">uuidMorphs</span><span class="token punctuation">(</span><span class="token punctuation">)</span></kbd> columns.</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">nullableTimestamps</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Alias of <code class=" language-php"><span class="token function">timestamps</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code> method.</td>
+                        <td>Alias of <kbd><span class="token function">timestamps</span><span class="token punctuation">(</span><span class="token punctuation">)</span></kbd> method.</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">point</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'position'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
@@ -323,7 +338,7 @@
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">rememberToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Adds a nullable <code class=" language-php">remember_token</code> VARCHAR(100) equivalent column.</td>
+                        <td>Adds a nullable <kbd>remember_token</kbd> VARCHAR(100) equivalent column.</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'flavors'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token single-quoted-string string">'strawberry'</span><span class="token punctuation">,</span> <span class="token single-quoted-string string">'vanilla'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
@@ -339,11 +354,11 @@
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">softDeletes</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'deleted_at'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Adds a nullable <code class=" language-php">deleted_at</code> TIMESTAMP equivalent column for soft deletes with precision (total digits).</td>
+                        <td>Adds a nullable <kbd>deleted_at</kbd> TIMESTAMP equivalent column for soft deletes with precision (total digits).</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">softDeletesTz</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'deleted_at'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Adds a nullable <code class=" language-php">deleted_at</code> TIMESTAMP (with timezone) equivalent column for soft deletes with precision (total digits).</td>
+                        <td>Adds a nullable <kbd>deleted_at</kbd> TIMESTAMP (with timezone) equivalent column for soft deletes with precision (total digits).</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'name'</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
@@ -371,11 +386,11 @@
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">timestamps</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Adds nullable <code class=" language-php">created_at</code> and <code class=" language-php">updated_at</code> TIMESTAMP equivalent columns with precision (total digits).</td>
+                        <td>Adds nullable <kbd>created_at</kbd> and <kbd>updated_at</kbd> TIMESTAMP equivalent columns with precision (total digits).</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">timestampsTz</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
-                        <td>Adds nullable <code class=" language-php">created_at</code> and <code class=" language-php">updated_at</code> TIMESTAMP (with timezone) equivalent columns with precision (total digits).</td>
+                        <td>Adds nullable <kbd>created_at</kbd> and <kbd>updated_at</kbd> TIMESTAMP (with timezone) equivalent columns with precision (total digits).</td>
                         </tr>
                         <tr>
                         <td><code class=" language-php"><span class="token variable">$table</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">tinyIncrements</span><span class="token punctuation">(</span><span class="token single-quoted-string string">'id'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></td>
@@ -421,7 +436,7 @@
                         </table>
                 </div>
                 <div class="info-table tab-pane fade" id="modifier" role="tabpanel" aria-labelledby="modifier-tab">
-                    <table class="table table-striped">
+                    <table class="table ">
                         <thead>
                         <tr>
                         <th>Modifier</th>
@@ -583,20 +598,55 @@
                     </table>
                 </div>
                 <div class="info-table tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
-                    <ul><li> return_col `id,name,email`, `name` </li>
-                        <li> id `5` ,`5-100`</li>
-                        <li>sort `asc`, `desc` </li>
-                        <li> sort_col `name`, `email`</li>
-                        <li> active `0`,`1`</li>
-                        <li> date `2020-04-12`</li>
-                        <li>end_date `2020-07-31`</li>
-                        <li> date_col `date`, `created_at`, `updated_at`</li>
-                        <li>lookup `gmail%`,`%gmail`, `%gmail%`, `!%.com%`</li>
-                        <li>lookup_col `email`</li>
-                        <li> per_page `5`, `10`, `25`</li>
-                        <li> where `column_name`, `product_price`,`discount`,`total`, `product_id,product_price`</li>
-                        <li>where_val `your_value`, `<50`,`>50`, `~100`, `435,>400`</li>
-                    </ul></div>
+                    <div class="readme markdown-body">
+                        <h1>README</h1>
+                        
+    <p>database panel for laravel application</p>
+    <h3><a id="user-content-installation" class="anchor" href="#user-content-installation" rel="nofollow noindex noopener external ugc"></a>Installation</h3>
+    <pre><code>composer require niaz/dbpanel
+    </code></pre>
+    <h3><a id="user-content-usage" class="anchor" href="#user-content-usage" rel="nofollow noindex noopener external ugc"></a>Usage</h3>
+    <p>Visit Route:</p>
+    <pre><code>/dbpanel
+    </code></pre>
+    <p>Select a <code>table</code> name from table option and enter some query string with some <code>key</code> name as follows:</p>
+    <h4><a id="user-content-id" class="anchor" href="#user-content-id" rel="nofollow noindex noopener external ugc"></a>id</h4>
+    <ul>
+    <li>id <code>5</code> ,<code>5-100</code></li>
+    </ul>
+    <h4><a id="user-content-sort" class="anchor" href="#user-content-sort" rel="nofollow noindex noopener external ugc"></a>sort</h4>
+    <ul>
+    <li>sort <code>asc</code>, <code>desc</code></li>
+    <li>sort_col <code>name</code>, <code>email</code></li>
+    </ul>
+    <h4><a id="user-content-is" class="anchor" href="#user-content-is" rel="nofollow noindex noopener external ugc"></a>is</h4>
+    <ul>
+    <li>is <code>0</code>,<code>1</code></li>
+    <li>is_col <code>active</code>,<code>is_active</code>, <code>is_admin</code></li>
+    </ul>
+    <h4><a id="user-content-date" class="anchor" href="#user-content-date" rel="nofollow noindex noopener external ugc"></a>date</h4>
+    <ul>
+    <li>date <code>2020-04-12</code></li>
+    <li>end_date <code>2020-07-31</code></li>
+    <li>date_col <code>date</code>, <code>created_at</code>, <code>updated_at</code></li>
+    </ul>
+    <h4><a id="user-content-lookupsearch" class="anchor" href="#user-content-lookupsearch" rel="nofollow noindex noopener external ugc"></a>lookup/search</h4>
+    <ul>
+    <li>lookup <code>gmail%</code>,<code>%gmail</code>, <code>%gmail%</code>, <code>!%.com%</code></li>
+    <li>lookup_col <code>email</code></li>
+    </ul>
+    <h4><a id="user-content-where" class="anchor" href="#user-content-where" rel="nofollow noindex noopener external ugc"></a>where</h4>
+    <ul>
+    <li>where <code>column_name</code>, <code>product_price</code>,<code>discount</code>,<code>total</code>, <code>product_id,product_price</code></li>
+    <li>where_val <code>your_value</code>, <code>&lt;50</code>,<code>&gt;50</code>, <code>~100</code>, <code>435,&gt;400</code></li>
+    </ul>
+    <h4><a id="user-content-return-column-list" class="anchor" href="#user-content-return-column-list" rel="nofollow noindex noopener external ugc"></a>return column list</h4>
+    <ul>
+    <li>return_col <code>id,name,email</code>, <code>name</code></li>
+    </ul>
+    
+                    </div>
+                </div>
             </div>
         </div><form class="row pt-2">
             <div class="col-md-12 row m-0">
@@ -632,7 +682,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text brr-0">Query</div>
                         </div>
-                        <input type="url" class="form-control" id="query" value="id=20-24&return_col=id,name,email">
+                        <input type="url" class="form-control brr-0" id="query" value="id=20-24&return_col=id,name,email">
                     </div>
                 </div>
                 <div class="col-md-1 p-0">
@@ -681,17 +731,24 @@
         
         let li ='';
         
-            if(!pageNo){
+            // if(!pageNo){
                 ulOfPagination.innerHTML =null ;
                 if(total>1){
                     if(total > 10){
-                        for(i=1;i < 11;i++){
-                            let activeClass = i==1 ? ' active' : '';
+                        let st = pageNo-4 >  1 ? pageNo - 3 : 1;
+                        let la = pageNo+4 > total ? total+1 : pageNo+4 ;
+                        if(pageNo- 4 >  1){
+                            ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData('+1+')">'+1+'</a></li>';
+                            ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
+                        }
+                        for(i=st;i < la;i++){
+                            let activeClass = i== pageNo ? ' active' : '';
                             ulOfPagination.innerHTML += '<li class="page-item'+activeClass+'"><a class="page-link" onclick="getData('+i+')">'+i+'</a></li>';
                         }
-                        ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
-                        ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData('+total+')">'+total+'</a></li>';
-                        
+                        if(la<total){
+                            ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
+                            ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData('+total+')">'+total+'</a></li>';
+                        }
                     }else{
 
                         for(i=1;i < total+1;i++){
@@ -700,10 +757,20 @@
                         }
                     }
                 } 
-            }else{
-                ulOfPagination.getElementsByClassName('active')[0].classList.remove('active');
-                ulOfPagination.getElementsByClassName('page-item')[pageNo-1].classList.add('active');
-            }
+            // }else{
+                // if(pageNo == total){
+                //     ulOfPagination.innerHTML =null ;
+                //     ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData('+1+')">'+1+'</a></li>';
+                //     ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
+                //     for(i=total-9;i <total+1;i++){
+                //             let activeClass = i==total ? ' active' : '';
+                //             ulOfPagination.innerHTML += '<li class="page-item'+activeClass+'"><a class="page-link" onclick="getData('+i+')">'+i+'</a></li>';
+                //         }
+                        
+                        
+                    
+                // }
+            // }
         
     }
     window.getData = function(pageNo=null){
@@ -729,7 +796,7 @@
                 // responseDom.innerHTML=response.status;
                 hljs.highlightBlock(dataDom);
                 hljs.highlightBlock(tableDom);
-                setPagination(pageNo,response.data.result.last_page);
+                setPagination(response.data.result.current_page,response.data.result.last_page);
                 // hljs.highlightBlock(requestDom);
             })
             .catch(
@@ -754,7 +821,17 @@
         $('#myTab a').on('click', function (e) {
             e.preventDefault();
             $(this).tab('show');
-        })
+        });
+        document.addEventListener('DOMContentLoaded', (event) => {
+  document.querySelectorAll('pre code').forEach((block) => {
+    hljs.highlightBlock(block);
+  });
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+  document.querySelectorAll('td code').forEach((block) => {
+    hljs.highlightBlock(block);
+  });
+});
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>

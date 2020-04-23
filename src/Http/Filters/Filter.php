@@ -25,7 +25,7 @@ class Filter
             // $tableName = Str::plural($model);
             if($this->hasTable($table)){
                 session(['filter_table'=>$table]);
-                
+
                 // $modelClass= Str::studly(Str::singular($table));
                 // $modelNamespace = config('dbpanel.model').'\\'.$modelClass;
                 // $model = new $modelNamespace;
@@ -50,7 +50,6 @@ class Filter
             $total_rows = $this->totalRows;
             $query = $pipe->send($this->database)->through([
                 \Niaz\DBpanel\Http\Filters\Type\Sort::class,
-                \Niaz\DBpanel\Http\Filters\Type\Is::class,
                 \Niaz\DBpanel\Http\Filters\Type\Lookup::class,
                 \Niaz\DBpanel\Http\Filters\Type\Id::class,
                 \Niaz\DBpanel\Http\Filters\Type\Date::class,
