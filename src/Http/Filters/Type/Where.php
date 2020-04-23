@@ -7,8 +7,14 @@ use Illuminate\Support\Facades\Schema;
 class Where extends BaseFilter
 {
     protected function applyFilter($builder){
-        $columns = explode(',',request('where'));
-        $values = explode(',',request('where_val'));
+        $where = explode(',',request('where'));
+        $columns=[];
+        $values = [];
+        for($i=0;$i< count($where);$i++){
+            $columns[] = explode(':',$where[$i])[0];
+            $values[] = explode(':',$where[$i])[1];
+        }
+ 
         $opKey = ['>','<','!','~'];
         $operator = ['>'=>'>','<' => '<','!' => '!=','~'=>'<>'];
         foreach($columns as $column){

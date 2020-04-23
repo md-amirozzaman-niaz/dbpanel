@@ -8,18 +8,20 @@ use Illuminate\Support\Facades\Session;
 class Date extends BaseFilter
 {
     protected function applyFilter($builder){
+        $date = explode(':',request('date'));
+        $column = $date[0];
+        $startDate = $date[1];
+        $endDate = count($date) > 2 ?$date[2] : null;
         
-        if ((request()->has('date_col') && !Schema::hasColumn(session('filter_table'), request('date_col')))) {
+        if ((request()->has('date') && !Schema::hasColumn(session('filter_table'), $column))) {
             session()->flash('status.date', 'Task was not successful!');
             return $builder;
         }
 
-        $method = request()->has('end_date') ? 'whereBetween' : 'whereDate';
+        $method = count($date)>2 ? 'whereBetween' : 'whereDate';
 
-        $column = request()->has('date_col') ? request('date_col') : 'created_at';
-
-        $contraints = request()->has('end_date') ? [request($this->filterName()),request('end_date')] : request($this->filterName());
-        session()->push('filters',$this->filterName());
+        $contraints = count($date)>2 ? [$startDate,$endDate] : $startDate;
+        session()->push('filters.date',[$column, $contraints]);
         return $builder->$method($column, $contraints);
     }
 }
