@@ -152,6 +152,13 @@ h4 {
     background: #fbfafa;
     padding: 15px;
 }
+kbd,code{
+    background: #e4eaea;
+    color: #333;
+    padding: 3px 5px;
+    margin-right: 5px;
+    border-radius: 3px;
+}
         </style>
     </head>
     <body>
@@ -598,6 +605,7 @@ h4 {
                     </table>
                 </div>
                 <div class="info-table tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
+                    
                     <div class="readme markdown-body">
                         <h1>README</h1>
                         
@@ -616,33 +624,23 @@ h4 {
     </ul>
     <h4><a id="user-content-sort" class="anchor" href="#user-content-sort" rel="nofollow noindex noopener external ugc"></a>sort</h4>
     <ul>
-    <li>sort <code>asc</code>, <code>desc</code></li>
-    <li>sort_col <code>name</code>, <code>email</code></li>
-    </ul>
-    <h4><a id="user-content-is" class="anchor" href="#user-content-is" rel="nofollow noindex noopener external ugc"></a>is</h4>
-    <ul>
-    <li>is <code>0</code>,<code>1</code></li>
-    <li>is_col <code>active</code>,<code>is_active</code>, <code>is_admin</code></li>
+    <li>sort <code>email:asc</code>, <code>name:desc</code></li>
     </ul>
     <h4><a id="user-content-date" class="anchor" href="#user-content-date" rel="nofollow noindex noopener external ugc"></a>date</h4>
     <ul>
-    <li>date <code>2020-04-12</code></li>
-    <li>end_date <code>2020-07-31</code></li>
-    <li>date_col <code>date</code>, <code>created_at</code>, <code>updated_at</code></li>
+    <li>date <code>created_at:2020-04-19:2020-04-21</code></li>
     </ul>
     <h4><a id="user-content-lookupsearch" class="anchor" href="#user-content-lookupsearch" rel="nofollow noindex noopener external ugc"></a>lookup/search</h4>
     <ul>
-    <li>lookup <code>gmail%</code>,<code>%gmail</code>, <code>%gmail%</code>, <code>!%.com%</code></li>
-    <li>lookup_col <code>email</code></li>
+    <li>lookup <code>email:start$</code>,<code>email:$end</code>, <code>email:$anywhere$</code>, <code>email:!$.com</code></li>
     </ul>
     <h4><a id="user-content-where" class="anchor" href="#user-content-where" rel="nofollow noindex noopener external ugc"></a>where</h4>
     <ul>
-    <li>where <code>column_name</code>, <code>product_price</code>,<code>discount</code>,<code>total</code>, <code>product_id,product_price</code></li>
-    <li>where_val <code>your_value</code>, <code>&lt;50</code>,<code>&gt;50</code>, <code>~100</code>, <code>435,&gt;400</code></li>
+    <li>where <code>column_name:column_value</code>, <code>product_price:500</code>,<code>discount_amount:!200</code>, <code>product_id:&lt;200,product_price:&gt;500</code></li>
     </ul>
     <h4><a id="user-content-return-column-list" class="anchor" href="#user-content-return-column-list" rel="nofollow noindex noopener external ugc"></a>return column list</h4>
     <ul>
-    <li>return_col <code>id,name,email</code>, <code>name</code></li>
+    <li>return_col <code>id,name,email</code>, <code>name,email,phone</code></li>
     </ul>
     
                     </div>
