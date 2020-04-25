@@ -69,6 +69,16 @@ Example *(value)*:
 + `product_id:<200,product_price:>500`
 + `product_price:<300|discount:>15`
 
+#### join *(key)*
+
+Example *(value)*:
+
++ `joinTableName:JoinTablesColumnName:PrimaryTablesColumnName`
++ `joinTableName:JoinTablesColumnName:PrimaryTablesColumnName,secondJoinTableName:secondJoinTablesColumnName:PrimaryTablesColumnName`
+
+> **Note**: Not used any `id` related filter because it is possible both table had `id` column.
+> it will thrown error.
+
 #### return_only *(key)*
 
 for *alias* use `@`
