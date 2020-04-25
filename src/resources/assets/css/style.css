@@ -143,3 +143,6 @@ padding: 3px 5px;
 margin-right: 5px;
 border-radius: 3px;
 }
+thead {
+    background: #f8f9fb;
+}
