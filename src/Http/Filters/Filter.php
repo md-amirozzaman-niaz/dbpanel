@@ -23,6 +23,14 @@ class Filter
     protected $bindings;
     protected $query;
 
+    /*
+    * load table information 
+    * set some property 
+    *
+    * @param string $table
+    * @return $this
+    *
+    **/
     public function loadTable($table=null){       
             // $tableName = Str::plural($model);
             if($this->hasTable($table)){
@@ -69,6 +77,13 @@ class Filter
             }
         return $this;
     }
+    /*
+    * set filter
+    * 
+    * @param void
+    * @return Query Builder
+    *
+    **/
 
     public function setQuery(){
         if($this->filter){
@@ -85,7 +100,13 @@ class Filter
             $this->query = $query->select($this->checkReturnColumnExist());
         }
     }
-
+    /*
+    * set some status 
+    * 
+    * @param void
+    * @return status property
+    *
+    **/
     public function status(){
         $this->status['FilterUsed'] = session('filters');
         $this->status['retrieveRows'] = $this->retrieveRows;
@@ -156,6 +177,13 @@ class Filter
         return $qualify_col_arr ? $qualify_col_arr : '*';
     }
 
+    /*
+    * check table existing or not 
+    * 
+    * @param string $tableName
+    * @return boolean
+    *
+    **/
     protected function hasTable($tableName){
         return true;
         return Schema::hasTable($tableName);

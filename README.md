@@ -19,29 +19,29 @@ Visit Route:
 ```
 Select a `table` name from table option and enter some query string with some `key` name are filter name as follows:
 
-#### id
+#### id *(key)*
 
-Example: `5` `5-100`
+Example *(value)*: `5` `5-100`
 
-#### sort
+#### sort *(key)*
 
-Example `email:asc` `name:desc`  `desc`
+Example *(value*: `email:asc` `name:desc`  `desc`
 
-#### is
+#### is *(key)*
 
-Example: `active:0` `active:1`  `date:2020-04-29`
+Example *(value)*: `active:0` `active:1`  `date:2020-04-29`
 
-#### date
+#### date *(key)*
 
 single date
 
-Example: `updated_at:2020-04-29`
+Example *(value)*: `updated_at:2020-04-29`
 
 range of date
 
-Example: `created_at:2020-04-19:2020-04-21`
+Example *(value)*: `created_at:2020-04-19:2020-04-21`
 
-#### lookup
+#### lookup *(key)*
 
 for *variant*,
 
@@ -50,11 +50,11 @@ for *variant*,
 + use `,` for *and* condition
 + use `|` for *or* condition
 
-Example:
+Example *(value)*:
 
 `email:start$` `email:$end` `email:$anywhere$` `email:!$.com` 
 
-#### where
+#### where *(key)*
 for *variant*,
 
 + use `!` for not equal
@@ -63,23 +63,24 @@ for *variant*,
 + use `,` for *and* condition
 + use `|` for *or* condition
 
-Example:
+Example *(value)*:
 
-+ `product_price:500` `discount:<20`
++ `product_price:500` `discount:<20` 
 + `product_id:<200,product_price:>500`
 + `product_price:<300|discount:>15`
 
-#### return_only
+#### return_only *(key)*
 
 for *alias* use `@`
 
-Example:
+Example *(value)*:
 
 + `id,name,email` `name,email,phone`
 + `id,name@user_name,email@user_email`
 + `name@employee_name,phone@employee_phone`
 
-#### return_except
+#### return_except *(key)*
 
-+ `id,name,email`, `name,email,phone`
+Example *(value)*:
++ `id,name,email` `name,email,phone`
 
