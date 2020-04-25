@@ -6,6 +6,10 @@ database panel for laravel application
 ```
 composer require niaz/dbpanel
 ```
+### Publish assets
+```
+php artisan vendor:publish --tag=public --force
+```
 ### Usage
 
 Visit Route:
