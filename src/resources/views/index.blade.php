@@ -13,8 +13,8 @@
          <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
          {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/a11y-dark.min.css" integrity="sha256-7L/IK7qUTcgTXtfLAxip5Eo+hnp+pSe5htBCh5pYg6o=" crossorigin="anonymous" /> --}}
          {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/shades-of-purple.min.css" integrity="sha256-U+HfsMv32Nk4Vgh4v5SAdJaVBCEY2vUhWIISOZ14h4g=" crossorigin="anonymous" /> --}}
-         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github-gist.min.css" integrity="sha256-xKngFRXh54wtbQtuYDjv4R5dJSjZAjRiq5u0dlUxAM0=" crossorigin="anonymous" />
-         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" /> --}}
+         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github-gist.min.css" integrity="sha256-xKngFRXh54wtbQtuYDjv4R5dJSjZAjRiq5u0dlUxAM0=" crossorigin="anonymous" /> --}}
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" />
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/fontawesome.min.css" integrity="sha256-CuUPKpitgFmSNQuPDL5cEfPOOJT/+bwUlhfumDJ9CI4=" crossorigin="anonymous" />
          <link rel="stylesheet" href='vendor/dbpanel/css/style.css' />
     </head>
@@ -416,7 +416,7 @@
                     </table>
                 </div>
                 <div class="info-table tab-pane fade" id="artisan" role="tabpanel" aria-labelledby="artisan-tab">
-                    <table class="table table-striped">
+                    <table class="table">
                         <thead>
                             <th>
                                 Commands
@@ -427,35 +427,49 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>php artisan migrate</td>
+                                <td><pre><code class="shell">php artisan make:migration create_porduct_table</code></pre></td>
+                                <td>To create a migration</td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="bash">php artisan migrate</code></pre></td>
+                                <td>Running All Outstanding Migrations</td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="bash">php artisan migrate --force</code></pre></td>
+                                <td>Forcing Migrations In Production</td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="system">php artisan migrate:rollback</code></pre></td>
+                                <td>Rollback The Last Migration Operation</td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="shell">php artisan migrate:reset</code></pre></td>
+                                <td>Rollback all migrations</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><b>Seeding</b></td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="system">php artisan make:seeder UsersTableSeeder</code></pre></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>php artisan db:seed</td>
+                                <td><pre><code class="system">php artisan db:seed --class=UsersTableSeeder</code></pre></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>php artisan db:fresh</td>
-                                <td></td>
+                                <td colspan="2"><b>Drop and Seed</b></td>
                             </tr>
                             <tr>
-                                <td>php artisan db:refresh</td>
-                                <td></td>
+                                <td><pre><code class="system">php artisan migrate:refresh</code></pre></td>
+                                <td>Rollback & Migrate In Single Command <b>Very useful to add new column in existing database</b></td>
                             </tr>
                             <tr>
-                                <td>php artisan make:model</td>
-                                <td></td>
+                                <td><pre><code class="system">php artisan migrate:fresh --seed</code></pre></td>
+                                <td>Drop All Tables & Migrate</td>
                             </tr>
                             <tr>
-                                <td>php artisan db:seeder</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>php artisan make:migration</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>php artisan migrate:rollback</td>
+                                <td><pre><code class="system">php artisan make:model</code></pre></td>
                                 <td></td>
                             </tr>
                         </tbody>
