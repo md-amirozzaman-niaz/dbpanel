@@ -25,24 +25,24 @@ Select a `table` name from table option and enter some query string with some `k
 + `active:0`, `active:1` , `date:2020-04-29`
 
 #### date
+single date
 + `updated_at:2020-04-29` 
->> for single date
+range of date
 + `created_at:2020-04-19:2020-04-21`
->> for range of date
 
 #### lookup
 + `email:start$`,`email:$end`, `email:$anywhere$`, `email:!$.com`
->> for `variant` use `!` not , 
->> use `$` to specify string postion
+> for `variant` use `!` not , 
+> use `$` to specify string postion
 
 #### where
 + `column_name:column_value`, `product_price:500`,`discount_amount:!200`
->> for `variant`, use `!` for not equal, use `<` for less than, use `>` for greater than
+> for `variant`, use `!` for not equal, use `<` for less than, use `>` for greater than
 
 + `product_id:<200,product_price:>500`
->> for `and` condition, use `,`
+> for `and` condition, use `,`
 + `product_id:<200,product_price:<300|id:100`
->> for `or` condition, use `|`
+> for `or` condition, use `|`
 #### return_only
 + `id,name,email`, `name,email,phone`
 
