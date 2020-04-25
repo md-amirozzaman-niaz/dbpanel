@@ -9,7 +9,7 @@ class Lookup extends BaseFilter
     protected function applyFilter($builder){
         $lookup = explode(':',request('lookup'));
         $column = $lookup [0];
-        if ((request()->has('lookup') && !Schema::hasColumn(session('filter_table'), $column))) {
+        if (!in_array($column,session('filter_column'))) {
             session()->push('status.lookup', $column.' is not exist!');
             return $builder;
         }

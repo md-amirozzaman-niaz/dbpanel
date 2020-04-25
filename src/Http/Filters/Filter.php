@@ -12,16 +12,18 @@ class Filter
     protected $status;
     protected $filter = false;
     protected $table;
+    protected $columns;
     protected $database;
     protected $joinTable;
     protected $totalRows;
     protected $lastID;
     protected $indexes=[];
     protected $retrieveRows;
+    protected $sql;
+    protected $bindings;
+    protected $query;
 
-    public function loadTable($table=null){
-        
-
+    public function loadTable($table=null){       
             // $tableName = Str::plural($model);
             if($this->hasTable($table)){
                 session(['filter_table'=>$table]);
@@ -35,90 +37,122 @@ class Filter
                 }
                 // $this->keys $indexes[ 'primary' ]->getColumns()[0];
                 $this->table=$table;
-                $this->totalRows = DB::table($table)->get()->count();
-                $this->lastID= $this->totalRows > 0 ? DB::table($table)->orderBy($indexes[ 'primary' ]->getColumns()[0],'desc')->first()->id : '';
-
                 $this->database = DB::table($table);
+                $reverseTable = DB::table($table)->orderBy($indexes[ 'primary' ]->getColumns()[0],'desc');
+                $this->totalRows = $reverseTable->get()->count();
+                $this->lastID= $this->totalRows > 0 ? $reverseTable->first()->id : '';
+
+                
+                $columnsWithType = [];
+                $columns = Schema::getColumnListing($this->table);
+
+                foreach($columns as $column){
+                    $this->columns[]=$column;
+                    $columnsWithType[$column] = Schema::getColumnType($this->table,$column);
+
+                }
+                session(['filter_column'=>$this->columns]);
+                // columnsWithType
+                $this->status =[
+                    'Table' => $table,
+                    'TotalRows'=> $this->totalRows,
+                    'indexes'=>$this->indexes,
+                    'lastID'=>$this->lastID,
+                    'Columns' => $columnsWithType,
+                    // 'Driver' => $this->database->getConnection()->getDriverName(),
+                    'Params' => $this->database->connection->getDoctrineConnection()->getParams(),
+                    // 'Table' => collect($this->database->connection->getDoctrineConnection()->getSchemaManager()->listTableDetails($table)),
+                ];
                 $this->filter=true;
             }
         return $this;
     }
 
-    public function query(){
+    public function setQuery(){
         if($this->filter){
             $pipe = app(Pipeline::class);
-            $total_rows = $this->totalRows;
             $query = $pipe->send($this->database)->through([
                 \Niaz\DBpanel\Http\Filters\Type\Sort::class,
                 \Niaz\DBpanel\Http\Filters\Type\Lookup::class,
                 \Niaz\DBpanel\Http\Filters\Type\Id::class,
+                \Niaz\DBpanel\Http\Filters\Type\Is::class,
                 \Niaz\DBpanel\Http\Filters\Type\Date::class,
                 \Niaz\DBpanel\Http\Filters\Type\Where::class
-                ])->thenReturn();
-                $columnsWithType = [];
-                $columns = Schema::getColumnListing($this->table);
+                ])->thenReturn(); 
 
-                foreach($columns as $column){
-                    $columnsWithType[$column] = Schema::getColumnType($this->table,$column);
-
-                }
-            $this->status =[
-                'FilterUsed' => session('filters'),
-                'TotalRows'=> $total_rows,
-                'indexes'=>$this->indexes,
-                'lastID'=>$this->lastID,
-                'Columns' => $columnsWithType,
-                'Connection' => class_basename($this->database->getConnection()),
-                'Database' => $this->database->getConnection()->getDatabaseName(),
-            ];
-                session()->forget('filters');
-                session()->forget('status');
-
-            return $query;
+            $this->query = $query->select($this->checkReturnColumnExist());
         }
     }
 
     public function status(){
+        $this->status['FilterUsed'] = session('filters');
         $this->status['retrieveRows'] = $this->retrieveRows;
+        $this->status['SQL']=$this->sql;
+        $this->status['Bindings']=$this->bindings;
+        session()->forget('filters');
+        session()->forget('status');
+    
         return $this->status;
     }
 
+    /*
+    * set Query as requested as follows
+    * get final SQL & Bindings which is used on query
+    * 
+    * @param void
+    * @return paginate
+    *
+    **/
     public function getData(){
-        if($this->filter){
-            $this->retrieveRows=count($this->query()->get());
-            $this->status['retrieveRows'] = count($this->query()->get());
-            if(request()->has('per_page') && request()->has('return_col')){
 
-                return $this->query()->paginate(request('per_page'), $this->checkReturnColumnExist());
+        $this->setQuery();
 
-            }else if(request()->has('per_page')){
+        $paginateData = $this->query->paginate(request('per_page'));
 
-                return $this->query()->paginate(request('per_page'));
+        $this->sql = $this->query->toSql();
+        $this->bindings = $this->query->getBindings();
+        
+        $this->retrieveRows = $paginateData->total();
 
-            }else if(request()->has('return_col')){
-
-                return $this->query()->get($this->checkReturnColumnExist());
-                
-            }else{
-
-                return $this->query()->get();
-            }
-        }else{
-            return 'Table Not found';
-        }
+        return $paginateData;
+     
     }
 
+    /*
+    * check for return columns are existing or have to made some alias
+    *
+    * @param void
+    * @return array
+    *
+    **/
+
     protected function checkReturnColumnExist(){
-        $return_col_arr = explode(',',request('return_col'));
+       
+        
         $qualify_col_arr = [];
-        foreach($return_col_arr as $col){
-            if(Schema::hasColumn(session('filter_table'),$col)) $qualify_col_arr[]=$col;
+        if(request()->has('return_only')){
+            $return_only_arr = explode(',',request('return_only'));
+            foreach($return_only_arr as $col){
+                $c = explode('@',$col) ? explode('@',$col)[0]:$col;
+                if(in_array($c,$this->columns)) 
+                {
+                    $alias= str_replace('@',' as ',$col);
+                    // $this->status['alias'][] = $alias;
+                    $qualify_col_arr[]=$alias;
+                }
+            }
+            return $qualify_col_arr ? $qualify_col_arr : '*';
         }
+        $return_except_arr = explode(',',request('return_except'));
+        foreach($return_except_arr as $col){
+            if(in_array($col,$this->columns)) $qualify_col_arr[]=$col;
+        }
+        $qualify_col_arr=array_diff($this->columns,$qualify_col_arr);
         return $qualify_col_arr ? $qualify_col_arr : '*';
     }
 
     protected function hasTable($tableName){
-
+        return true;
         return Schema::hasTable($tableName);
         
     }
