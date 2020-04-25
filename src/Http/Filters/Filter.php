@@ -38,10 +38,12 @@ class Filter
                 // $this->keys $indexes[ 'primary' ]->getColumns()[0];
                 $this->table=$table;
                 $this->database = DB::table($table);
-                $reverseTable = DB::table($table)->orderBy($indexes[ 'primary' ]->getColumns()[0],'desc');
-                $this->totalRows = $reverseTable->get()->count();
-                $this->lastID= $this->totalRows > 0 ? $reverseTable->first()->id : '';
-
+                if(array_key_exists('primary',$indexes)){ 
+                    $primaryKey = $indexes[ 'primary' ]->getColumns()[0];
+                    $reverseTable = DB::table($table)->orderBy($primaryKey,'desc');
+                    $this->totalRows = $reverseTable->get()->count();
+                    $this->lastID= $this->totalRows > 0 ? $reverseTable->first()->$primaryKey : '';
+                }
                 
                 $columnsWithType = [];
                 $columns = Schema::getColumnListing($this->table);
@@ -143,11 +145,14 @@ class Filter
             }
             return $qualify_col_arr ? $qualify_col_arr : '*';
         }
-        $return_except_arr = explode(',',request('return_except'));
-        foreach($return_except_arr as $col){
-            if(in_array($col,$this->columns)) $qualify_col_arr[]=$col;
+        if(request()->has('return_except')){
+            $return_except_arr = explode(',',request('return_except'));
+            foreach($return_except_arr as $col){
+                if(in_array($col,$this->columns)) $qualify_col_arr[]=$col;
+            }
+            $qualify_col_arr=array_diff($this->columns,$qualify_col_arr);
         }
-        $qualify_col_arr=array_diff($this->columns,$qualify_col_arr);
+        
         return $qualify_col_arr ? $qualify_col_arr : '*';
     }
 

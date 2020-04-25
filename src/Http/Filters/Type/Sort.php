@@ -11,7 +11,7 @@ class Sort extends BaseFilter
         $column = count($sort)>1 ? $sort[0] : 'id';
         $order = count($sort)>1 ? $sort[1] : $sort[0] ;
         if (!in_array($column,session('filter_column'))) {
-            session()->push('status.sort', 'Task was not successful!');
+            session()->push('filters.sort', ['error' => $column.' is not exist']);
             return $builder;
         }
         $rule = 'orderBy('.$column.','.$order.')';
