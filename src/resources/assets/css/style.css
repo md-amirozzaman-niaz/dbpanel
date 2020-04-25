@@ -133,7 +133,6 @@ color: #fff;
 background-color: #BA68C8;
 }
 .markdown-body{
-background: #fbfafa;
 padding: 15px;
 }
 kbd,code{
@@ -143,6 +142,12 @@ padding: 3px 5px;
 margin-right: 5px;
 border-radius: 3px;
 }
+a.nav-link{
+    color: #163556 !important;
+}
 thead {
     background: #f8f9fb;
+}
+li {
+    margin-bottom: .5em;
 }

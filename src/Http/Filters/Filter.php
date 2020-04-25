@@ -88,15 +88,31 @@ class Filter
     public function setQuery(){
         if($this->filter){
             $pipe = app(Pipeline::class);
-            $query = $pipe->send($this->database)->through([
+            $query = $this->database->select();
+            if(request()->has('join')){ 
+                $joinClause = explode(',',request('join'))[0];
+                $joinTable = explode(':',$joinClause)[0];
+                $columns = Schema::getColumnListing($joinTable);
+                foreach($columns as $column){
+                    $this->columns[]=$column;
+                    $columnsWithType[$column] = Schema::getColumnType($joinTable,$column);
+
+                }
+                session(['filter_column'=>$this->columns]);
+                $query = DB::table($joinTable)->joinSub($query, 'filtered_query', function ($join) {
+                    $joinClause = explode(',',request('join'))[0];
+                    $a = explode(':',$joinClause);
+                    $join->on($a[0].'.'.$a[1], '=', 'filtered_query.'.$a[2]);
+                });
+            }
+            $query = $pipe->send($query)->through([
                 \Niaz\DBpanel\Http\Filters\Type\Sort::class,
                 \Niaz\DBpanel\Http\Filters\Type\Lookup::class,
                 \Niaz\DBpanel\Http\Filters\Type\Id::class,
                 \Niaz\DBpanel\Http\Filters\Type\Is::class,
                 \Niaz\DBpanel\Http\Filters\Type\Date::class,
                 \Niaz\DBpanel\Http\Filters\Type\Where::class
-                ])->thenReturn(); 
-
+                ])->thenReturn();
             $this->query = $query->select($this->checkReturnColumnExist());
         }
     }

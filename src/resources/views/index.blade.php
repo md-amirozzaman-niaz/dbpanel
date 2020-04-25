@@ -13,8 +13,8 @@
          <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
          {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/a11y-dark.min.css" integrity="sha256-7L/IK7qUTcgTXtfLAxip5Eo+hnp+pSe5htBCh5pYg6o=" crossorigin="anonymous" /> --}}
          {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/shades-of-purple.min.css" integrity="sha256-U+HfsMv32Nk4Vgh4v5SAdJaVBCEY2vUhWIISOZ14h4g=" crossorigin="anonymous" /> --}}
-         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github-gist.min.css" integrity="sha256-xKngFRXh54wtbQtuYDjv4R5dJSjZAjRiq5u0dlUxAM0=" crossorigin="anonymous" />
-         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" /> --}}
+         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github-gist.min.css" integrity="sha256-xKngFRXh54wtbQtuYDjv4R5dJSjZAjRiq5u0dlUxAM0=" crossorigin="anonymous" /> --}}
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" />
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/fontawesome.min.css" integrity="sha256-CuUPKpitgFmSNQuPDL5cEfPOOJT/+bwUlhfumDJ9CI4=" crossorigin="anonymous" />
          <link rel="stylesheet" href='vendor/dbpanel/css/style.css' />
     </head>
@@ -416,7 +416,7 @@
                     </table>
                 </div>
                 <div class="info-table tab-pane fade" id="artisan" role="tabpanel" aria-labelledby="artisan-tab">
-                    <table class="table table-striped">
+                    <table class="table">
                         <thead>
                             <th>
                                 Commands
@@ -427,105 +427,128 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>php artisan migrate</td>
+                                <td><pre><code class="shell">php artisan make:migration create_porduct_table</code></pre></td>
+                                <td>To create a migration</td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="bash">php artisan migrate</code></pre></td>
+                                <td>Running All Outstanding Migrations</td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="bash">php artisan migrate --force</code></pre></td>
+                                <td>Forcing Migrations In Production</td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="system">php artisan migrate:rollback</code></pre></td>
+                                <td>Rollback The Last Migration Operation</td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="shell">php artisan migrate:reset</code></pre></td>
+                                <td>Rollback all migrations</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><b>Seeding</b></td>
+                            </tr>
+                            <tr>
+                                <td><pre><code class="system">php artisan make:seeder UsersTableSeeder</code></pre></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>php artisan db:seed</td>
+                                <td><pre><code class="system">php artisan db:seed --class=UsersTableSeeder</code></pre></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>php artisan db:fresh</td>
-                                <td></td>
+                                <td colspan="2"><b>Drop and Seed</b></td>
                             </tr>
                             <tr>
-                                <td>php artisan db:refresh</td>
-                                <td></td>
+                                <td><pre><code class="system">php artisan migrate:refresh</code></pre></td>
+                                <td>Rollback & Migrate In Single Command <b>Very useful to add new column in existing database</b></td>
                             </tr>
                             <tr>
-                                <td>php artisan make:model</td>
-                                <td></td>
+                                <td><pre><code class="system">php artisan migrate:fresh --seed</code></pre></td>
+                                <td>Drop All Tables & Migrate</td>
                             </tr>
                             <tr>
-                                <td>php artisan db:seeder</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>php artisan make:migration</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>php artisan migrate:rollback</td>
+                                <td><pre><code class="system">php artisan make:model</code></pre></td>
                                 <td></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="info-table tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
-                    
-                    <article class="markdown-body entry-content" itemprop="text"><h1><a id="user-content-dbpanel" class="anchor" aria-hidden="true" href="#dbpanel"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>dbpanel</h1>
+                    <article class="markdown-body entry-content" itemprop="text"><h1><a id="user-content-dbpanel" class="anchor" aria-hidden="true" href="#dbpanel"></a>dbpanel</h1>
                         <p>database panel for laravel application</p>
-                        <h3><a id="user-content-installation" class="anchor" aria-hidden="true" href="#installation"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installation</h3>
+                        <h3><a id="user-content-installation" class="anchor" aria-hidden="true" href="#installation">
+                            
+                        </a>Installation</h3>
                         <pre><code>composer require niaz/dbpanel
                         </code></pre>
-                        <h3><a id="user-content-usage" class="anchor" aria-hidden="true" href="#usage"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage</h3>
+                        <h3><a id="user-content-publish-assets" class="anchor" aria-hidden="true" href="#publish-assets"></a>Publish assets</h3>
+                        <pre><code>php artisan vendor:publish --tag=public --force
+                        </code></pre>
+                        <h3><a id="user-content-usage" class="anchor" aria-hidden="true" href="#usage">
+                        </a>Usage</h3>
                         <p>Visit Route:</p>
                         <pre><code>/dbpanel
                         </code></pre>
                         <p>Select a <code>table</code> name from table option and enter some query string with some <code>key</code> name are filter name as follows:</p>
-                        <h4><a id="user-content-id" class="anchor" aria-hidden="true" href="#id"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>id</h4>
-                        <ul>
-                        <li><code>5</code> ,<code>5-100</code></li>
-                        </ul>
-                        <h4><a id="user-content-sort" class="anchor" aria-hidden="true" href="#sort"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>sort</h4>
-                        <ul>
-                        <li><code>email:asc</code>, <code>name:desc</code> , <code>desc</code></li>
-                        </ul>
-                        <h4><a id="user-content-is" class="anchor" aria-hidden="true" href="#is"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>is</h4>
-                        <ul>
-                        <li><code>active:0</code>, <code>active:1</code> , <code>date:2020-04-29</code></li>
-                        </ul>
-                        <h4><a id="user-content-date" class="anchor" aria-hidden="true" href="#date"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>date</h4>
+                        <h4><a id="user-content-id-key" class="anchor" aria-hidden="true" href="#id-key">
+                            </a>id <em>(key)</em></h4>
+                        <p>Example <em>(value)</em>: <code>5</code> <code>5-100</code></p>
+                        <h4><a id="user-content-sort-key" class="anchor" aria-hidden="true" href="#sort-key">
+                            </a>sort <em>(key)</em></h4>
+                        <p>Example <em>(value</em>: <code>email:asc</code> <code>name:desc</code>  <code>desc</code></p>
+                        <h4><a id="user-content-is-key" class="anchor" aria-hidden="true" href="#is-key">
+                            </a>is <em>(key)</em></h4>
+                        <p>Example <em>(value)</em>: <code>active:0</code> <code>active:1</code>  <code>date:2020-04-29</code></p>
+                        <h4><a id="user-content-date-key" class="anchor" aria-hidden="true" href="#date-key">
+                            </a>date <em>(key)</em></h4>
                         <p>single date</p>
-                        <ul>
-                        <li><code>updated_at:2020-04-29</code></li>
-                        </ul>
+                        <p>Example <em>(value)</em>: <code>updated_at:2020-04-29</code></p>
                         <p>range of date</p>
+                        <p>Example <em>(value)</em>: <code>created_at:2020-04-19:2020-04-21</code></p>
+                        <h4><a id="user-content-lookup-key" class="anchor" aria-hidden="true" href="#lookup-key">
+                            </a>lookup <em>(key)</em></h4>
+                        <p>for <em>variant</em>,</p>
                         <ul>
-                        <li><code>created_at:2020-04-19:2020-04-21</code></li>
+                        <li>use <code>!</code> for not match</li>
+                        <li>use <code>$</code> to specify string postion</li>
+                        <li>use <code>,</code> for <em>and</em> condition</li>
+                        <li>use <code>|</code> for <em>or</em> condition</li>
                         </ul>
-                        <h4><a id="user-content-lookup" class="anchor" aria-hidden="true" href="#lookup"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>lookup</h4>
-                        <p>for <code>variant</code> use <code>!</code> for not match, use <code>$</code> to specify string postion</p>
+                        <p>Example <em>(value)</em>:</p>
+                        <p><code>email:start$</code> <code>email:$end</code> <code>email:$anywhere$</code> <code>email:!$.com</code></p>
+                        <h4><a id="user-content-where-key" class="anchor" aria-hidden="true" href="#where-key">
+                        </a>where <em>(key)</em></h4>
+                        <p>for <em>variant</em>,</p>
                         <ul>
-                        <li><code>email:start$</code>,<code>email:$end</code>, <code>email:$anywhere$</code>, <code>email:!$.com</code></li>
+                        <li>use <code>!</code> for not equal</li>
+                        <li>use <code>&lt;</code> for less than</li>
+                        <li>use <code>&gt;</code> for greater than</li>
+                        <li>use <code>,</code> for <em>and</em> condition</li>
+                        <li>use <code>|</code> for <em>or</em> condition</li>
                         </ul>
-                        <h4><a id="user-content-where" class="anchor" aria-hidden="true" href="#where"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>where</h4>
-                        <p>for <code>variant</code>, use <code>!</code> for not equal, use <code>&lt;</code> for less than, use <code>&gt;</code> for greater than</p>
+                        <p>Example <em>(value)</em>:</p>
                         <ul>
-                        <li><code>column_name:column_value</code>, <code>product_price:500</code>,<code>discount_amount:!200</code></li>
-                        </ul>
-                        <p>for <code>and</code> condition, use <code>,</code></p>
-                        <ul>
+                        <li><code>product_price:500</code> <code>discount:&lt;20</code></li>
                         <li><code>product_id:&lt;200,product_price:&gt;500</code></li>
+                        <li><code>product_price:&lt;300|discount:&gt;15</code></li>
                         </ul>
-                        <p>for <code>or</code> condition, use <code>|</code></p>
+                        <h4><a id="user-content-return_only-key" class="anchor" aria-hidden="true" href="#return_only-key"></a>return_only <em>(key)</em></h4>
+                        <p>for <em>alias</em> use <code>@</code></p>
+                        <p>Example <em>(value)</em>:</p>
                         <ul>
-                        <li><code>product_id:&lt;200,product_price:&lt;300|id:100</code></li>
+                        <li><code>id,name,email</code> <code>name,email,phone</code></li>
+                        <li><code>id,name@user_name,email@user_email</code></li>
+                        <li><code>name@employee_name,phone@employee_phone</code></li>
                         </ul>
-                        <h4><a id="user-content-return_only" class="anchor" aria-hidden="true" href="#return_only"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>return_only</h4>
+                        <h4><a id="user-content-return_except-key" class="anchor" aria-hidden="true" href="#return_except-key"></a>return_except <em>(key)</em></h4>
+                        <p>Example <em>(value)</em>:</p>
                         <ul>
-                        <li><code>id,name,email</code>, <code>name,email,phone</code></li>
-                        </ul>
-                        <p>for alias use <code>@</code></p>
-                        <ul>
-                        <li><code>id,name@user_name,email@user_email</code>, <code>name@employee_name,phone@employee_phone</code></li>
-                        </ul>
-                        <h4><a id="user-content-return_except" class="anchor" aria-hidden="true" href="#return_except"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>return_except</h4>
-                        <ul>
-                        <li><code>id,name,email</code>, <code>name,email,phone</code></li>
+                        <li><code>id,name,email</code> <code>name,email,phone</code></li>
                         </ul>
                         </article>
-                </div>
+               </div>
             </div>
         </div><form class="row pt-2">
             <div class="col-md-12 row m-0">
