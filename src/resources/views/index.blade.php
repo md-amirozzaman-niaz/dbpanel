@@ -16,153 +16,7 @@
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github-gist.min.css" integrity="sha256-xKngFRXh54wtbQtuYDjv4R5dJSjZAjRiq5u0dlUxAM0=" crossorigin="anonymous" />
          {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" /> --}}
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/fontawesome.min.css" integrity="sha256-CuUPKpitgFmSNQuPDL5cEfPOOJT/+bwUlhfumDJ9CI4=" crossorigin="anonymous" />
-        <style>
-            label{
-                padding: 16px;
-                background-color: #f6f8fa;
-                border: 1px solid #d1d5da;
-                border-top-left-radius: 3px;
-                border-top-right-radius: 3px;
-                width: 100%;
-                margin-bottom: 0px;
-            }
-            body{
-                background: #e8e8e8;
-    /* font-family: monospace; */
-    font-size:12px;
-            }
-            #output{
-                height:70vh;
-                width:100%;
-                border:none;
-
-            }
-            
-            #data,#table{
-                height:65vh;
-            }
-            
-            #request{
-                height: calc(35vh - 66px);
-            }
-            .btn{
-
-                /* background: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5); */
-                background: aliceblue;
-                color: #24292e;
-                background-color: #eff3f6;
-                background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
-                font-size: 13px;
-                padding: 7px;
-            }
-            .brr-0{
-                border-radius: 0 !important;
-                border-left: 0px;
-            }
-            .window{
-                border: 1px solid #ced4da;
-                padding: 10px;
-                /* background: #f6f8fa; */
-                background: #fff;                
-                border-top: 0px;
-                border-bottom-left-radius: 3px;
-                border-bottom-right-radius: 3px;
-            }
-            .input-group-text{
-                color: #24292e;
-    background-color: #eff3f6;
-    background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
-    font-size: 13px;
-    
-            }
-            .form-control{
-                font-size:14px;
-            }
-            .btn{
-                border: 1px solid #d2d2d2;
-                border-left: 0px;
-                border-top-left-radius: 0px;
-                border-bottom-left-radius: 0px;
-                color: #24292e;
-                background-color: #eff3f6;
-                background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
-                font-size: 13px;
-                padding: 7px;
-            }
-            .info-container{
-                position: fixed;
-                z-index: 12;
-                background: #f5f5f5;
-                border-left: 1px solid #999;
-                transition: 800ms;
-                right: -79.5%;
-                width: 80%;
-            }
-            .info-table{
-                height: calc(100vh - 60px);
-                overflow-y: scroll;
-                padding: 10px;
-            }
-            .info-container.active{
-                right:0px;
-            }
-            .info-btn{
-                position:absolute;
-                width: 32px;
-                padding: 0.62em;
-                margin-top: 8px;
-                margin-left: -32px;
-                z-index: 15;
-                cursor: pointer;
-                border: 1px solid #c5c5c5;
-                border-right: 0px;
-                border-radius: 5px;
-                border-bottom-right-radius: 0px;
-                border-top-right-radius: 0px;
-                background: #f5f5f5 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIcAAACHCAYAAAA850oKAAAABHNCS…J0ZWQgd2l0aCBlemdpZi5jb20gU1ZHIHRvIFBORyBjb252ZXJ0ZXIsKeMjAAAAAElFTkSuQmCC) no-repeat 5px 3px;
-                height: 35px;
-                background-position: center;
-                background-size: 21px;
-            }
-            .page-item .page-link{
-                background-color: #eff3f6;
-                background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
-                color: #888;
-            }
-            .page-item.active .page-link {
-                background-image:none;
-                background-color: #5d646d;
-                border-color: #454646;
-            }
-            .input-group-text {
-                font-weight: 600;
-    margin-right: 1px;
-            }
-            h1 {
-    font-size: 1.5rem;
-}
-h3 {
-    font-size: 1.25rem;
-}
-h4 {
-    font-size: 1rem;
-}
-.badge-primary {
-    color: #fff;
-    background-color: #BA68C8;
-}
-.markdown-body{
-    background: #fbfafa;
-    padding: 15px;
-}
-kbd,code{
-    background: #e4eaea;
-    color: #333;
-    padding: 3px 5px;
-    margin-right: 5px;
-    border-radius: 3px;
-}
-        </style>
+         <link rel="stylesheet" href='vendor/dbpanel/css/style.css' />
     </head>
     <body>
         <div class="container-fluid"><div class="info-container shadow">
@@ -609,44 +463,68 @@ kbd,code{
                 </div>
                 <div class="info-table tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
                     
-                    <div class="readme markdown-body">
-                        <h1>README</h1>
-                        
-    <p>database panel for laravel application</p>
-    <h3><a id="user-content-installation" class="anchor" href="#user-content-installation" rel="nofollow noindex noopener external ugc"></a>Installation</h3>
-    <pre><code>composer require niaz/dbpanel
-    </code></pre>
-    <h3><a id="user-content-usage" class="anchor" href="#user-content-usage" rel="nofollow noindex noopener external ugc"></a>Usage</h3>
-    <p>Visit Route:</p>
-    <pre><code>/dbpanel
-    </code></pre>
-    <p>Select a <code>table</code> name from table option and enter some query string with some <code>key</code> name as follows:</p>
-    <h4><a id="user-content-id" class="anchor" href="#user-content-id" rel="nofollow noindex noopener external ugc"></a>id</h4>
-    <ul>
-    <li>id <code>5</code> ,<code>5-100</code></li>
-    </ul>
-    <h4><a id="user-content-sort" class="anchor" href="#user-content-sort" rel="nofollow noindex noopener external ugc"></a>sort</h4>
-    <ul>
-    <li>sort <code>email:asc</code>, <code>name:desc</code></li>
-    </ul>
-    <h4><a id="user-content-date" class="anchor" href="#user-content-date" rel="nofollow noindex noopener external ugc"></a>date</h4>
-    <ul>
-    <li>date <code>created_at:2020-04-19:2020-04-21</code></li>
-    </ul>
-    <h4><a id="user-content-lookupsearch" class="anchor" href="#user-content-lookupsearch" rel="nofollow noindex noopener external ugc"></a>lookup/search</h4>
-    <ul>
-    <li>lookup <code>email:start$</code>,<code>email:$end</code>, <code>email:$anywhere$</code>, <code>email:!$.com</code></li>
-    </ul>
-    <h4><a id="user-content-where" class="anchor" href="#user-content-where" rel="nofollow noindex noopener external ugc"></a>where</h4>
-    <ul>
-    <li>where <code>column_name:column_value</code>, <code>product_price:500</code>,<code>discount_amount:!200</code>, <code>product_id:&lt;200,product_price:&gt;500</code></li>
-    </ul>
-    <h4><a id="user-content-return-column-list" class="anchor" href="#user-content-return-column-list" rel="nofollow noindex noopener external ugc"></a>return column list</h4>
-    <ul>
-    <li>return_col <code>id,name,email</code>, <code>name,email,phone</code></li>
-    </ul>
-    
-                    </div>
+                    <article class="markdown-body entry-content" itemprop="text"><h1><a id="user-content-dbpanel" class="anchor" aria-hidden="true" href="#dbpanel"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>dbpanel</h1>
+                        <p>database panel for laravel application</p>
+                        <h3><a id="user-content-installation" class="anchor" aria-hidden="true" href="#installation"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installation</h3>
+                        <pre><code>composer require niaz/dbpanel
+                        </code></pre>
+                        <h3><a id="user-content-usage" class="anchor" aria-hidden="true" href="#usage"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage</h3>
+                        <p>Visit Route:</p>
+                        <pre><code>/dbpanel
+                        </code></pre>
+                        <p>Select a <code>table</code> name from table option and enter some query string with some <code>key</code> name are filter name as follows:</p>
+                        <h4><a id="user-content-id" class="anchor" aria-hidden="true" href="#id"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>id</h4>
+                        <ul>
+                        <li><code>5</code> ,<code>5-100</code></li>
+                        </ul>
+                        <h4><a id="user-content-sort" class="anchor" aria-hidden="true" href="#sort"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>sort</h4>
+                        <ul>
+                        <li><code>email:asc</code>, <code>name:desc</code> , <code>desc</code></li>
+                        </ul>
+                        <h4><a id="user-content-is" class="anchor" aria-hidden="true" href="#is"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>is</h4>
+                        <ul>
+                        <li><code>active:0</code>, <code>active:1</code> , <code>date:2020-04-29</code></li>
+                        </ul>
+                        <h4><a id="user-content-date" class="anchor" aria-hidden="true" href="#date"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>date</h4>
+                        <p>single date</p>
+                        <ul>
+                        <li><code>updated_at:2020-04-29</code></li>
+                        </ul>
+                        <p>range of date</p>
+                        <ul>
+                        <li><code>created_at:2020-04-19:2020-04-21</code></li>
+                        </ul>
+                        <h4><a id="user-content-lookup" class="anchor" aria-hidden="true" href="#lookup"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>lookup</h4>
+                        <p>for <code>variant</code> use <code>!</code> for not match, use <code>$</code> to specify string postion</p>
+                        <ul>
+                        <li><code>email:start$</code>,<code>email:$end</code>, <code>email:$anywhere$</code>, <code>email:!$.com</code></li>
+                        </ul>
+                        <h4><a id="user-content-where" class="anchor" aria-hidden="true" href="#where"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>where</h4>
+                        <p>for <code>variant</code>, use <code>!</code> for not equal, use <code>&lt;</code> for less than, use <code>&gt;</code> for greater than</p>
+                        <ul>
+                        <li><code>column_name:column_value</code>, <code>product_price:500</code>,<code>discount_amount:!200</code></li>
+                        </ul>
+                        <p>for <code>and</code> condition, use <code>,</code></p>
+                        <ul>
+                        <li><code>product_id:&lt;200,product_price:&gt;500</code></li>
+                        </ul>
+                        <p>for <code>or</code> condition, use <code>|</code></p>
+                        <ul>
+                        <li><code>product_id:&lt;200,product_price:&lt;300|id:100</code></li>
+                        </ul>
+                        <h4><a id="user-content-return_only" class="anchor" aria-hidden="true" href="#return_only"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>return_only</h4>
+                        <ul>
+                        <li><code>id,name,email</code>, <code>name,email,phone</code></li>
+                        </ul>
+                        <p>for alias use <code>@</code></p>
+                        <ul>
+                        <li><code>id,name@user_name,email@user_email</code>, <code>name@employee_name,phone@employee_phone</code></li>
+                        </ul>
+                        <h4><a id="user-content-return_except" class="anchor" aria-hidden="true" href="#return_except"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>return_except</h4>
+                        <ul>
+                        <li><code>id,name,email</code>, <code>name,email,phone</code></li>
+                        </ul>
+                        </article>
                 </div>
             </div>
         </div><form class="row pt-2">
@@ -726,101 +604,10 @@ kbd,code{
         </div>
     </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
-    <script>
-    function setPagination(pageNo,total){
-        let ulOfPagination = document.getElementsByClassName('pagination')[0];
-        
-        let li ='';
-        
-            // if(!pageNo){
-                ulOfPagination.innerHTML =null ;
-                if(total>1){
-                    if(total > 10){
-                        let st = pageNo-4 >  1 ? pageNo - 3 : 1;
-                        let la = pageNo+4 > total ? total+1 : pageNo+4 ;
-                        if(pageNo- 4 >  1){
-                            ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData('+1+')">'+1+'</a></li>';
-                            ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
-                        }
-                        for(i=st;i < la;i++){
-                            let activeClass = i== pageNo ? ' active' : '';
-                            ulOfPagination.innerHTML += '<li class="page-item'+activeClass+'"><a class="page-link" onclick="getData('+i+')">'+i+'</a></li>';
-                        }
-                        if(la<total){
-                            ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
-                            ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData('+total+')">'+total+'</a></li>';
-                        }
-                    }else{
-
-                        for(i=1;i < total+1;i++){
-                            let activeClass = i==1 ? ' active' : '';
-                            ulOfPagination.innerHTML += '<li class="page-item'+activeClass+'"><a class="page-link" onclick="getData('+i+')">'+i+'</a></li>';
-                        }
-                    }
-                } 
-
-        
-    }
-    window.getData = function(pageNo=1){
-        let url= "/"+document.getElementById('uri').value+"?"+document.getElementById('query').value+"&per_page="+document.getElementById('per_page').value+"&page="+pageNo;
-        let dataDom = document.getElementById('data');
-        let tableDom = document.getElementById('table');
-        // let requestDom = document.getElementById('request');
-        let totalDom = document.getElementById('total');
-        // let responseDom = document.getElementById('response');
-        dataDom.innerHTML=null;
-        tableDom.innerHTML=null;
-        // requestDom.innerHTML=null;
-        totalDom.innerHTML='processing....';
-        // responseDom.innerHTML='processing....';
-        // document.getElementById('output').src=url;
-        axios.post('/dbpanel'+url).then( 
-            function(response){ 
-                // console.log(response.data.result);
-                dataDom.innerHTML=JSON.stringify(response.data.result.data, undefined, 4).replace(/</g,'&lt');
-                tableDom.innerHTML=JSON.stringify(response.data.filter_status, undefined, 4);
-                // requestDom.innerHTML=JSON.stringify(response.headers, undefined, 4);
-                totalDom.innerHTML=response.data.total;
-                // responseDom.innerHTML=response.status;
-                hljs.highlightBlock(dataDom);
-                hljs.highlightBlock(tableDom);
-                setPagination(response.data.result.current_page,response.data.result.last_page);
-                // hljs.highlightBlock(requestDom);
-            })
-            .catch(
-            function(error){
-                dataDom.innerHTML='Error';
-                // requestDom.innerHTML=JSON.stringify(error.message, undefined, 4);
-                // hljs.highlightBlock(requestDom);
-                
-            });
-    
-    };
-    // hljs.highlightBlock(document.querySelector('code'));
-    function viewInfo(){
-        event.stopPropagation();
-        document.getElementsByClassName('info-container')[0].classList.toggle('active');
-    }
-    </script>
+    <script src='vendor/dbpanel/js/app.js'></script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script>
-        $('#myTab a').on('click', function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-        });
-        document.addEventListener('DOMContentLoaded', (event) => {
-  document.querySelectorAll('pre code').forEach((block) => {
-    hljs.highlightBlock(block);
-  });
-});
-document.addEventListener('DOMContentLoaded', (event) => {
-  document.querySelectorAll('td code').forEach((block) => {
-    hljs.highlightBlock(block);
-  });
-});
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
 </html>

@@ -40,6 +40,10 @@ class DBpanelServiceProvider extends ServiceProvider{
         $this->publishes([
             __DIR__.'/config/dbpanel.php' => config_path('dbpanel.php')
         ], 'config');
+
+        $this->publishes([
+            __DIR__.'/resources/assets' => public_path('vendor/dbpanel'),
+        ], 'public');
     }
 
     public function register(){
