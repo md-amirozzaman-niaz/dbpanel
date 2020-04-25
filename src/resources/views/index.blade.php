@@ -92,7 +92,7 @@
             .info-container{
                 position: fixed;
                 z-index: 12;
-                background: #f2f2f2;
+                background: #f5f5f5;
                 border-left: 1px solid #999;
                 transition: 800ms;
                 right: -79.5%;
@@ -108,18 +108,21 @@
             }
             .info-btn{
                 position:absolute;
-                width: 31px;
+                width: 32px;
                 padding: 0.62em;
                 margin-top: 8px;
-                margin-left: -31px;
+                margin-left: -32px;
                 z-index: 15;
                 cursor: pointer;
-                background: #f2f2f2;
                 border: 1px solid #c5c5c5;
                 border-right: 0px;
                 border-radius: 5px;
                 border-bottom-right-radius: 0px;
                 border-top-right-radius: 0px;
+                background: #f5f5f5 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIcAAACHCAYAAAA850oKAAAABHNCS…J0ZWQgd2l0aCBlemdpZi5jb20gU1ZHIHRvIFBORyBjb252ZXJ0ZXIsKeMjAAAAAElFTkSuQmCC) no-repeat 5px 3px;
+                height: 35px;
+                background-position: center;
+                background-size: 21px;
             }
             .page-item .page-link{
                 background-color: #eff3f6;
@@ -163,7 +166,7 @@ kbd,code{
     </head>
     <body>
         <div class="container-fluid"><div class="info-container shadow">
-            <div class="info-btn" onclick="viewInfo()"><i class="fas fa-cogs"></i></div>
+            <div class="info-btn" onclick="viewInfo()"></div>
             <ul class="nav nav-tabs pl-2 pt-2" id="myTab" role="tablist">
                 <li class="nav-item">
                   <a class="nav-link active" id="data-type-tab" data-toggle="tab" href="#data-type" role="tab" aria-controls="data-type" aria-selected="true">Data type</a>
@@ -680,7 +683,7 @@ kbd,code{
                         <div class="input-group-prepend">
                             <div class="input-group-text brr-0">Query</div>
                         </div>
-                        <input type="url" class="form-control brr-0" id="query" value="id=20-24&return_col=id,name,email">
+                        <input type="url" class="form-control brr-0" id="query" value="id=20-24&return_only=id,name,email">
                     </div>
                 </div>
                 <div class="col-md-1 p-0">
@@ -755,20 +758,7 @@ kbd,code{
                         }
                     }
                 } 
-            // }else{
-                // if(pageNo == total){
-                //     ulOfPagination.innerHTML =null ;
-                //     ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData('+1+')">'+1+'</a></li>';
-                //     ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
-                //     for(i=total-9;i <total+1;i++){
-                //             let activeClass = i==total ? ' active' : '';
-                //             ulOfPagination.innerHTML += '<li class="page-item'+activeClass+'"><a class="page-link" onclick="getData('+i+')">'+i+'</a></li>';
-                //         }
-                        
-                        
-                    
-                // }
-            // }
+
         
     }
     window.getData = function(pageNo=1){
@@ -787,7 +777,7 @@ kbd,code{
         axios.post('/dbpanel'+url).then( 
             function(response){ 
                 // console.log(response.data.result);
-                dataDom.innerHTML=JSON.stringify(response.data.result.data, undefined, 4);
+                dataDom.innerHTML=JSON.stringify(response.data.result.data, undefined, 4).replace(/</g,'&lt');
                 tableDom.innerHTML=JSON.stringify(response.data.filter_status, undefined, 4);
                 // requestDom.innerHTML=JSON.stringify(response.headers, undefined, 4);
                 totalDom.innerHTML=response.data.total;

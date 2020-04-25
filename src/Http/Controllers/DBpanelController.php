@@ -21,7 +21,7 @@ class DBpanelController extends Controller
     public function data($table,$joinTable=null  ){
         $filter = new Filter;
         $filtered= $filter->loadTable($table);
-        $filtered_query = $filtered->query();
+        // $filtered_query = $filtered->query();
         
     
         $filtered_data = $filtered->getData();

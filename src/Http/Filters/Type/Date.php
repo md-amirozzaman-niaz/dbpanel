@@ -13,7 +13,7 @@ class Date extends BaseFilter
         $startDate = $date[1];
         $endDate = count($date) > 2 ?$date[2] : null;
         
-        if ((request()->has('date') && !Schema::hasColumn(session('filter_table'), $column))) {
+        if (!in_array($column,session('filter_column'))) {
             session()->flash('status.date', 'Task was not successful!');
             return $builder;
         }
