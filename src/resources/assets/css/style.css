@@ -146,3 +146,6 @@ border-radius: 3px;
 thead {
     background: #f8f9fb;
 }
+li {
+    margin-bottom: .5em;
+}
