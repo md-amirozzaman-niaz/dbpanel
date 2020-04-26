@@ -101,7 +101,7 @@ class Filter
                     }
                     session(['filter_column'=>$this->columns]);
                     // session(['filter_join_table'=> $joinTableName]);
-                    $query->join($joinTableName[0], $this->table.'.'.$joinTableName[2], '=', $joinTableName[0].'.'.$joinTableName[1]);
+                    $query->join($joinTableName[0], $joinTableName[2].'.'.$joinTableName[3], '=', $joinTableName[0].'.'.$joinTableName[1]);
                     // $query = DB::table($joinTableName[0])->joinSub($query, 'filtered_query', function ($join) {
                     //     $a =session('filter_join_table');
                     //     $join->on($a[0].'.'.$a[1], '=', 'filtered_query.'.$a[2]);

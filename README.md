@@ -73,8 +73,8 @@ Example *(value)*:
 
 Example *(value)*:
 
-+ `joinTableName:JoinTablesColumnName:PrimaryTablesColumnName`
-+ `joinTableName:JoinTablesColumnName:PrimaryTablesColumnName,secondJoinTableName:secondJoinTablesColumnName:PrimaryTablesColumnName`
++ `joinTableName:JoinTablesColumnName:PrimaryTable:PrimaryTablesColumnName`
++ `joinTableName:JoinTablesColumnName:PrimaryTable:PrimaryTablesColumnName,secondJoinTableName:secondJoinTablesColumnName:anotherTable:anotherTableColumnName`
 
 > **Note**: Not used any `id` related filter because it is possible both table had `id` column.
 > it will thrown error.
