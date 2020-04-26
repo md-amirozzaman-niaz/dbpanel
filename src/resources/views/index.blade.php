@@ -534,6 +534,16 @@
                         <li><code>product_id:&lt;200,product_price:&gt;500</code></li>
                         <li><code>product_price:&lt;300|discount:&gt;15</code></li>
                         </ul>
+                        <h4><a id="user-content-join-key" class="anchor" aria-hidden="true" href="#join-key"></a>join <em>(key)</em></h4>
+                        <p>Example <em>(value)</em>:</p>
+                        <ul>
+                            <li><code>joinTableName:JoinTablesColumnName:PrimaryTable:PrimaryTablesColumnName</code></li>
+                            <li><code>joinTableName:JoinTablesColumnName:PrimaryTable:PrimaryTablesColumnName,secondJoinTableName:secondJoinTablesColumnName:anotherTable:anotherTableColumnName</code></li>
+                        </ul>
+                        <blockquote>
+                            <p><strong>Note</strong>: Not used any <code>id</code> related filter because it is possible both table had <code>id</code> column.
+                            it will thrown error.</p>
+                        </blockquote>
                         <h4><a id="user-content-return_only-key" class="anchor" aria-hidden="true" href="#return_only-key"></a>return_only <em>(key)</em></h4>
                         <p>for <em>alias</em> use <code>@</code></p>
                         <p>Example <em>(value)</em>:</p>
