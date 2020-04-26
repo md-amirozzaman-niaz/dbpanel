@@ -88,22 +88,25 @@ class Filter
     public function setQuery(){
         if($this->filter){
             $pipe = app(Pipeline::class);
-            $query = $this->database->select();
+            $query = $this->database;
             if(request()->has('join')){ 
-                $joinClause = explode(',',request('join'))[0];
-                $joinTable = explode(':',$joinClause)[0];
-                $columns = Schema::getColumnListing($joinTable);
-                foreach($columns as $column){
-                    $this->columns[]=$column;
-                    $columnsWithType[$column] = Schema::getColumnType($joinTable,$column);
+                $joinTables = explode(',',request('join'));
+                foreach($joinTables as $joinTable){
+                    $joinTableName = explode(':',$joinTable);
+                    $columns = Schema::getColumnListing($joinTableName[0]);
+                    foreach($columns as $column){
+                        $this->columns[]=$column;
+                        $columnsWithType[$column] = Schema::getColumnType($joinTableName[0],$column);
 
+                    }
+                    session(['filter_column'=>$this->columns]);
+                    // session(['filter_join_table'=> $joinTableName]);
+                    $query->join($joinTableName[0], $joinTableName[2].'.'.$joinTableName[3], '=', $joinTableName[0].'.'.$joinTableName[1]);
+                    // $query = DB::table($joinTableName[0])->joinSub($query, 'filtered_query', function ($join) {
+                    //     $a =session('filter_join_table');
+                    //     $join->on($a[0].'.'.$a[1], '=', 'filtered_query.'.$a[2]);
+                    // });
                 }
-                session(['filter_column'=>$this->columns]);
-                $query = DB::table($joinTable)->joinSub($query, 'filtered_query', function ($join) {
-                    $joinClause = explode(',',request('join'))[0];
-                    $a = explode(':',$joinClause);
-                    $join->on($a[0].'.'.$a[1], '=', 'filtered_query.'.$a[2]);
-                });
             }
             $query = $pipe->send($query)->through([
                 \Niaz\DBpanel\Http\Filters\Type\Sort::class,
