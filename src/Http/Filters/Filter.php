@@ -178,9 +178,10 @@ class Filter
                 foreach($return_only_arr as $col){       
                     $alias= str_replace('@',' as ',$col);
                     $qualify_col_arr[]=$alias;
-
+                    
+                }
+                return $qualify_col_arr;
             }
-             }
              return '*';
         }
         if(request()->has('return_only')){
