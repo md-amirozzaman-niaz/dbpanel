@@ -93,15 +93,15 @@ class Filter
                 $joinTables = explode(',',request('join'));
                 foreach($joinTables as $joinTable){
                     $joinTableName = explode(':',$joinTable);
-                    $columns = Schema::getColumnListing($joinTableName[0]);
+                    $columns = Schema::getColumnListing($joinTableName[2]);
                     foreach($columns as $column){
                         $this->columns[]=$column;
-                        $columnsWithType[$column] = Schema::getColumnType($joinTableName[0],$column);
+                        $columnsWithType[$column] = Schema::getColumnType($joinTableName[2],$column);
 
                     }
                     session(['filter_column'=>$this->columns]);
                     // session(['filter_join_table'=> $joinTableName]);
-                    $query->join($joinTableName[0], $joinTableName[2].'.'.$joinTableName[3], '=', $joinTableName[0].'.'.$joinTableName[1]);
+                    $query->join($joinTableName[2], $joinTableName[0].'.'.$joinTableName[1], '=', $joinTableName[2].'.'.$joinTableName[3]);
                     // $query = DB::table($joinTableName[0])->joinSub($query, 'filtered_query', function ($join) {
                     //     $a =session('filter_join_table');
                     //     $join->on($a[0].'.'.$a[1], '=', 'filtered_query.'.$a[2]);
@@ -170,8 +170,19 @@ class Filter
 
     protected function checkReturnColumnExist(){
        
-        
+        // return explode(',',request('return_only'));
         $qualify_col_arr = [];
+        if(request()->has('join')){
+            if(request()->has('return_only')){
+                $return_only_arr = explode(',',request('return_only'));
+                foreach($return_only_arr as $col){       
+                    $alias= str_replace('@',' as ',$col);
+                    $qualify_col_arr[]=$alias;
+
+            }
+             }
+             return '*';
+        }
         if(request()->has('return_only')){
             $return_only_arr = explode(',',request('return_only'));
             foreach($return_only_arr as $col){
