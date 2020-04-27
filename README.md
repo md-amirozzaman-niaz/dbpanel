@@ -73,10 +73,13 @@ Example *(value)*:
 
 Example *(value)*:
 
-+ `joinTableName:JoinTablesColumnName:PrimaryTable:PrimaryTablesColumnName`
-+ `joinTableName:JoinTablesColumnName:PrimaryTable:PrimaryTablesColumnName,secondJoinTableName:secondJoinTablesColumnName:anotherTable:anotherTableColumnName`
++ `initialTable:Column:firstTable:Column`
 
-> **Note**: Not used any `id` related filter because it is possible both table had `id` column.
+*initialColumn=firstColumn* and *firstColumn=secondColumn*
+
++ `initialTable:Column:firstTable:Column,firstable:Column:secondTable:Column:`
+
+> **Note**: when use **join** Not to use any similar `column` name related filter
 > it will thrown error.
 
 #### return_only *(key)*
@@ -88,6 +91,7 @@ Example *(value)*:
 + `id,name,email` `name,email,phone`
 + `id,name@user_name,email@user_email`
 + `name@employee_name,phone@employee_phone`
++ `upazilas.name@upazila,districts.name@district,divisions.name@division,website`
 
 #### return_except *(key)*
 
