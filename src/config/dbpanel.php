@@ -1,4 +1,5 @@
 <?php 
 return [
-    'model' => '\App\Models'
+    'model' => '\App\Models',
+    'design' => '\vendor\dbpanel\media\demo.png'
 ];

@@ -83,6 +83,7 @@ font-size: 13px;
     height: calc(100vh - 60px);
     overflow-y: scroll;
     padding: 10px;
+    position: relative;
 }
 .info-container.active{
     right:0px;
@@ -150,4 +151,14 @@ thead {
 }
 li {
     margin-bottom: .5em;
+}
+img{
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }

@@ -38,6 +38,9 @@
                     <a class="nav-link" id="artisan-tab" data-toggle="tab" href="#artisan" role="tab" aria-controls="artisan" aria-selected="false">Artisan Commands</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" id="image-tab" data-toggle="tab" href="#image" role="tab" aria-controls="image" aria-selected="false">Database Design</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" id="help-tab" data-toggle="tab" href="#help" role="tab" aria-controls="help" aria-selected="false">How to Use</a>
                 </li>
               </ul>
@@ -476,21 +479,12 @@
                     </table>
                 </div>
                 <div class="info-table tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
-                    <article class="markdown-body entry-content" itemprop="text"><h1><a id="user-content-dbpanel" class="anchor" aria-hidden="true" href="#dbpanel"></a>dbpanel</h1>
+                    <article class="markdown-body entry-content" itemprop="text">
+                        <h1><a id="user-content-dbpanel" class="anchor" aria-hidden="true" href="#dbpanel"></a>dbpanel</h1>
                         <p>database panel for laravel application</p>
-                        <h3><a id="user-content-installation" class="anchor" aria-hidden="true" href="#installation">
+                        
                             
-                        </a>Installation</h3>
-                        <pre><code>composer require niaz/dbpanel
-                        </code></pre>
-                        <h3><a id="user-content-publish-assets" class="anchor" aria-hidden="true" href="#publish-assets"></a>Publish assets</h3>
-                        <pre><code>php artisan vendor:publish --tag=public --force
-                        </code></pre>
-                        <h3><a id="user-content-usage" class="anchor" aria-hidden="true" href="#usage">
-                        </a>Usage</h3>
-                        <p>Visit Route:</p>
-                        <pre><code>/dbpanel
-                        </code></pre>
+                        
                         <p>Select a <code>table</code> name from table option and enter some query string with some <code>key</code> name are filter name as follows:</p>
                         <h4><a id="user-content-id-key" class="anchor" aria-hidden="true" href="#id-key">
                             </a>id <em>(key)</em></h4>
@@ -558,7 +552,14 @@
                         <li><code>id,name,email</code> <code>name,email,phone</code></li>
                         </ul>
                         </article>
-               </div>
+
+                
+                    
+                    
+                    </div>
+                    <div class="info-table tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
+                        <img src="{{config('dbpanel.design')}}">
+                    </div>
             </div>
         </div><form class="row pt-2">
             <div class="col-md-12 row m-0">
