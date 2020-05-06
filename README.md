@@ -4,7 +4,7 @@ database panel for laravel application
 ### Installation
 
 ```
-composer require niaz/dbpanel
+composer require niaz/dbpanel --dev
 ```
 ### Publish assets
 ```
