@@ -1,5 +1,5 @@
 # dbpanel
-database panel for laravel application
+database panel for laravel application. You can look around your laravel application's database easily and fastest way with so many filter. You might look around your table's column type and index.
 
 ### Installation
 
