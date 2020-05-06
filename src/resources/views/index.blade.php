@@ -8,13 +8,10 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
+        <link rel="icon" type="image/png" sizes="32x32" href="vendor/dbpanel/media/favicon.png">
         <!-- Styles -->
          <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/a11y-dark.min.css" integrity="sha256-7L/IK7qUTcgTXtfLAxip5Eo+hnp+pSe5htBCh5pYg6o=" crossorigin="anonymous" /> --}}
-         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/shades-of-purple.min.css" integrity="sha256-U+HfsMv32Nk4Vgh4v5SAdJaVBCEY2vUhWIISOZ14h4g=" crossorigin="anonymous" /> --}}
-         {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github-gist.min.css" integrity="sha256-xKngFRXh54wtbQtuYDjv4R5dJSjZAjRiq5u0dlUxAM0=" crossorigin="anonymous" /> --}}
-         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" />
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/fontawesome.min.css" integrity="sha256-CuUPKpitgFmSNQuPDL5cEfPOOJT/+bwUlhfumDJ9CI4=" crossorigin="anonymous" />
          <link rel="stylesheet" href='vendor/dbpanel/css/style.css' />
     </head>
@@ -36,6 +33,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="artisan-tab" data-toggle="tab" href="#artisan" role="tab" aria-controls="artisan" aria-selected="false">Artisan Commands</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="image-tab" data-toggle="tab" href="#image" role="tab" aria-controls="image" aria-selected="false">Database Design</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="help-tab" data-toggle="tab" href="#help" role="tab" aria-controls="help" aria-selected="false">How to Use</a>
@@ -476,21 +476,8 @@
                     </table>
                 </div>
                 <div class="info-table tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
-                    <article class="markdown-body entry-content" itemprop="text"><h1><a id="user-content-dbpanel" class="anchor" aria-hidden="true" href="#dbpanel"></a>dbpanel</h1>
-                        <p>database panel for laravel application</p>
-                        <h3><a id="user-content-installation" class="anchor" aria-hidden="true" href="#installation">
-                            
-                        </a>Installation</h3>
-                        <pre><code>composer require niaz/dbpanel
-                        </code></pre>
-                        <h3><a id="user-content-publish-assets" class="anchor" aria-hidden="true" href="#publish-assets"></a>Publish assets</h3>
-                        <pre><code>php artisan vendor:publish --tag=public --force
-                        </code></pre>
-                        <h3><a id="user-content-usage" class="anchor" aria-hidden="true" href="#usage">
-                        </a>Usage</h3>
-                        <p>Visit Route:</p>
-                        <pre><code>/dbpanel
-                        </code></pre>
+                    <article class="markdown-body entry-content" itemprop="text">
+                        <h1><a id="user-content-dbpanel" class="anchor" aria-hidden="true" href="#dbpanel"></a>dbpanel</h1>                                                                      
                         <p>Select a <code>table</code> name from table option and enter some query string with some <code>key</code> name are filter name as follows:</p>
                         <h4><a id="user-content-id-key" class="anchor" aria-hidden="true" href="#id-key">
                             </a>id <em>(key)</em></h4>
@@ -537,11 +524,14 @@
                         <h4><a id="user-content-join-key" class="anchor" aria-hidden="true" href="#join-key"></a>join <em>(key)</em></h4>
                         <p>Example <em>(value)</em>:</p>
                         <ul>
-                            <li><code>joinTableName:JoinTablesColumnName:PrimaryTable:PrimaryTablesColumnName</code></li>
-                            <li><code>joinTableName:JoinTablesColumnName:PrimaryTable:PrimaryTablesColumnName,secondJoinTableName:secondJoinTablesColumnName:anotherTable:anotherTableColumnName</code></li>
+                                <li><code>initialTable:Column:firstTable:Column</code></li>
+                        </ul>
+                        <p><em>initialColumn=firstColumn</em> and <em>firstColumn=secondColumn</em></p>
+                        <ul>
+                            <li><code>initialTable:Column:firstTable:Column,firstable:Column:secondTable:Column:</code></li>
                         </ul>
                         <blockquote>
-                            <p><strong>Note</strong>: Not used any <code>id</code> related filter because it is possible both table had <code>id</code> column.
+                            <p><strong>Note</strong>: when use <strong>join</strong> Not to use any similar <code>column</code> name related filter
                             it will thrown error.</p>
                         </blockquote>
                         <h4><a id="user-content-return_only-key" class="anchor" aria-hidden="true" href="#return_only-key"></a>return_only <em>(key)</em></h4>
@@ -558,7 +548,15 @@
                         <li><code>id,name,email</code> <code>name,email,phone</code></li>
                         </ul>
                         </article>
-               </div>
+
+                
+                    
+                    
+                </div>
+                <div class="info-table tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
+                    
+                    <img src="{{config('dbpanel.design')}}" class="d-block">
+                </div>
             </div>
         </div><form class="row pt-2">
             <div class="col-md-12 row m-0">
@@ -613,7 +611,6 @@
                 </label>
               <pre spellcheck="false" class="window"><code id="data">No data</code></pre>
             </div>
-            {{-- <div class="form-group"><iframe id="output" src=""></iframe></div> --}}
             <div class="col-md-12">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
@@ -626,12 +623,7 @@
             <div class="form-group">
                 <label>Table</label>
                 <pre spellcheck="false" class="window"><code id="table" class="json">No info</code></pre>
-            </div>
-            {{-- <div class="form-group">
-                <label>Response <span class="badge badge-primary ml-2" id="response"></span></label>
-                <pre spellcheck="false" class="window"><code id="request" class="json">No request</code></pre>
-            </div> --}}
-            
+            </div>           
         </div>
           </form>
         </div>

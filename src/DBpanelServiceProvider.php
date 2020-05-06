@@ -9,29 +9,7 @@ use Illuminate\Support\ServiceProvider;
 class DBpanelServiceProvider extends ServiceProvider{
 
     public function boot(){
-        /**
-         * Paginate a standard Laravel Collection.
-         *
-         * @param int $perPage
-         * @param int $total
-         * @param int $page
-         * @param string $pageName
-         * @return array
-         */
-        // Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
-        //     $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
-
-        //     return new LengthAwarePaginator(
-        //         $this->forPage($page, $perPage),
-        //         $total ?: $this->count(),
-        //         $perPage,
-        //         $page,
-        //         [
-        //             'path' => LengthAwarePaginator::resolveCurrentPath(),
-        //             'pageName' => $pageName,
-        //         ]
-        //     );
-        // });
+    
         $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         $this->loadViewsFrom(__DIR__.'/resources/views', 'dbpanel');
         $this->mergeConfigFrom(
@@ -39,11 +17,11 @@ class DBpanelServiceProvider extends ServiceProvider{
         );
         $this->publishes([
             __DIR__.'/config/dbpanel.php' => config_path('dbpanel.php')
-        ], 'config');
+        ], 'dbpanel');
 
         $this->publishes([
             __DIR__.'/resources/assets' => public_path('vendor/dbpanel'),
-        ], 'public');
+        ], 'dbpanel');
     }
 
     public function register(){

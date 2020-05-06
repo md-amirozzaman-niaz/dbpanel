@@ -20,7 +20,7 @@ function setPagination(pageNo,total){
         }else{
 
             for(i=1;i < total+1;i++){
-                let activeClass = i==1 ? ' active' : '';
+                let activeClass = i==pageNo ? ' active' : '';
                 ulOfPagination.innerHTML += '<li class="page-item'+activeClass+'"><a class="page-link" onclick="getData('+i+')">'+i+'</a></li>';
             }
         }

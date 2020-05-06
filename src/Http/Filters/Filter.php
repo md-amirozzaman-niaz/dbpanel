@@ -35,7 +35,6 @@ class Filter
             // $tableName = Str::plural($model);
             if($this->hasTable($table)){
                 session(['filter_table'=>$table]);
-
                 // $modelClass= Str::studly(Str::singular($table));
                 // $modelNamespace = config('dbpanel.model').'\\'.$modelClass;
                 // $model = new $modelNamespace;
@@ -43,7 +42,7 @@ class Filter
                 foreach($indexes as $indexType => $value){
                     $this->indexes[$indexType] = $value->getColumns();
                 }
-                // $this->keys $indexes[ 'primary' ]->getColumns()[0];
+
                 $this->table=$table;
                 $this->database = DB::table($table);
                 if(array_key_exists('primary',$indexes)){ 
@@ -62,7 +61,7 @@ class Filter
 
                 }
                 session(['filter_column'=>$this->columns]);
-                // columnsWithType
+
                 $this->status =[
                     'Table' => $table,
                     'TotalRows'=> $this->totalRows,
@@ -86,27 +85,14 @@ class Filter
     **/
 
     public function setQuery(){
+
         if($this->filter){
+
             $pipe = app(Pipeline::class);
             $query = $this->database;
-            if(request()->has('join')){ 
-                $joinTables = explode(',',request('join'));
-                foreach($joinTables as $joinTable){
-                    $joinTableName = explode(':',$joinTable);
-                    $columns = Schema::getColumnListing($joinTableName[2]);
-                    foreach($columns as $column){
-                        $this->columns[]=$column;
-                        $columnsWithType[$column] = Schema::getColumnType($joinTableName[2],$column);
 
-                    }
-                    session(['filter_column'=>$this->columns]);
-                    // session(['filter_join_table'=> $joinTableName]);
-                    $query->join($joinTableName[2], $joinTableName[0].'.'.$joinTableName[1], '=', $joinTableName[2].'.'.$joinTableName[3]);
-                    // $query = DB::table($joinTableName[0])->joinSub($query, 'filtered_query', function ($join) {
-                    //     $a =session('filter_join_table');
-                    //     $join->on($a[0].'.'.$a[1], '=', 'filtered_query.'.$a[2]);
-                    // });
-                }
+            if($this->hasParam('join')){ 
+                $query = $this->joinTable($query);
             }
             $query = $pipe->send($query)->through([
                 \Niaz\DBpanel\Http\Filters\Type\Sort::class,
@@ -116,7 +102,8 @@ class Filter
                 \Niaz\DBpanel\Http\Filters\Type\Date::class,
                 \Niaz\DBpanel\Http\Filters\Type\Where::class
                 ])->thenReturn();
-            $this->query = $query->select($this->checkReturnColumnExist());
+       
+            $this->query = $query->select(DB::raw($this->checkReturnColumnExist()));
         }
     }
     /*
@@ -131,6 +118,8 @@ class Filter
         $this->status['retrieveRows'] = $this->retrieveRows;
         $this->status['SQL']=$this->sql;
         $this->status['Bindings']=$this->bindings;
+        $this->status['Log']=DB::getQueryLog();
+        // $this->status['methods'] =get_class(new DB);
         session()->forget('filters');
         session()->forget('status');
     
@@ -148,8 +137,8 @@ class Filter
     public function getData(){
 
         $this->setQuery();
-
-        $paginateData = $this->query->paginate(request('per_page'));
+        DB::connection()->enableQueryLog();
+        $paginateData = $this->query->paginate($this->parameters('per_page'));
 
         $this->sql = $this->query->toSql();
         $this->bindings = $this->query->getBindings();
@@ -169,12 +158,12 @@ class Filter
     **/
 
     protected function checkReturnColumnExist(){
-       
-        // return explode(',',request('return_only'));
+
         $qualify_col_arr = [];
-        if(request()->has('join')){
-            if(request()->has('return_only')){
-                $return_only_arr = explode(',',request('return_only'));
+
+        if($this->hasParam('join')){
+            if($this->hasParam('return_only')){
+                $return_only_arr = explode(',',$this->parameters('return_only'));
                 foreach($return_only_arr as $col){       
                     $alias= str_replace('@',' as ',$col);
                     $qualify_col_arr[]=$alias;
@@ -182,30 +171,35 @@ class Filter
                 }
                 return $qualify_col_arr;
             }
+            if($this->hasParam('return')){
+                return str_replace('@',' as ',$this->parameters('return'));
+                }
              return '*';
         }
-        if(request()->has('return_only')){
-            $return_only_arr = explode(',',request('return_only'));
+        if($this->hasParam('return_only')){
+            $return_only_arr =explode(',',$this->parameters('return_only'));
             foreach($return_only_arr as $col){
                 $c = explode('@',$col) ? explode('@',$col)[0]:$col;
                 if(in_array($c,$this->columns)) 
                 {
                     $alias= str_replace('@',' as ',$col);
-                    // $this->status['alias'][] = $alias;
                     $qualify_col_arr[]=$alias;
                 }
             }
-            return $qualify_col_arr ? $qualify_col_arr : '*';
+            return $qualify_col_arr ? implode(',',$qualify_col_arr) : '*';
         }
-        if(request()->has('return_except')){
-            $return_except_arr = explode(',',request('return_except'));
+        if($this->hasParam('return_except')){
+            $return_except_arr = explode(',',$this->parameters('return_except'));
             foreach($return_except_arr as $col){
                 if(in_array($col,$this->columns)) $qualify_col_arr[]=$col;
             }
             $qualify_col_arr=array_diff($this->columns,$qualify_col_arr);
+            return implode(',',$qualify_col_arr);
         }
-        
-        return $qualify_col_arr ? $qualify_col_arr : '*';
+        if($this->hasParam('return')){
+            return str_replace('@',' as ',$this->parameters('return'));
+        }
+        return '*';
     }
 
     /*
@@ -216,9 +210,33 @@ class Filter
     *
     **/
     protected function hasTable($tableName){
-        return true;
         return Schema::hasTable($tableName);
         
+    }
+
+    protected function joinTable($query){
+        $joinTables = explode(',',$this->parameters('join'));
+        foreach($joinTables as $joinTable){
+            $joinTableName = explode(':',$joinTable);
+            $columns = Schema::getColumnListing($joinTableName[2]);
+            foreach($columns as $column){
+                $this->columns[]=$column;
+                $columnsWithType[$column] = Schema::getColumnType($joinTableName[2],$column);
+
+            }
+            session(['filter_column'=>$this->columns]);
+            $query->join($joinTableName[2], $joinTableName[0].'.'.$joinTableName[1], '=', $joinTableName[2].'.'.$joinTableName[3]);
+            
+        }
+        return $query;
+    }
+
+    protected function parameters($param){
+        return request($param);
+    }
+
+    protected function hasParam($param){
+        return request()->has($param);
     }
 
 }
