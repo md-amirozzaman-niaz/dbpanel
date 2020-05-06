@@ -25,7 +25,7 @@ Example *(value)*: `5` `5-100`
 
 #### sort *(key)*
 
-Example *(value*: `email:asc` `name:desc`  `desc`
+Example *(value)*: `email:asc` `name:desc`  `desc`
 
 #### is *(key)*
 
