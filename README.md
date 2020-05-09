@@ -99,15 +99,15 @@ Example *(value)*:
 Example *(value)*:
 + `id,name,email` `name,email,phone`
 
-### To Check Controller method
+### To Check Controller or Model
 
-Just type your controller class and method as 
+Just type your Controller or Model class name and method as 
 
 ```
 YourControllerName@method
 ```
 
-If you had a subfolder from Controller folder, then pass as
+If you had a subfolder from Controller or Model default folder, then pass as
 
 ```
 YourSubfolderName.YourControllerName@method
