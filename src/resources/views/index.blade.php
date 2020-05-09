@@ -547,6 +547,19 @@
                         <ul>
                         <li><code>id,name,email</code> <code>name,email,phone</code></li>
                         </ul>
+                        <h3>To Check COntroller method</h3>
+                        <p>Just type your controller class and method as</p>
+                        <pre><code>YourControllerName@method
+                        </code></pre>
+                        <p>If you had a subfolder from Controller folder, then pass as</p>
+                        <pre><code>YourSubfolderName.YourControllerName@method
+                        </code></pre>
+                        <p>To pass parameter</p>
+                        <pre><code>string:value1,value2:45
+                        </code></pre>
+                        <blockquote>
+                            <p>Note: parameters are separated by <code>:</code>. Array parameter value are <code>,</code> seprated. Numeric string value will auto converted as <code>int</code> type value. This was also applicable for array.</p>
+                            </blockquote>
                         </article>
 
                 
