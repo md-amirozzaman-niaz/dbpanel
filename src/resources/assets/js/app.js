@@ -73,6 +73,30 @@ window.controller =function(){
             totalDom.innerHTML='error';
         });
 }
+
+window.model =function(){
+    let model = document.getElementById('model-input').value;
+    let param = document.getElementById('model-parameter').value;
+    let dataDom = document.getElementById('data');
+    let tableDom = document.getElementById('table');
+    let totalDom = document.getElementById('total');
+    let ulOfPagination = document.getElementsByClassName('pagination')[0];  
+    ulOfPagination.innerHTML= null ;
+    dataDom.innerHTML=null;
+    tableDom.innerHTML=null;
+    totalDom.innerHTML='processing....';
+    axios.get('/dbpanel/model/'+model+'?parameters='+param).then( 
+        function(response){ 
+            dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
+            hljs.highlightBlock(dataDom);
+            totalDom.innerHTML='Success';
+        })
+        .catch(
+        function(exception){
+            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
+            totalDom.innerHTML='error';
+        });
+}
 function viewInfo(){
     event.stopPropagation();
     document.getElementsByClassName('info-container')[0].classList.toggle('active');
