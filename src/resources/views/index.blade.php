@@ -547,7 +547,7 @@
                         <ul>
                         <li><code>id,name,email</code> <code>name,email,phone</code></li>
                         </ul>
-                        <h3>To Check COntroller method</h3>
+                        <h3>To Check Controller method</h3>
                         <p>Just type your controller class and method as</p>
                         <pre><code>YourControllerName@method
                         </code></pre>
@@ -643,11 +643,11 @@
                         <div class="btn">json</div>
                     </div> --}}
                 </label>
-              <pre spellcheck="false" class="window"><code id="data">No data</code></pre>
+              <pre spellcheck="false" class="window"><code id="data"></code></pre>
             </div>
             <div class="col-md-12">
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
+                    <ul class="pagination justify-content-right" style="height:60px;">
                       <li class="nav-item"><a class="nav-link"></a></li>
                     </ul>
                   </nav>
@@ -656,7 +656,7 @@
         <div class="col-md-4 mt-2 pr-0">
             <div class="form-group">
                 <label class="header">Table</label>
-                <pre spellcheck="false" class="window"><code id="table" class="json">No info</code></pre>
+                <pre spellcheck="false" class="window"><code id="table" class="json"></code></pre>
             </div>           
         </div>
     </div>

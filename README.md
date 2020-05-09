@@ -92,14 +92,14 @@ Example *(value)*:
 + `id,name,email` `name,email,phone`
 + `id,name@user_name,email@user_email`
 + `name@employee_name,phone@employee_phone`
-+ `upazilas.name@upazila,districts.name@district,divisions.name@division,website`
++ `users.name@employee_name,address,website`
 
 #### return_except *(key)*
 
 Example *(value)*:
 + `id,name,email` `name,email,phone`
 
-### To Check COntroller method
+### To Check Controller method
 
 Just type your controller class and method as 
 
@@ -120,3 +120,8 @@ string:value1,value2:45
 ```
 
 > Note: parameters are separated by `:`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.
+
+### Return
+
+It will return a json with `log` and `data` . In `log` all database query,bindings and time are listed.If this method return any data,it will return with `data`.
+
