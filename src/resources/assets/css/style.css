@@ -1,4 +1,4 @@
-label{
+label.header{
     padding: 16px;
     background-color: #f6f8fa;
     border: 1px solid #d1d5da;
@@ -9,6 +9,14 @@ label{
 }
 body{
     background: #e8e8e8;
+    font-size: 13px;
+}
+.sidebar{
+    height: 96vh;
+    background: #f6f8fa;
+    border: 1px solid;
+    border-color: #bcc7d0;
+    border-radius: 3px;
 }
 #output{
     height:70vh;
@@ -28,7 +36,7 @@ body{
 .window{
     border: 1px solid #ced4da;
     padding: 10px;
-    /* background: #f6f8fa; */
+    font-size: 13px;
     background: #fff;                
     border-top: 0px;
     border-bottom-left-radius: 3px;
@@ -46,14 +54,16 @@ font-size: 13px;
 }
 .btn{
     border: 1px solid #d2d2d2;
-    border-left: 0px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
     color: #24292e;
     background-color: #eff3f6;
     background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
     font-size: 13px;
     padding: 7px;
+}
+.brl-0{
+    border-left: 0px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 .info-container{
     position: fixed;
