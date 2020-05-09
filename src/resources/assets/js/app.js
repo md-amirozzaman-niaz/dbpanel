@@ -54,14 +54,23 @@ window.controller =function(){
     let controller = document.getElementById('controller-input').value;
     let param = document.getElementById('controller-parameter').value;
     let dataDom = document.getElementById('data');
+    let tableDom = document.getElementById('table');
+    let totalDom = document.getElementById('total');
+    let ulOfPagination = document.getElementsByClassName('pagination')[0];  
+    ulOfPagination.innerHTML= null ;
+    dataDom.innerHTML=null;
+    tableDom.innerHTML=null;
+    totalDom.innerHTML='processing....';
     axios.get('/dbpanel/controller/'+controller+'?parameters='+param).then( 
         function(response){ 
             dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
             hljs.highlightBlock(dataDom);
+            totalDom.innerHTML='Success';
         })
         .catch(
         function(exception){
             dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
+            totalDom.innerHTML='error';
         });
 }
 function viewInfo(){
