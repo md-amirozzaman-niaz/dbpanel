@@ -1,4 +1,5 @@
 # dbpanel
+
 dbpanel for laravel application. You can look around your laravel application's database easily and fastest way with so many filter. You might look around your table's column type and index. You can console your controller methods database query log. How many query it going to used and how long it will take for those query. To use this package follow the instruction below.
 
 ### Installation
