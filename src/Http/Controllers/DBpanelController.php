@@ -41,11 +41,33 @@ class DBpanelController extends Controller
         });
         DB::connection()->enableQueryLog();
         $controller = explode('@',$controller);
-        $controller_namespace ='\\App\\Http\\Controllers\\'.str_replace('.','\\',$controller[0]);
+        $controller_namespace =config('dbpanel.controller').'\\'.str_replace('.','\\',$controller[0]);
         $controller_class = new $controller_namespace;
         $method = $controller[1];
         
         $data = $controller_class->$method(...$parameters);
         return ['log'=> DB::getQueryLog(),'data'=>$data];
     }
+
+    public function checkModel($model){
+
+        $parameters= collect(explode(':',request('parameters')))->map(function($i){
+            if(strpos($i,',') > -1){
+                return collect(explode(',',$i))->map(function($j){
+                    return is_numeric($j) ? (int)$j : $j;
+                });
+            }
+            else{
+                return is_numeric($i) ? (int)$i : $i;
+            }
+        });
+        DB::connection()->enableQueryLog();
+        $model = explode('@',$model);
+        $model_namespace =config('dbpanel.model').'\\'.str_replace('.','\\',$model[0]);
+        $model_class = new $model_namespace;
+        $method = $model[1];
+        
+        $data = $model_class->$method(...$parameters);
+        return ['log'=> DB::getQueryLog(),'data'=>$data];
+    } 
 }

@@ -578,7 +578,7 @@
                         <a class="nav-link active" id="controller-type-tab" data-toggle="tab" href="#controller-type" role="tab" aria-controls="controller-type" aria-selected="true">Controller</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="true">history</a>
+                        <a class="nav-link" id="model-tab" data-toggle="tab" href="#model" role="tab" aria-controls="model" aria-selected="true">Model</a>
                       </li>
                 </ul>
                 <div class="tab-content p-2" style="background:#fff;" id="mySideBarTabContent">
@@ -587,8 +587,10 @@
                         <input type="text" id="controller-parameter" class="form-control mt-2" placeholder="parameters">
                         <input type="button" onclick="controller()" class="btn btn-block mt-2" value="check">
                     </div>
-                    <div class=" tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
-                        history
+                    <div class=" tab-pane fade" id="model" role="tabpanel" aria-labelledby="history-tab">
+                        <input type="text" id="model-input" class="form-control mt-2" placeholder="model@method">
+                        <input type="text" id="model-parameter" class="form-control mt-2" placeholder="parameters">
+                        <input type="button" onclick="model()" class="btn btn-block mt-2" value="check">
                     </div>
                 </div>
             </div>
