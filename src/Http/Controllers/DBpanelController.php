@@ -29,13 +29,23 @@ class DBpanelController extends Controller
 
     public function checkController($controller){
 
+        $parameters= collect(explode(':',request('parameters')))->map(function($i){
+            if(strpos($i,',') > -1){
+                return collect(explode(',',$i))->map(function($j){
+                    return is_numeric($j) ? (int)$j : $j;
+                });
+            }
+            else{
+                return is_numeric($i) ? (int)$i : $i;
+            }
+        });
         DB::connection()->enableQueryLog();
         $controller = explode('@',$controller);
         $controller_namespace ='\\App\\Http\\Controllers\\'.str_replace('.','\\',$controller[0]);
         $controller_class = new $controller_namespace;
         $method = $controller[1];
-        $parameter= request('parameters');
-        $data = $controller_class->$method($parameter);
+        
+        $data = $controller_class->$method(...$parameters);
         return ['log'=> DB::getQueryLog(),'data'=>$data];
     }
 }

@@ -1,5 +1,5 @@
 # dbpanel
-database panel for laravel application
+dbpanel for laravel application. You can look around your laravel application's database easily and fastest way with so many filter. You might look around your table's column type and index. You can console your controller methods database query log. How many query it going to used and how long it will take for those query. To use this package follow the instruction below.
 
 ### Installation
 
@@ -25,7 +25,7 @@ Example *(value)*: `5` `5-100`
 
 #### sort *(key)*
 
-Example *(value*: `email:asc` `name:desc`  `desc`
+Example *(value)*: `email:asc` `name:desc`  `desc`
 
 #### is *(key)*
 
@@ -98,3 +98,24 @@ Example *(value)*:
 Example *(value)*:
 + `id,name,email` `name,email,phone`
 
+### To Check COntroller method
+
+Just type your controller class and method as 
+
+```
+YourControllerName@method
+```
+
+If you had a subfolder from Controller folder, then pass as
+
+```
+YourSubfolderName.YourControllerName@method
+```
+
+To pass parameter
+
+```
+string:value1,value2:45
+```
+
+> Note: parameters are separated by `:`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.

@@ -45,7 +45,7 @@ window.getData = function(pageNo=1){
         })
         .catch(
         function(error){
-            dataDom.innerHTML=JSON.stringify(error.response.data, undefined, 4).replace(/</g,'&lt');
+            dataDom.innerHTML=JSON.stringify(error.response.data, undefined, 4).replace(/\/\//g,'/');
             totalDom.innerHTML='';       
         });
 
@@ -61,7 +61,7 @@ window.controller =function(){
         })
         .catch(
         function(exception){
-            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/</g,'&lt');      
+            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
         });
 }
 function viewInfo(){
