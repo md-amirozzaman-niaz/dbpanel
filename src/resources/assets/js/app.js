@@ -27,14 +27,14 @@ function setPagination(pageNo,total){
     }  
 }
 window.getData = function(pageNo=1){
-    let url= "/"+document.getElementById('uri').value+"?"+document.getElementById('query').value+"&per_page="+document.getElementById('per_page').value+"&page="+pageNo;
+    let url= document.getElementById('uri').value+"?"+document.getElementById('query').value+"&per_page="+document.getElementById('per_page').value+"&page="+pageNo;
     let dataDom = document.getElementById('data');
     let tableDom = document.getElementById('table');
     let totalDom = document.getElementById('total');
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
     totalDom.innerHTML='processing....';
-    axios.post('/dbpanel'+url).then( 
+    axios.post('/dbpanel/database/'+url).then( 
         function(response){ 
             dataDom.innerHTML=JSON.stringify(response.data.result.data, undefined, 4).replace(/</g,'&lt');
             tableDom.innerHTML=JSON.stringify(response.data.filter_status, undefined, 4);
@@ -45,12 +45,25 @@ window.getData = function(pageNo=1){
         })
         .catch(
         function(error){
-            dataDom.innerHTML='Error';
+            dataDom.innerHTML=JSON.stringify(error.response.data, undefined, 4).replace(/</g,'&lt');
             totalDom.innerHTML='';       
         });
 
 };
-
+window.controller =function(){
+    let controller = document.getElementById('controller-input').value;
+    let param = document.getElementById('controller-parameter').value;
+    let dataDom = document.getElementById('data');
+    axios.get('/dbpanel/controller/'+controller+'?parameters='+param).then( 
+        function(response){ 
+            dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
+            hljs.highlightBlock(dataDom);
+        })
+        .catch(
+        function(exception){
+            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/</g,'&lt');      
+        });
+}
 function viewInfo(){
     event.stopPropagation();
     document.getElementsByClassName('info-container')[0].classList.toggle('active');

@@ -558,7 +558,28 @@
                     <img src="{{config('dbpanel.design')}}" class="d-block">
                 </div>
             </div>
-        </div><form class="row pt-2">
+        </div><form class="row p-2">
+            <div class="col-md-2 p-0 sidebar">
+                <ul class="nav nav-tabs pl-2 pt-2" id="mySideBarTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="controller-type-tab" data-toggle="tab" href="#controller-type" role="tab" aria-controls="controller-type" aria-selected="true">Controller</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="true">history</a>
+                      </li>
+                </ul>
+                <div class="tab-content p-2" style="background:#fff;" id="mySideBarTabContent">
+                    <div class=" tab-pane fade show active" id="controller-type" role="tabpanel" aria-labelledby="controller-type-tab">
+                        <input type="text" id="controller-input" class="form-control mt-2" placeholder="Controller@method">
+                        <input type="text" id="controller-parameter" class="form-control mt-2" placeholder="parameters">
+                        <input type="button" onclick="controller()" class="btn btn-block mt-2" value="check">
+                    </div>
+                    <div class=" tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                        history
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 row pr-0">
             <div class="col-md-12 row m-0">
                 <div class="col-md-2 p-0">
                     <div class="input-group">                
@@ -596,12 +617,12 @@
                     </div>
                 </div>
                 <div class="col-md-1 p-0">
-                    <input type="button" class="btn" onclick="getData()" value="Get Data">
+                    <input type="button" class="btn brl-0" onclick="getData()" value="Get Data">
                 </div>
             </div>
             <div class="col-md-8 mt-2 pr-0">
             <div class="form-group">
-                <label>
+                <label class="header">
                     Data
                     <span class="badge badge-primary ml-2" id="total"></span>
                     {{-- <div class="float-right">
@@ -614,17 +635,18 @@
             <div class="col-md-12">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                      
+                      <li class="nav-item"><a class="nav-link"></a></li>
                     </ul>
                   </nav>
                 </div>
         </div>
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4 mt-2 pr-0">
             <div class="form-group">
-                <label>Table</label>
+                <label class="header">Table</label>
                 <pre spellcheck="false" class="window"><code id="table" class="json">No info</code></pre>
             </div>           
         </div>
+    </div>
           </form>
         </div>
     </body>
