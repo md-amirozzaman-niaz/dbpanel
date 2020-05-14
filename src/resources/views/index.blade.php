@@ -547,12 +547,12 @@
                         <ul>
                         <li><code>id,name,email</code> <code>name,email,phone</code></li>
                         </ul>
-                        <h3>To Check Controller method</h3>
-                        <p>Just type your controller class and method as</p>
-                        <pre><code>YourControllerName@method
+                        <h3>To Check Controller or Model or Other Method</h3>
+                        <p>Just type your Controller or Model or any other class name and method as</p>
+                        <pre><code>ClassName@method
                         </code></pre>
-                        <p>If you had a subfolder from Controller folder, then pass as</p>
-                        <pre><code>YourSubfolderName.YourControllerName@method
+                        <p>If you had a more namespace from Controller or Model default namespace prefix, then pass those extra as <code>dot</code> notation.</p>
+                        <pre><code>ExtraNameSpace.ClassName@method
                         </code></pre>
                         <p>To pass parameter</p>
                         <pre><code>string:value1,value2:45
@@ -560,6 +560,11 @@
                         <blockquote>
                             <p>Note: parameters are separated by <code>:</code>. Array parameter value are <code>,</code> seprated. Numeric string value will auto converted as <code>int</code> type value. This was also applicable for array.</p>
                             </blockquote>
+                            <p>To pass <code>request</code> instance</p>
+                            <pre><code>key@value:key2@value2:Key3@value3,number3
+                            </code></pre>
+                            <h3>Return</h3>
+                            <p>It will return a json with <code>log</code> and <code>data</code> . In <code>log</code> all database query,bindings and time are listed.If this method return any data,it will return with <code>data</code>.</p>
                         </article>
 
                 
