@@ -27,7 +27,7 @@ class DBpanelController extends Controller
         return ['result'=> $filtered_data , 'filter_status' => $filter->status(), 'request' => request()->all(),'total' => $count ];
     }
 
-    public function checkController($controller){
+    public function checkController(Request $request,$controller){
 
         $parameters=$this->setParameters();
         
