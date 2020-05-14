@@ -77,6 +77,8 @@ window.controller =function(){
 window.model =function(){
     let model = document.getElementById('model-input').value;
     let param = document.getElementById('model-parameter').value;
+     param = document.getElementById('hadRequest').checked?param+'&hadRequest=true':param;
+    
     let dataDom = document.getElementById('data');
     let tableDom = document.getElementById('table');
     let totalDom = document.getElementById('total');
@@ -96,6 +98,42 @@ window.model =function(){
             dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
             totalDom.innerHTML='error';
         });
+}
+window.other =function(){
+    let other = document.getElementById('other-input').value;
+    let request = document.getElementById('request-parameter').value;
+    let param = document.getElementById('other-parameter').value;
+     param = document.getElementById('hadRequest').checked?param+'&hadRequest='+request:param;
+    
+    let dataDom = document.getElementById('data');
+    let tableDom = document.getElementById('table');
+    let totalDom = document.getElementById('total');
+    let ulOfPagination = document.getElementsByClassName('pagination')[0];  
+    ulOfPagination.innerHTML= null ;
+    dataDom.innerHTML=null;
+    tableDom.innerHTML=null;
+    totalDom.innerHTML='processing....';
+    axios.get('/dbpanel/other/'+other+'?parameters='+param).then( 
+        function(response){ 
+            dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
+            hljs.highlightBlock(dataDom);
+            totalDom.innerHTML='Success';
+        })
+        .catch(
+        function(exception){
+            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
+            totalDom.innerHTML='error';
+        });
+}
+window.checkMethod =function(){
+    let whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
+    if(whichMethod == 'controller'){
+        window.controller();
+    }else if(whichMethod == 'model'){
+        window.model();
+    }else{
+        window.other();
+    }
 }
 function viewInfo(){
     event.stopPropagation();

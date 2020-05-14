@@ -7,4 +7,5 @@ Route::group(['namespace' => 'Niaz\DBpanel\Http\Controllers'], function () {
     Route::any('/dbpanel/database/{table}/{jointable?}','DBpanelController@data');
     Route::get('/dbpanel/controller/{controller}','DBpanelController@checkController');
     Route::get('/dbpanel/model/{model}','DBpanelController@checkModel');
+    Route::get('/dbpanel/other/{other}','DBpanelController@checkOther');
 });

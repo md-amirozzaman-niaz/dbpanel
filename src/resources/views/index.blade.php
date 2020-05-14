@@ -572,7 +572,7 @@
                 </div>
             </div>
         </div><form class="row p-2">
-            <div class="col-md-2 p-0 sidebar">
+            <div class="col-md-3 p-0 sidebar">
                 <ul class="nav nav-tabs pl-2 pt-2" id="mySideBarTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="controller-type-tab" data-toggle="tab" href="#controller-type" role="tab" aria-controls="controller-type" aria-selected="true">Controller</a>
@@ -580,21 +580,40 @@
                       <li class="nav-item">
                         <a class="nav-link" id="model-tab" data-toggle="tab" href="#model" role="tab" aria-controls="model" aria-selected="true">Model</a>
                       </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="model" aria-selected="true">Other</a>
+                      </li>
                 </ul>
                 <div class="tab-content p-2" style="background:#fff;" id="mySideBarTabContent">
                     <div class=" tab-pane fade show active" id="controller-type" role="tabpanel" aria-labelledby="controller-type-tab">
                         <input type="text" id="controller-input" class="form-control mt-2" placeholder="Controller@method">
+                        <small>Namespace: {{config('dbpanel.controller')}}</small>
                         <input type="text" id="controller-parameter" class="form-control mt-2" placeholder="parameters">
-                        <input type="button" onclick="controller()" class="btn btn-block mt-2" value="check">
+                       
                     </div>
                     <div class=" tab-pane fade" id="model" role="tabpanel" aria-labelledby="history-tab">
                         <input type="text" id="model-input" class="form-control mt-2" placeholder="model@method">
+                        <small>Namespace: {{config('dbpanel.model')}}</small>
                         <input type="text" id="model-parameter" class="form-control mt-2" placeholder="parameters">
-                        <input type="button" onclick="model()" class="btn btn-block mt-2" value="check">
+                    
+                       
                     </div>
+                    <div class=" tab-pane fade" id="other" role="tabpanel" aria-labelledby="history-tab">
+                        <input type="text" id="other-input" class="form-control mt-2" placeholder="other@method">
+                        <small>Namespace: {{config('dbpanel.other')}}</small>
+                        <input type="text" id="other-parameter" class="form-control mt-2" placeholder="parameters">
+            
+                    </div>
+                    <div class="form-check mt-2">
+                        <input type="checkbox" id="hadRequest" name="hadRequest" class="form-check-input mt-2">
+                        <label class="form-check-label pt-1" for="hadRequest">Illuminate\Support\Request </label>
+                    </div>
+                    <input type="text" id="request-parameter" class="form-control mt-2" placeholder="key1@value1:key2@str2,number2">
+                    <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
                 </div>
+
             </div>
-            <div class="col-md-10 row pr-0">
+            <div class="col-md-9 row pr-0">
             <div class="col-md-12 row m-0">
                 <div class="col-md-2 p-0">
                     <div class="input-group">                
@@ -638,7 +657,7 @@
             <div class="col-md-8 mt-2 pr-0">
             <div class="form-group">
                 <label class="header">
-                    Data
+                    Console
                     <span class="badge badge-primary ml-2" id="total"></span>
                     {{-- <div class="float-right">
                         <div class="btn">table</div>
