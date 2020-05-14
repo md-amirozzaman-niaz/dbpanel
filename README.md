@@ -99,18 +99,18 @@ Example *(value)*:
 Example *(value)*:
 + `id,name,email` `name,email,phone`
 
-### To Check Controller or Model
+### To Check Controller or Model or Other Method
 
-Just type your Controller or Model class name and method as 
-
-```
-YourControllerName@method
-```
-
-If you had a subfolder from Controller or Model default folder, then pass as
+Just type your Controller or Model or any other class name and method as 
 
 ```
-YourSubfolderName.YourControllerName@method
+ClassName@method
+```
+
+If you had a more namespace from Controller or Model default namespace prefix, then pass those extra as `dot` notation.
+
+```
+ExtraNameSpace.ClassName@method
 ```
 
 To pass parameter
@@ -120,6 +120,11 @@ string:value1,value2:45
 ```
 
 > Note: parameters are separated by `:`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.
+
+To pass `request` instance 
+```
+key@value:key2@value2:Key3@value3,number3
+```
 
 ### Return
 
