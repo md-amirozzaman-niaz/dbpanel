@@ -1,6 +1,6 @@
 # dbpanel
 
-dbpanel for laravel application. You can look around your laravel application's database easily and fastest way with so many filter. You might look around your table's column type and index. You can console your controller methods database query log. How many query it going to used and how long it will take for those query. To use this package follow the instruction below.
+dbpanel for laravel application. You can look around your laravel application's database easily and fastest way with so many filter. You might look around your table's column type and index. You can also console your Controller or Model or Any ohter class's methods full database query log and time. If methods return any data,it also display that data. To use this package follow the instruction below.
 
 ### Installation
 
@@ -121,7 +121,7 @@ string:value1,value2:45
 
 > Note: parameters are separated by `:`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.
 
-To pass `request` instance 
+If you method use `request` instance 
 ```
 key@value:key2@value2:Key3@value3,number3
 ```
