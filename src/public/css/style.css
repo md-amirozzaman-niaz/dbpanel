@@ -169,3 +169,12 @@ img{
 .carousel-indicators li{
     background-color:#794848;
 }
+
+.json-formatter-children.json-formatter-object {
+    border-left: 1px dashed #e3e3e3;
+    margin-left: 2px;
+}
+ .json-formatter-toggler {
+
+    font-size: 0.9rem !important;
+}

@@ -1,3 +1,5 @@
+import JSONFormatter from 'json-formatter-js'
+
 function setPagination(pageNo,total){
     let ulOfPagination = document.getElementsByClassName('pagination')[0];  
     ulOfPagination.innerHTML =null ;
@@ -9,7 +11,7 @@ function setPagination(pageNo,total){
                 ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData('+1+')">'+1+'</a></li>';
                 ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
             }
-            for(i=st;i < la;i++){
+            for(var i=st;i < la;i++){
                 let activeClass = i== pageNo ? ' active' : '';
                 ulOfPagination.innerHTML += '<li class="page-item'+activeClass+'"><a class="page-link" onclick="getData('+i+')">'+i+'</a></li>';
             }
@@ -19,7 +21,7 @@ function setPagination(pageNo,total){
             }
         }else{
 
-            for(i=1;i < total+1;i++){
+            for(var i=1;i < total+1;i++){
                 let activeClass = i==pageNo ? ' active' : '';
                 ulOfPagination.innerHTML += '<li class="page-item'+activeClass+'"><a class="page-link" onclick="getData('+i+')">'+i+'</a></li>';
             }
@@ -34,25 +36,46 @@ window.getData = function(pageNo=1){
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
     totalDom.innerHTML='processing....';
+    totalDom.classList.remove('badge-success');
+    totalDom.classList.remove('badge-danger');
+    totalDom.classList.add('badge-primary');
     axios.post('/dbpanel/database/'+url).then( 
-        function(response){ 
-            dataDom.innerHTML=JSON.stringify(response.data.result.data, undefined, 4).replace(/</g,'&lt');
-            tableDom.innerHTML=JSON.stringify(response.data.filter_status, undefined, 4);
-            totalDom.innerHTML=response.data.total;
-            hljs.highlightBlock(dataDom);
-            hljs.highlightBlock(tableDom);
+        function(response){
+          dataDom.innerHTML=null;
+          let formatter = new JSONFormatter(response.data.result.data,1,{
+            hoverPreviewEnabled: true});
+
+          dataDom.appendChild(formatter.render());
+           
+            // dataDom.innerHTML=JSON.stringify(response.data.result.data, undefined, 4).replace(/</g,'&lt');
+            // tableDom.innerHTML=JSON.stringify(response.data.filter_status, undefined, 4);
+            // totalDom.innerHTML=response.data.total;
+            let tbleaFormatter = new JSONFormatter(response.data.filter_status,1,{
+              hoverPreviewEnabled: true});
+  
+              tableDom.appendChild(tbleaFormatter.render());
+            // hljs.highlightBlock(dataDom);
+            // hljs.highlightBlock(tableDom);
+            totalDom.innerHTML='Success';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-success');
             setPagination(response.data.result.current_page,response.data.result.last_page);
         })
         .catch(
         function(error){
+
             dataDom.innerHTML=JSON.stringify(error.response.data, undefined, 4).replace(/\/\//g,'/');
-            totalDom.innerHTML='';       
+            totalDom.innerHTML='Error';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-danger');    
         });
 
 };
 window.controller =function(){
     let controller = document.getElementById('controller-input').value;
+    let request = document.getElementById('request-parameter').value;
     let param = document.getElementById('controller-parameter').value;
+    param = document.getElementById('hadRequest').checked?param+'&hadRequest='+request:param;
     let dataDom = document.getElementById('data');
     let tableDom = document.getElementById('table');
     let totalDom = document.getElementById('total');
@@ -61,23 +84,35 @@ window.controller =function(){
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
     totalDom.innerHTML='processing....';
+    totalDom.classList.remove('badge-success');
+    totalDom.classList.remove('badge-danger');
+    totalDom.classList.add('badge-primary');
     axios.get('/dbpanel/controller/'+controller+'?parameters='+param).then( 
         function(response){ 
-            dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-            hljs.highlightBlock(dataDom);
+            dataDom.innerHTML=null;
+            let formatter = new JSONFormatter(response.data,2,{
+              hoverPreviewEnabled: true});
+              dataDom.appendChild(formatter.render());
+            // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
+            // hljs.highlightBlock(dataDom);
             totalDom.innerHTML='Success';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-success');
         })
         .catch(
         function(exception){
             dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
-            totalDom.innerHTML='error';
+            totalDom.innerHTML='Error';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-danger');
         });
 }
 
 window.model =function(){
     let model = document.getElementById('model-input').value;
+    let request = document.getElementById('request-parameter').value;
     let param = document.getElementById('model-parameter').value;
-     param = document.getElementById('hadRequest').checked?param+'&hadRequest=true':param;
+     param = document.getElementById('hadRequest').checked?param+'&hadRequest='+request:param;
     
     let dataDom = document.getElementById('data');
     let tableDom = document.getElementById('table');
@@ -87,16 +122,27 @@ window.model =function(){
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
     totalDom.innerHTML='processing....';
+    totalDom.classList.remove('badge-success');
+    totalDom.classList.remove('badge-danger');
+    totalDom.classList.add('badge-primary');
     axios.get('/dbpanel/model/'+model+'?parameters='+param).then( 
         function(response){ 
-            dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-            hljs.highlightBlock(dataDom);
+          dataDom.innerHTML=null;
+            let formatter = new JSONFormatter(response.data,4,{
+              hoverPreviewEnabled: true});
+              dataDom.appendChild(formatter.render());
+            // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
+            // hljs.highlightBlock(dataDom);
             totalDom.innerHTML='Success';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-success');
         })
         .catch(
         function(exception){
             dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
-            totalDom.innerHTML='error';
+            totalDom.innerHTML='Error';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-danger');
         });
 }
 window.other =function(){
@@ -113,16 +159,27 @@ window.other =function(){
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
     totalDom.innerHTML='processing....';
+    totalDom.classList.remove('badge-success');
+    totalDom.classList.remove('badge-danger');
+            totalDom.classList.add('badge-primary');
     axios.get('/dbpanel/other/'+other+'?parameters='+param).then( 
         function(response){ 
-            dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-            hljs.highlightBlock(dataDom);
+          dataDom.innerHTML=null;
+          let formatter = new JSONFormatter(response.data,2,{
+            hoverPreviewEnabled: true});
+            dataDom.appendChild(formatter.render());
+            // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
+            // hljs.highlightBlock(dataDom);
             totalDom.innerHTML='Success';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-success');
         })
         .catch(
         function(exception){
             dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
-            totalDom.innerHTML='error';
+            totalDom.innerHTML='Error';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-danger');
         });
 }
 window.checkMethod =function(){
@@ -135,7 +192,7 @@ window.checkMethod =function(){
         window.other();
     }
 }
-function viewInfo(){
+window.viewInfo=function(){
     event.stopPropagation();
     document.getElementsByClassName('info-container')[0].classList.toggle('active');
 }

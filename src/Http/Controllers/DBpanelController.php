@@ -111,8 +111,28 @@ class DBpanelController extends Controller
                     return  [$keyValue[0]=>is_numeric($keyValue[1]) ? (int)$keyValue[1] : $keyValue[1]];
                 }
             });
+            // $request->merge([$pairs]);
             foreach($pairs as $pair){
-                $request->merge($pair);
+                // $request->merge($pair);
+                foreach($pair as $key => $value){
+                    
+                    $arr = [];
+                    $keys = explode('.',$key);  
+                    $this->assignArrayByPath($arr, $key, $value);
+                    $in = $keys[0];
+                    $se= $keys[1];
+                    if(request()->has($in)){
+                        if(request()->has($in.'.'.$se)){
+                            $a[$in][$se]=array_merge($arr[$in][$se],request()->input($in.'.'.$se));
+                            $request->merge($a);
+                        }else{
+                            $a[$in]=array_merge($arr[$in],request()->input($in));
+                            $request->merge($a);
+                        }
+                     }else{ 
+                         $request->merge($arr);
+                     }
+                }
             }
             $request->request->remove('parameters');
             $request->request->remove('hadRequest');
@@ -129,5 +149,15 @@ class DBpanelController extends Controller
                 return is_numeric($i) ? (int)$i : $i;
             }
         }); 
+    }
+
+    function assignArrayByPath(&$arr, $path, $value, $separator='.') {
+        $keys = explode($separator, $path);
+    
+        foreach ($keys as $key) {
+            $arr = &$arr[$key];
+        }
+    
+        $arr = $value;
     }
 }

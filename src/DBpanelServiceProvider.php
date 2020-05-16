@@ -20,7 +20,7 @@ class DBpanelServiceProvider extends ServiceProvider{
         ], 'dbpanel');
 
         $this->publishes([
-            __DIR__.'/resources/assets' => public_path('vendor/dbpanel'),
+            __DIR__.'/public' => public_path('vendor/dbpanel'),
         ], 'dbpanel');
     }
 

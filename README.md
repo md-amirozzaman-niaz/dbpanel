@@ -123,7 +123,7 @@ string:value1,value2:45
 
 If you method use `request` instance 
 ```
-key@value:key2@value2:Key3@value3,number3
+key@value:key1.key2.key3@value,number:Key1.key2@string,number
 ```
 
 ### Return
