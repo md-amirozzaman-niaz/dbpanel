@@ -565,11 +565,7 @@
                             </code></pre>
                             <h3>Return</h3>
                             <p>It will return a json with <code>log</code> and <code>data</code> . In <code>log</code> all database query,bindings and time are listed.If this method return any data,it will return with <code>data</code>.</p>
-                        </article>
-
-                
-                    
-                    
+                        </article>                
                 </div>
                 <div class="info-table tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
                     
@@ -613,7 +609,7 @@
                         <input type="checkbox" id="hadRequest" name="hadRequest" class="form-check-input mt-2">
                         <label class="form-check-label pt-1" for="hadRequest">Illuminate\Support\Request </label>
                     </div>
-                    <input type="text" id="request-parameter" class="form-control mt-2" placeholder="key1@value1:key2@str2,number2">
+                    <input type="text" id="request-parameter" class="form-control mt-2" placeholder="key@value:Array@string,number">
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
                 </div>
 
@@ -652,7 +648,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text brr-0">Query</div>
                         </div>
-                        <input type="url" class="form-control brr-0" id="query" value="id=20-24&return_only=id,name,email">
+                        <input type="url" class="form-control brr-0" id="query" placeholder="filter your data table....">
                     </div>
                 </div>
                 <div class="col-md-1 p-0">
@@ -663,7 +659,7 @@
             <div class="form-group">
                 <label class="header">
                     Console
-                    <span class="badge badge-primary ml-2" id="total"></span>
+                    <span class="badge ml-2" id="total"></span>
                     {{-- <div class="float-right">
                         <div class="btn">table</div>
                         <div class="btn">json</div>
