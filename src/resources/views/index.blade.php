@@ -561,7 +561,7 @@
                             <p>Note: parameters are separated by <code>:</code>. Array parameter value are <code>,</code> seprated. Numeric string value will auto converted as <code>int</code> type value. This was also applicable for array.</p>
                             </blockquote>
                             <p>To pass <code>request</code> instance</p>
-                            <pre><code>key@value:key2@value2:Key3@value3,number3
+                            <pre><code>key@value:key1.key2.key3@value,number:Key1.key2@string,number
                             </code></pre>
                             <h3>Return</h3>
                             <p>It will return a json with <code>log</code> and <code>data</code> . In <code>log</code> all database query,bindings and time are listed.If this method return any data,it will return with <code>data</code>.</p>

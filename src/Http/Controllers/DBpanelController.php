@@ -119,8 +119,8 @@ class DBpanelController extends Controller
                     $arr = [];
                     $keys = explode('.',$key);  
                     $this->assignArrayByPath($arr, $key, $value);
-                    $in = $keys[0];
-                    $se= $keys[1];
+                    $in = count($keys)>0?$keys[0]:null;
+                    $se= count($keys)>1?$keys[1]:null;
                     if(request()->has($in)){
                         if(request()->has($in.'.'.$se)){
                             $a[$in][$se]=array_merge($arr[$in][$se],request()->input($in.'.'.$se));
