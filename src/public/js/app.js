@@ -173,7 +173,7 @@ window.getData = function () {
 
 window.controller = function () {
   var controller = document.getElementById('controller-input').value;
-  var request = document.getElementById('request-parameter').value;
+  var request = document.getElementById('request-parameter').value.replace(/\n/gi, ':');
   var param = document.getElementById('controller-parameter').value;
   param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + request : param;
   var dataDom = document.getElementById('data');
@@ -208,7 +208,7 @@ window.controller = function () {
 
 window.model = function () {
   var model = document.getElementById('model-input').value;
-  var request = document.getElementById('request-parameter').value;
+  var request = document.getElementById('request-parameter').value.replace(/\n/gi, ':');
   var param = document.getElementById('model-parameter').value;
   param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + request : param;
   var dataDom = document.getElementById('data');
@@ -243,7 +243,7 @@ window.model = function () {
 
 window.other = function () {
   var other = document.getElementById('other-input').value;
-  var request = document.getElementById('request-parameter').value;
+  var request = document.getElementById('request-parameter').value.replace(/\n/g, ':');
   var param = document.getElementById('other-parameter').value;
   param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + request : param;
   var dataDom = document.getElementById('data');

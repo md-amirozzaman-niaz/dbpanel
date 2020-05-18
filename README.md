@@ -123,10 +123,15 @@ string:value1,value2:45
 
 To pass `request` instance 
 ```
-key@value:key1.key2.key3@value,number:Key1.key2@string,number
+prop.width.px@45
+prop.width.rem@4
+prop.height.px@45
+prop.height.rem@4
 ```
 
 ### Return
 
 It will return a json with `log` and `data` . In `log` all database query,bindings and time are listed.If this method return any data,it will return with `data`.
+
+> Tip: you can test your request data from other tab by passing `request@dd`, `parameters` and `request` 
 
