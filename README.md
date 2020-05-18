@@ -121,7 +121,7 @@ string:value1,value2:45
 
 > Note: parameters are separated by `:`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.
 
-If you method use `request` instance 
+To pass `request` instance 
 ```
 prop.width.px@45
 prop.width.rem@4
