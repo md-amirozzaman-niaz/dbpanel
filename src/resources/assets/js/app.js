@@ -73,7 +73,7 @@ window.getData = function(pageNo=1){
 };
 window.controller =function(){
     let controller = document.getElementById('controller-input').value;
-    let request = document.getElementById('request-parameter').value;
+    let request = document.getElementById('request-parameter').value.replace(/\n/gi,':');
     let param = document.getElementById('controller-parameter').value;
     param = document.getElementById('hadRequest').checked?param+'&hadRequest='+request:param;
     let dataDom = document.getElementById('data');
@@ -110,7 +110,7 @@ window.controller =function(){
 
 window.model =function(){
     let model = document.getElementById('model-input').value;
-    let request = document.getElementById('request-parameter').value;
+    let request = document.getElementById('request-parameter').value.replace(/\n/gi,':');
     let param = document.getElementById('model-parameter').value;
      param = document.getElementById('hadRequest').checked?param+'&hadRequest='+request:param;
     
@@ -147,7 +147,7 @@ window.model =function(){
 }
 window.other =function(){
     let other = document.getElementById('other-input').value;
-    let request = document.getElementById('request-parameter').value;
+    let request = document.getElementById('request-parameter').value.replace(/\n/g,':');
     let param = document.getElementById('other-parameter').value;
      param = document.getElementById('hadRequest').checked?param+'&hadRequest='+request:param;
     

@@ -561,10 +561,16 @@
                             <p>Note: parameters are separated by <code>:</code>. Array parameter value are <code>,</code> seprated. Numeric string value will auto converted as <code>int</code> type value. This was also applicable for array.</p>
                             </blockquote>
                             <p>To pass <code>request</code> instance</p>
-                            <pre><code>key@value:key1.key2.key3@value,number:Key1.key2@string,number
+                            <pre><code>prop.width.px@45
+                                prop.width.rem@4
+                                prop.height.px@45
+                                prop.height.rem@4
                             </code></pre>
                             <h3>Return</h3>
                             <p>It will return a json with <code>log</code> and <code>data</code> . In <code>log</code> all database query,bindings and time are listed.If this method return any data,it will return with <code>data</code>.</p>
+                            <blockquote>
+                                  Tip: you can test your request data from other tab by passing <code>request@dd</code>, <code>parameters</code> and <code>request</code>
+                            </blockquote>
                         </article>                
                 </div>
                 <div class="info-table tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
@@ -609,7 +615,9 @@
                         <input type="checkbox" id="hadRequest" name="hadRequest" class="form-check-input mt-2">
                         <label class="form-check-label pt-1" for="hadRequest">Illuminate\Support\Request </label>
                     </div>
-                    <input type="text" id="request-parameter" class="form-control mt-2" placeholder="key@value:Array@string,number">
+                    <div class="form-group">
+                        <textarea id="request-parameter" rows="12" class="form-control mt-2" ></textarea>
+                    </div>
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
                 </div>
 

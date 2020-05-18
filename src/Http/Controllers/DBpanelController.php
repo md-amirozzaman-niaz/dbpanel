@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class DBpanelController extends Controller
 {
     //
+    protected $parameters;
 
     public function index(){
         $tables= DB::select('SHOW TABLES');
@@ -53,7 +54,7 @@ class DBpanelController extends Controller
     }
 
     public function checkModel(Request $request,$model){
-
+        
         $parameters=$this->setParameters();
 
         DB::connection()->enableQueryLog();
@@ -76,30 +77,35 @@ class DBpanelController extends Controller
     }
 
     public function checkOther(Request $request,$other){
-
+        
         $parameters=$this->setParameters();
 
         DB::connection()->enableQueryLog();
 
         $other = explode('@',$other);
         $other_namespace =config('dbpanel.other').str_replace('.','\\',$other[0]);
-        $other_class = app($other_namespace);
         $method = $other[1];
 
         if(request()->has('hadRequest') && strpos(request('hadRequest'),'@') > 0){
             $this->setRequest($request);
+            if($method == 'dd'){
+                return $this->dd($request,$parameters);
+            };
+            $other_class = app($other_namespace);
             $data = $other_class->$method($request,...$parameters);
             return ['log'=> DB::getQueryLog(),'data'=> $data];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
+        $other_class = app($other_namespace);
         $data = $other_class->$method(...$parameters);
         return ['log'=> DB::getQueryLog(),'data'=>$data];
     } 
 
     public function setRequest($request){
+        $r = trim(request('hadRequest'));
         $pairs =
-             collect(explode(':',request('hadRequest')))->map(function($i){
+             collect(explode(':',$r))->map(function($i){
                 $keyValue = explode('@',$i);
                 if(strpos($keyValue[1],',') > -1){
                     $c = collect(explode(',',$keyValue[1]))->map(function($j){
@@ -121,10 +127,24 @@ class DBpanelController extends Controller
                     $this->assignArrayByPath($arr, $key, $value);
                     $in = count($keys)>0?$keys[0]:null;
                     $se= count($keys)>1?$keys[1]:null;
+                    $th = count($keys)>2?$keys[2]:null;
+                    $fo= count($keys)>3?$keys[3]:null;
                     if(request()->has($in)){
                         if(request()->has($in.'.'.$se)){
-                            $a[$in][$se]=array_merge($arr[$in][$se],request()->input($in.'.'.$se));
-                            $request->merge($a);
+                            if(request()->has($in.'.'.$se.'.'.$th)){
+                                if(request()->has($in.'.'.$se.'.'.$th.'.'.$fo)){
+                                    $a[$in][$se][$th][$fo]=array_merge($arr[$in][$se][$th][$fo],request()->input($in.'.'.$se.'.'.$th.'.'.$fo));
+                                    $request->merge($a);
+                                }
+                                else{
+                                    $a[$in][$se][$th]=array_merge($arr[$in][$se][$th],request()->input($in.'.'.$se.'.'.$th));
+                                    $request->merge($a);
+                                }
+                            }
+                            else{
+                                $a[$in][$se]=array_merge($arr[$in][$se],request()->input($in.'.'.$se));
+                                $request->merge($a);
+                            }
                         }else{
                             $a[$in]=array_merge($arr[$in],request()->input($in));
                             $request->merge($a);
@@ -134,6 +154,7 @@ class DBpanelController extends Controller
                      }
                 }
             }
+            $this->parameters = $request->parameters;
             $request->request->remove('parameters');
             $request->request->remove('hadRequest');
     }
@@ -151,7 +172,7 @@ class DBpanelController extends Controller
         }); 
     }
 
-    function assignArrayByPath(&$arr, $path, $value, $separator='.') {
+    public function assignArrayByPath(&$arr, $path, $value, $separator='.') {
         $keys = explode($separator, $path);
     
         foreach ($keys as $key) {
@@ -160,4 +181,9 @@ class DBpanelController extends Controller
     
         $arr = $value;
     }
+
+    public function dd(Request $request,$parameters){
+
+        return ['request' => $request->all(),'parameters'=>$parameters];
+    } 
 }
