@@ -182,12 +182,49 @@ window.other =function(){
             totalDom.classList.add('badge-danger');
         });
 }
+
+window.command =function(){
+    let command = document.getElementById('command-input').value;
+    
+    let dataDom = document.getElementById('data');
+    let tableDom = document.getElementById('table');
+    let totalDom = document.getElementById('total');
+    let ulOfPagination = document.getElementsByClassName('pagination')[0];  
+    ulOfPagination.innerHTML= null ;
+    dataDom.innerHTML=null;
+    tableDom.innerHTML=null;
+    totalDom.innerHTML='processing....';
+    totalDom.classList.remove('badge-success');
+    totalDom.classList.remove('badge-danger');
+            totalDom.classList.add('badge-primary');
+    axios.get('/dbpanel/command/'+command).then( 
+        function(response){ 
+          dataDom.innerHTML=null;
+          let formatter = new JSONFormatter(response.data,2,{
+            hoverPreviewEnabled: true});
+            dataDom.appendChild(formatter.render());
+            // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
+            // hljs.highlightBlock(dataDom);
+            totalDom.innerHTML='Success';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-success');
+        })
+        .catch(
+        function(exception){
+            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
+            totalDom.innerHTML='Error';
+            totalDom.classList.remove('badge-primary');
+            totalDom.classList.add('badge-danger');
+        });
+}
 window.checkMethod =function(){
     let whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
     if(whichMethod == 'controller'){
         window.controller();
     }else if(whichMethod == 'model'){
         window.model();
+    }else if(whichMethod == 'command'){
+        window.command();
     }else{
         window.other();
     }

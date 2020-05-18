@@ -276,6 +276,38 @@ window.other = function () {
   });
 };
 
+window.command = function () {
+  var command = document.getElementById('command-input').value;
+  var dataDom = document.getElementById('data');
+  var tableDom = document.getElementById('table');
+  var totalDom = document.getElementById('total');
+  var ulOfPagination = document.getElementsByClassName('pagination')[0];
+  ulOfPagination.innerHTML = null;
+  dataDom.innerHTML = null;
+  tableDom.innerHTML = null;
+  totalDom.innerHTML = 'processing....';
+  totalDom.classList.remove('badge-success');
+  totalDom.classList.remove('badge-danger');
+  totalDom.classList.add('badge-primary');
+  axios.get('/dbpanel/command/' + command).then(function (response) {
+    dataDom.innerHTML = null;
+    var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(response.data, 2, {
+      hoverPreviewEnabled: true
+    });
+    dataDom.appendChild(formatter.render()); // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
+    // hljs.highlightBlock(dataDom);
+
+    totalDom.innerHTML = 'Success';
+    totalDom.classList.remove('badge-primary');
+    totalDom.classList.add('badge-success');
+  })["catch"](function (exception) {
+    dataDom.innerHTML = JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g, '\\');
+    totalDom.innerHTML = 'Error';
+    totalDom.classList.remove('badge-primary');
+    totalDom.classList.add('badge-danger');
+  });
+};
+
 window.checkMethod = function () {
   var whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
 
@@ -283,6 +315,8 @@ window.checkMethod = function () {
     window.controller();
   } else if (whichMethod == 'model') {
     window.model();
+  } else if (whichMethod == 'command') {
+    window.command();
   } else {
     window.other();
   }

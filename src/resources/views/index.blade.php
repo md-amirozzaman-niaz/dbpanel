@@ -562,9 +562,9 @@
                             </blockquote>
                             <p>To pass <code>request</code> instance</p>
                             <pre><code>prop.width.px@45
-                                prop.width.rem@4
-                                prop.height.px@45
-                                prop.height.rem@4
+prop.width.rem@4
+prop.height.px@45
+prop.height.rem@4
                             </code></pre>
                             <h3>Return</h3>
                             <p>It will return a json with <code>log</code> and <code>data</code> . In <code>log</code> all database query,bindings and time are listed.If this method return any data,it will return with <code>data</code>.</p>
@@ -590,6 +590,9 @@
                       <li class="nav-item">
                         <a class="nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="model" aria-selected="true">Other</a>
                       </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="command-tab" data-toggle="tab" href="#command" role="tab" aria-controls="model" aria-selected="true">Command</a>
+                      </li>
                 </ul>
                 <div class="tab-content p-2" style="background:#fff;" id="mySideBarTabContent">
                     <div class=" tab-pane fade show active" id="controller-type" role="tabpanel" aria-labelledby="controller-type-tab">
@@ -610,6 +613,10 @@
                         <small>Namespace: {{config('dbpanel.other')}}</small>
                         <input type="text" id="other-parameter" class="form-control mt-2" placeholder="parameters">
             
+                    </div>
+                    <div class="tab-pane fade" id="command" role="tabpanel" aria-labelledby="controller-type-tab">
+                        <input type="text" id="command-input" class="form-control mt-2" placeholder="commands.....">
+                        <small>For `php artisan route:list` need to pass `route:list`</small>        
                     </div>
                     <div class="form-check mt-2">
                         <input type="checkbox" id="hadRequest" name="hadRequest" class="form-check-input mt-2">
