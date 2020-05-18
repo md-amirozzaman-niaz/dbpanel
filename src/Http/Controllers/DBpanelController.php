@@ -5,6 +5,8 @@ namespace Niaz\DBpanel\Http\Controllers;
 use Niaz\DBpanel\Http\Filters\Filter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+
 class DBpanelController extends Controller
 {
     //
@@ -101,7 +103,10 @@ class DBpanelController extends Controller
         $data = $other_class->$method(...$parameters);
         return ['log'=> DB::getQueryLog(),'data'=>$data];
     } 
-
+    public function run($command){
+        Artisan::call($command);
+        return Artisan::output();
+    }
     public function setRequest($request){
         $r = trim(request('hadRequest'));
         $pairs =
@@ -160,7 +165,7 @@ class DBpanelController extends Controller
     }
 
     public function setParameters(){
-        return collect(explode(':',request('parameters')))->map(function($i){
+        return !empty(request()->input('parameters'))?collect(explode(':',request('parameters')))->map(function($i){
             if(strpos($i,',') > -1){
                 return collect(explode(',',$i))->map(function($j){
                     return is_numeric($j) ? (int)$j : $j;
@@ -169,7 +174,7 @@ class DBpanelController extends Controller
             else{
                 return is_numeric($i) ? (int)$i : $i;
             }
-        }); 
+        }):null; 
     }
 
     public function assignArrayByPath(&$arr, $path, $value, $separator='.') {
@@ -183,7 +188,7 @@ class DBpanelController extends Controller
     }
 
     public function dd(Request $request,$parameters){
-
-        return ['request' => $request->all(),'parameters'=>$parameters];
+        
+        return ['request' => $request->all(),'parameters'=>$parameters ? $parameters : null];
     } 
 }
