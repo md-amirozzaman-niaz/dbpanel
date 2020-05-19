@@ -175,7 +175,9 @@ window.controller = function () {
   var controller = document.getElementById('controller-input').value;
   var request = document.getElementById('request-parameter').value.replace(/\n/gi, ':');
   var param = document.getElementById('controller-parameter').value;
+  var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
   param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + request : param;
+  param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
   var dataDom = document.getElementById('data');
   var tableDom = document.getElementById('table');
   var totalDom = document.getElementById('total');
@@ -210,7 +212,9 @@ window.model = function () {
   var model = document.getElementById('model-input').value;
   var request = document.getElementById('request-parameter').value.replace(/\n/gi, ':');
   var param = document.getElementById('model-parameter').value;
+  var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
   param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + request : param;
+  param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
   var dataDom = document.getElementById('data');
   var tableDom = document.getElementById('table');
   var totalDom = document.getElementById('total');
@@ -245,7 +249,9 @@ window.other = function () {
   var other = document.getElementById('other-input').value;
   var request = document.getElementById('request-parameter').value.replace(/\n/g, ':');
   var param = document.getElementById('other-parameter').value;
+  var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
   param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + request : param;
+  param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
   var dataDom = document.getElementById('data');
   var tableDom = document.getElementById('table');
   var totalDom = document.getElementById('total');
@@ -278,6 +284,8 @@ window.other = function () {
 
 window.command = function () {
   var command = document.getElementById('command-input').value;
+  var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
+  var param = dbpanel_auth_id ? '?dbpanel_auth_id=' + dbpanel_auth_id : '';
   var dataDom = document.getElementById('data');
   var tableDom = document.getElementById('table');
   var totalDom = document.getElementById('total');
@@ -289,7 +297,7 @@ window.command = function () {
   totalDom.classList.remove('badge-success');
   totalDom.classList.remove('badge-danger');
   totalDom.classList.add('badge-primary');
-  axios.get('/dbpanel/command/' + command).then(function (response) {
+  axios.get('/dbpanel/command/' + command + param).then(function (response) {
     dataDom.innerHTML = null;
     var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(response.data, 2, {
       hoverPreviewEnabled: true

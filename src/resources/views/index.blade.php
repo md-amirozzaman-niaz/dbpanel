@@ -625,6 +625,7 @@ prop.height.rem@4
                     <div class="form-group">
                         <textarea id="request-parameter" spellcheck="false" rows="12" class="form-control mt-2" ></textarea>
                     </div>
+                    <input type="text" id="dbpanel_auth_id" class="form-control mt-2" placeholder="auth user id...">
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
                 </div>
 
