@@ -579,7 +579,7 @@ prop.height.rem@4
                 </div>
             </div>
         </div><form class="row p-2">
-            <div class="col-md-3 p-0 sidebar">
+            <div class="col-md-3 p-0 sidebar shadow">
                 <ul class="nav nav-tabs pl-2 pt-2" id="mySideBarTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="controller-type-tab" data-toggle="tab" href="#controller-type" role="tab" aria-controls="controller-type" aria-selected="true">Controller</a>
@@ -623,7 +623,7 @@ prop.height.rem@4
                         <label class="form-check-label pt-1" for="hadRequest">Illuminate\Support\Request </label>
                     </div>
                     <div class="form-group">
-                        <textarea id="request-parameter" rows="12" class="form-control mt-2" ></textarea>
+                        <textarea id="request-parameter" spellcheck="false" rows="12" class="form-control mt-2" ></textarea>
                     </div>
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
                 </div>
@@ -680,7 +680,7 @@ prop.height.rem@4
                         <div class="btn">json</div>
                     </div> --}}
                 </label>
-              <pre spellcheck="false" class="window"><code id="data"></code></pre>
+              <pre spellcheck="false" class="window"><div id="data" class="p-2"></div></pre>
             </div>
             <div class="col-md-12">
                 <nav aria-label="Page navigation example">
@@ -693,7 +693,7 @@ prop.height.rem@4
         <div class="col-md-4 mt-2 pr-0">
             <div class="form-group">
                 <label class="header">Table</label>
-                <pre spellcheck="false" class="window"><code id="table" class="json"></code></pre>
+                <pre spellcheck="false" class="window"><div id="table" class="p-2"></div></pre>
             </div>           
         </div>
     </div>

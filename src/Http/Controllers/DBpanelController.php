@@ -50,7 +50,7 @@ class DBpanelController extends Controller
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
-        $data = $controller_class->$method(...$parameters);
+        $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
         
         return ['log'=> DB::getQueryLog(),'data'=>$data];
     }
@@ -74,7 +74,7 @@ class DBpanelController extends Controller
 
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
-        $data = $model_class->$method(...$parameters);
+        $data = $parameters ? $model_class->$method(...$parameters) : $model_class->$method();
         return ['log'=> DB::getQueryLog(),'data'=>$data];
     }
 
@@ -100,7 +100,7 @@ class DBpanelController extends Controller
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $other_class = app($other_namespace);
-        $data = $other_class->$method(...$parameters);
+        $data = $parameters ? $other_class->$method(...$parameters) : $other_class->$method();
         return ['log'=> DB::getQueryLog(),'data'=>$data];
     } 
     public function run($command){
