@@ -6,10 +6,10 @@ use Niaz\DBpanel\Http\Filters\Filter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 
 class DBpanelController extends Controller
 {
-    //
     protected $parameters;
 
     public function index(){
@@ -17,8 +17,7 @@ class DBpanelController extends Controller
         return view('dbpanel::index')->with(['tables'=>$tables]);
             
     }
-
-    public function data($table,$joinTable=null  ){
+    public function data($table){
         $filter = new Filter;
         $filtered= $filter->loadTable($table);
         // $filtered_query = $filtered->query();
@@ -29,9 +28,11 @@ class DBpanelController extends Controller
         $count = !is_string($filtered_data) ? count($filtered_data) : 'Error';
         return ['result'=> $filtered_data , 'filter_status' => $filter->status(), 'request' => request()->all(),'total' => $count ];
     }
-
     public function checkController(Request $request,$controller){
-
+        $user = 'None';
+        if(request()->has('dbpanel_auth_id')){
+            $user=$this->login();
+        }
         $parameters=$this->setParameters();
         
         DB::connection()->enableQueryLog();
@@ -46,17 +47,19 @@ class DBpanelController extends Controller
             
             $data = $controller_class->$method($request,...$parameters);
             
-            return ['log'=> DB::getQueryLog(),'data'=>$data];
+            return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
-        $data = $controller_class->$method(...$parameters);
+        $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
         
-        return ['log'=> DB::getQueryLog(),'data'=>$data];
+        return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
     }
-
     public function checkModel(Request $request,$model){
-        
+        $user = 'None';
+        if(request()->has('dbpanel_auth_id')){
+            $user=$this->login();
+        }
         $parameters=$this->setParameters();
 
         DB::connection()->enableQueryLog();
@@ -69,16 +72,20 @@ class DBpanelController extends Controller
         if(request()->has('hadRequest') && strpos(request('hadRequest'),'@') > 0){
             $this->setRequest($request);
             $data = $model_class->$method($request,...$parameters);
-            return ['log'=> DB::getQueryLog(),'data'=>$data];
+            return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
         }
 
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
-        $data = $model_class->$method(...$parameters);
-        return ['log'=> DB::getQueryLog(),'data'=>$data];
+        $data = $parameters ? $model_class->$method(...$parameters) : $model_class->$method();
+        return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
     }
 
     public function checkOther(Request $request,$other){
+        $user = 'None';
+        if(request()->has('dbpanel_auth_id')){
+            $user=$this->login();
+        }
         
         $parameters=$this->setParameters();
 
@@ -95,17 +102,25 @@ class DBpanelController extends Controller
             };
             $other_class = app($other_namespace);
             $data = $other_class->$method($request,...$parameters);
-            return ['log'=> DB::getQueryLog(),'data'=> $data];
+            return ['log'=> DB::getQueryLog(),'data'=> $data,'Auth User Info'=>$user];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $other_class = app($other_namespace);
-        $data = $other_class->$method(...$parameters);
-        return ['log'=> DB::getQueryLog(),'data'=>$data];
+        $data = $parameters ? $other_class->$method(...$parameters) : $other_class->$method();
+        return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
     } 
     public function run($command){
         Artisan::call($command);
         return Artisan::output();
+    }
+    public function login(){
+        $user = explode('@',request()->input('dbpanel_auth_id'));
+        request()->request->remove('dbpanel_auth_id');
+        Auth::loginUsingId($user[0]);
+
+        $cols=explode(',',$user[1]);
+        return auth()->user()->only(...$cols);
     }
     public function setRequest($request){
         $r = trim(request('hadRequest'));
@@ -129,7 +144,7 @@ class DBpanelController extends Controller
                     
                     $arr = [];
                     $keys = explode('.',$key);  
-                    $this->assignArrayByPath($arr, $key, $value);
+                    data_set($arr, $key, $value);
                     $in = count($keys)>0?$keys[0]:null;
                     $se= count($keys)>1?$keys[1]:null;
                     $th = count($keys)>2?$keys[2]:null;
@@ -163,32 +178,24 @@ class DBpanelController extends Controller
             $request->request->remove('parameters');
             $request->request->remove('hadRequest');
     }
-
     public function setParameters(){
-        return !empty(request()->input('parameters'))?collect(explode(':',request('parameters')))->map(function($i){
-            if(strpos($i,',') > -1){
-                return collect(explode(',',$i))->map(function($j){
-                    return is_numeric($j) ? (int)$j : $j;
-                });
-            }
-            else{
-                return is_numeric($i) ? (int)$i : $i;
-            }
-        }):null; 
+        return !empty(request()->input('parameters'))?
+            collect(explode(':',request('parameters')))->map(function($i){
+                if(strpos($i,',') > -1){
+                    return collect(explode(',',$i))->map(function($j){
+                        return is_numeric($j) ? (int)$j : $j;
+                    });
+                }
+                else{
+                    return is_numeric($i) ? (int)$i : $i;
+                }
+            }):[]; 
     }
-
-    public function assignArrayByPath(&$arr, $path, $value, $separator='.') {
-        $keys = explode($separator, $path);
-    
-        foreach ($keys as $key) {
-            $arr = &$arr[$key];
-        }
-    
-        $arr = $value;
-    }
-
     public function dd(Request $request,$parameters){
         
-        return ['request' => $request->all(),'parameters'=>$parameters ? $parameters : null];
+        return [
+            'request' => $request->all(),
+            'parameters'=>$parameters ? $parameters : null
+        ];
     } 
 }

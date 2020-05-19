@@ -128,10 +128,20 @@ prop.width.rem@4
 prop.height.px@45
 prop.height.rem@4
 ```
+> every formData are in a new line
 
 ### Return
 
 It will return a json with `log` and `data` . In `log` all database query,bindings and time are listed.If this method return any data,it will return with `data`.
 
 > Tip: you can test your request data from other tab by passing `request@dd`, `parameters` and `request` 
+
+### To pass auth
+
+```
+5@id,name,email
+```
+
+> `id_number@id,column_name,email
+
 
