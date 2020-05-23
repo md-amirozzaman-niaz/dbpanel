@@ -80,7 +80,6 @@ class DBpanelController extends Controller
         $data = $parameters ? $model_class->$method(...$parameters) : $model_class->$method();
         return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
     }
-
     public function checkOther(Request $request,$other){
         $user = 'None';
         if(request()->has('dbpanel_auth_id')){
@@ -118,14 +117,18 @@ class DBpanelController extends Controller
         $user = explode('@',request()->input('dbpanel_auth_id'));
         request()->request->remove('dbpanel_auth_id');
         Auth::loginUsingId($user[0]);
-
-        $cols=explode(',',$user[1]);
+        if(count($user)>1){
+        $userCols =  $user[1];
+        $cols=explode(',',$userCols);
         return auth()->user()->only(...$cols);
+        }else{
+            return auth()->user();
+        }
     }
     public function setRequest($request){
         $r = trim(request('hadRequest'));
         $pairs =
-             collect(explode(':',$r))->map(function($i){
+             collect(explode('|',$r))->map(function($i){
                 $keyValue = explode('@',$i);
                 if(strpos($keyValue[1],',') > -1){
                     $c = collect(explode(',',$keyValue[1]))->map(function($j){
@@ -137,9 +140,7 @@ class DBpanelController extends Controller
                     return  [$keyValue[0]=>is_numeric($keyValue[1]) ? (int)$keyValue[1] : $keyValue[1]];
                 }
             });
-            // $request->merge([$pairs]);
             foreach($pairs as $pair){
-                // $request->merge($pair);
                 foreach($pair as $key => $value){
                     
                     $arr = [];
@@ -180,7 +181,7 @@ class DBpanelController extends Controller
     }
     public function setParameters(){
         return !empty(request()->input('parameters'))?
-            collect(explode(':',request('parameters')))->map(function($i){
+            collect(explode('|',request('parameters')))->map(function($i){
                 if(strpos($i,',') > -1){
                     return collect(explode(',',$i))->map(function($j){
                         return is_numeric($j) ? (int)$j : $j;

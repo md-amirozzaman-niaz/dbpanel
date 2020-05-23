@@ -16,6 +16,7 @@
          <link rel="stylesheet" href='vendor/dbpanel/css/style.css' />
     </head>
     <body>
+        <!-- developed by md.amirozzaman@gmail.com-->
         <div class="container-fluid"><div class="info-container shadow">
             <div class="info-btn" onclick="viewInfo()"></div>
             <ul class="nav nav-tabs pl-2 pt-2" id="myTab" role="tablist">
@@ -555,16 +556,20 @@
                         <pre><code>ExtraNameSpace.ClassName@method
                         </code></pre>
                         <p>To pass parameter</p>
-                        <pre><code>string:value1,value2:45
+                        <pre><code>string|58,hello,78|12:58:59
                         </code></pre>
                         <blockquote>
-                            <p>Note: parameters are separated by <code>:</code>. Array parameter value are <code>,</code> seprated. Numeric string value will auto converted as <code>int</code> type value. This was also applicable for array.</p>
+                            <p>Note: parameters are separated by <code>|</code>. Array parameter value are <code>,</code> seprated. Numeric string value will auto converted as <code>int</code> type value. This was also applicable for array.</p>
                             </blockquote>
                             <p>To pass <code>request</code> instance</p>
                             <pre><code>prop.width.px@45
-prop.width.rem@4
 prop.height.px@45
-prop.height.rem@4
+filter.date.start@2020-11-12
+filter.date.end@2020-15-12
+filter.search@lorem ipsum
+filter.range.min@15,158,23
+filter.range.max@68
+filter.time@12:58:56
                             </code></pre>
                             <h3>Return</h3>
                             <p>It will return a json with <code>log</code> and <code>data</code> . In <code>log</code> all database query,bindings and time are listed.If this method return any data,it will return with <code>data</code>.</p>
@@ -627,6 +632,9 @@ prop.height.rem@4
                     </div>
                     <input type="text" id="dbpanel_auth_id" class="form-control mt-2" placeholder="auth user id...">
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
+                    <div>
+                        developed by © <a href="http://me.amirozzaman.com">niaz@dev</a>
+                    </div>
                 </div>
 
             </div>
