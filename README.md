@@ -1,6 +1,6 @@
 # dbpanel
 
-dbpanel for laravel application. You can look around your laravel application's database easily and fastest way with so many filter. You might look around your table's column type and index. You can also console your Controller or Model or Any ohter class's methods full database query log and time. If methods return any data,it also display that data. To use this package follow the instruction below.
+dbpanel is a developer tool for laravel application. You can access your laravel application's database easily and fastest way. There are some cool filter available with this package. You might look around your table's column type and index. You can console your controller methods database query log and its return data structure. How many query it going to be used in run time and how long it will take for those query. To use this package follow the instruction below.
 
 ### Installation
 
@@ -116,17 +116,21 @@ ExtraNameSpace.ClassName@method
 To pass parameter
 
 ```
-string:value1,value2:45
+string|value,1055,name|45
 ```
 
-> Note: parameters are separated by `:`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.
+> Note: parameters are separated by `|`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.
 
 To pass `request` instance 
 ```
 prop.width.px@45
-prop.width.rem@4
 prop.height.px@45
-prop.height.rem@4
+filter.date.start@2020-11-12
+filter.date.end@2020-15-12
+filter.search@lorem ipsum
+filter.range.min@15
+filter.range.max@68
+filter.time@12:58:56
 ```
 > every formData are in a new line
 
@@ -136,12 +140,14 @@ It will return a json with `log` and `data` . In `log` all database query,bindin
 
 > Tip: you can test your request data from other tab by passing `request@dd`, `parameters` and `request` 
 
-### To pass auth
+### To pass auth for login with `ID`
 
 ```
 5@id,name,email
 ```
 
-> `id_number@id,column_name,email
+> id_number@id,column_name,email
+
+### Run Artisan Command
 
 
