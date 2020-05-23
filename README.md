@@ -9,7 +9,7 @@ composer require niaz/dbpanel --dev
 ```
 ### Publish assets
 ```
-php artisan vendor:publish --tag=dbpanel
+php artisan vendor:publish --tag=dbpanel --force
 ```
 ### Usage
 

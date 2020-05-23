@@ -122,6 +122,8 @@ function setPagination(pageNo, total) {
         ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
         ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData(' + total + ')">' + total + '</a></li>';
       }
+
+      ulOfPagination.innerHTML += '<li class="page-item"><div class="d-flex"><input type="number" id="pageNumber" class="form-control brr-0" value=""><div class="btn brl-0" onclick="getDataFromGoTo()">Go</div></div></li>';
     } else {
       for (var i = 1; i < total + 1; i++) {
         var _activeClass = i == pageNo ? ' active' : '';
@@ -328,6 +330,11 @@ window.checkMethod = function () {
   } else {
     window.other();
   }
+};
+
+window.getDataFromGoTo = function () {
+  var p = document.getElementById('pageNumber').value;
+  window.getData(p);
 };
 
 window.viewInfo = function () {
