@@ -3,14 +3,14 @@ return [
     /**
      * controller name space
      */
-    'controller' => '\\App\\Http\\Controllers\\',
+    'controller' => 'App\\Http\\Controllers\\',
 
 
 
     /**
      * model namespace 
      */
-    'model' => '\\App\\Models\\',
+    'model' => 'App\\Models\\',
 
     /**
      * other namespace 
