@@ -46,14 +46,21 @@ class DBpanelController extends Controller
             $this->setRequest($request);
             
             $data = $controller_class->$method($request,...$parameters);
-            
-            return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
+            $returnData = class_basename($data) == 'View' ? $this->getView($data) : $data;
+            return ['log'=> DB::getQueryLog(),'data'=>$returnData,'Auth User Info'=>$user];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
-        
-        return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
+        $returnData = class_basename($data) == 'View' ? $this->getView($data) : $data;
+        return ['log'=> DB::getQueryLog(),'data'=>$returnData,'Auth User Info'=>$user];
+    }
+    protected function getView($view){
+        return [
+            'name' => $view->name(),
+            'path' => str_replace('/','\\',$view->getPath()),
+            'with' => $view->getData()
+        ];
     }
     public function checkModel(Request $request,$model){
         $user = 'None';
@@ -101,13 +108,15 @@ class DBpanelController extends Controller
             };
             $other_class = app($other_namespace);
             $data = $other_class->$method($request,...$parameters);
-            return ['log'=> DB::getQueryLog(),'data'=> $data,'Auth User Info'=>$user];
+            $returnData = class_basename($data) == 'View' ? $this->getView($data) : $data;
+            return ['log'=> DB::getQueryLog(),'data'=>$returnData,'Auth User Info'=>$user];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $other_class = app($other_namespace);
         $data = $parameters ? $other_class->$method(...$parameters) : $other_class->$method();
-        return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
+        $returnData = class_basename($data) == 'View' ? $this->getView($data) : $data;
+        return ['log'=> DB::getQueryLog(),'data'=>$returnData,'Auth User Info'=>$user];
     } 
     public function run($command){
         Artisan::call($command);

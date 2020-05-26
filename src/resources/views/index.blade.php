@@ -584,7 +584,7 @@ filter.time@12:58:56
                 </div>
             </div>
         </div><form class="row p-2">
-            <div class="col-md-3 p-0 sidebar shadow">
+            <div class="col-md-3 p-0 sidebar">
                 <ul class="nav nav-tabs pl-2 pt-2" id="mySideBarTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="controller-type-tab" data-toggle="tab" href="#controller-type" role="tab" aria-controls="controller-type" aria-selected="true">Controller</a>
@@ -599,32 +599,28 @@ filter.time@12:58:56
                         <a class="nav-link" id="command-tab" data-toggle="tab" href="#command" role="tab" aria-controls="model" aria-selected="true">Command</a>
                       </li>
                 </ul>
-                <div class="tab-content p-2" style="background:#fff;" id="mySideBarTabContent">
+                <div class="tab-content p-2"  id="mySideBarTabContent">
                     <div class=" tab-pane fade show active" id="controller-type" role="tabpanel" aria-labelledby="controller-type-tab">
-                        <input type="text" id="controller-input" class="form-control mt-2" placeholder="Controller@method">
-                        <small>Namespace: {{config('dbpanel.controller')}}</small>
-                        <input type="text" id="controller-parameter" class="form-control mt-2" placeholder="parameters">
-                       
+                        <input type="text" id="controller-input" spellcheck="false" class="form-control mt-2" placeholder="Controller@method">
+                        <small>Namespace: {{config('dbpanel.controller')}}</small>                       
                     </div>
                     <div class=" tab-pane fade" id="model" role="tabpanel" aria-labelledby="history-tab">
-                        <input type="text" id="model-input" class="form-control mt-2" placeholder="model@method">
-                        <small>Namespace: {{config('dbpanel.model')}}</small>
-                        <input type="text" id="model-parameter" class="form-control mt-2" placeholder="parameters">
-                    
-                       
+                        <input type="text" id="model-input" spellcheck="false" class="form-control mt-2" placeholder="model@method">
+                        <small>Namespace: {{config('dbpanel.model')}}</small>                 
                     </div>
                     <div class=" tab-pane fade" id="other" role="tabpanel" aria-labelledby="history-tab">
-                        <input type="text" id="other-input" class="form-control mt-2" placeholder="other@method">
+                        <input type="text" id="other-input" spellcheck="false" class="form-control mt-2" value="request@dd" placeholder="other@method">
                         <small>Namespace: {{config('dbpanel.other')}}</small>
-                        <input type="text" id="other-parameter" class="form-control mt-2" placeholder="parameters">
-            
                     </div>
                     <div class="tab-pane fade" id="command" role="tabpanel" aria-labelledby="controller-type-tab">
-                        <input type="text" id="command-input" class="form-control mt-2" placeholder="commands.....">
+                        <input type="text" id="command-input" spellcheck="false" class="form-control mt-2" placeholder="commands.....">
                         <small>For `php artisan route:list` need to pass `route:list`</small>        
                     </div>
+                    <div class="form-group">
+                        <input type="text" id="parameters" spellcheck="false" class="form-control mt-2" placeholder="parameters">
+                    </div>
                     <div class="form-check mt-2">
-                        <input type="checkbox" id="hadRequest" name="hadRequest" class="form-check-input mt-2">
+                        <input type="checkbox" id="hadRequest" spellcheck="false" name="hadRequest" class="form-check-input mt-2">
                         <label class="form-check-label pt-1" for="hadRequest">Illuminate\Support\Request </label>
                     </div>
                     <div class="form-group">
@@ -699,7 +695,7 @@ filter.time@12:58:56
                   </nav>
                 </div>
         </div>
-        <div class="col-md-4 mt-2 pr-0">
+        <div class="col-md-4 mt-2 pl-0 pr-0">
             <div class="form-group">
                 <label class="header">Table</label>
                 <pre spellcheck="false" class="window"><div id="table" class="p-2"></div></pre>
