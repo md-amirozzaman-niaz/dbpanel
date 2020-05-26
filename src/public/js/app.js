@@ -98,9 +98,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var json_formatter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! json-formatter-js */ "./node_modules/json-formatter-js/dist/json-formatter.umd.js");
 /* harmony import */ var json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(json_formatter_js__WEBPACK_IMPORTED_MODULE_0__);
 
+var dataDom = document.getElementById('data');
+var totalDom = document.getElementById('total');
+var tableDom = document.getElementById('table');
+var ulOfPagination = document.getElementsByClassName('pagination')[0];
+var requestParams = document.getElementById('request-parameter');
+var params = document.getElementById('parameters');
 
 function setPagination(pageNo, total) {
-  var ulOfPagination = document.getElementsByClassName('pagination')[0];
   ulOfPagination.innerHTML = null;
 
   if (total > 1) {
@@ -137,185 +142,114 @@ function setPagination(pageNo, total) {
 window.getData = function () {
   var pageNo = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
   var url = document.getElementById('uri').value + "?" + document.getElementById('query').value + "&per_page=" + document.getElementById('per_page').value + "&page=" + pageNo;
-  var dataDom = document.getElementById('data');
-  var tableDom = document.getElementById('table');
-  var totalDom = document.getElementById('total');
-  dataDom.innerHTML = null;
-  tableDom.innerHTML = null;
-  totalDom.innerHTML = 'processing....';
-  totalDom.classList.remove('badge-success');
-  totalDom.classList.remove('badge-danger');
-  totalDom.classList.add('badge-primary');
+  dbpanelProcessing();
   axios.post('/dbpanel/database/' + url).then(function (response) {
     dataDom.innerHTML = null;
     var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(response.data.result.data, 1, {
       hoverPreviewEnabled: true
     });
-    dataDom.appendChild(formatter.render()); // dataDom.innerHTML=JSON.stringify(response.data.result.data, undefined, 4).replace(/</g,'&lt');
-    // tableDom.innerHTML=JSON.stringify(response.data.filter_status, undefined, 4);
-    // totalDom.innerHTML=response.data.total;
-
+    dataDom.appendChild(formatter.render());
     var tbleaFormatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(response.data.filter_status, 1, {
       hoverPreviewEnabled: true
     });
-    tableDom.appendChild(tbleaFormatter.render()); // hljs.highlightBlock(dataDom);
-    // hljs.highlightBlock(tableDom);
-
+    tableDom.appendChild(tbleaFormatter.render());
     totalDom.innerHTML = 'Success';
     totalDom.classList.remove('badge-primary');
     totalDom.classList.add('badge-success');
     setPagination(response.data.result.current_page, response.data.result.last_page);
   })["catch"](function (error) {
-    dataDom.innerHTML = JSON.stringify(error.response.data, undefined, 4).replace(/\/\//g, '/');
-    totalDom.innerHTML = 'Error';
-    totalDom.classList.remove('badge-primary');
-    totalDom.classList.add('badge-danger');
+    dbpanelError(error.esponse.data);
   });
+};
+
+window.dbpanelProcessing = function () {
+  ulOfPagination.innerHTML = null;
+  dataDom.innerHTML = null;
+  tableDom.innerHTML = null;
+  totalDom.innerHTML = 'processing....';
+  totalDom.classList.remove('badge-success');
+  totalDom.classList.remove('badge-danger');
+  totalDom.classList.add('badge-primary');
+};
+
+window.dbpanelProcessed = function (url) {
+  axios.get(url).then(function (response) {
+    dbpanelSuccess(response.data);
+  })["catch"](function (exception) {
+    dbpanelError(exception.response.data);
+  });
+};
+
+window.dbpanelSuccess = function (data) {
+  if (data["log"] || data["request"]) {
+    var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(data, 4, {
+      hoverPreviewEnabled: true
+    });
+    dataDom.appendChild(formatter.render());
+  } else {
+    dataDom.innerHTML = data; // dataDom.innerHTML=`<iframe id='dbpaneldump'></iframe>`;
+    // document.getElementById('dbpaneldump').contentDocument.body.innerHTML=data;
+  }
+
+  totalDom.innerHTML = 'Success';
+  totalDom.classList.remove('badge-primary');
+  totalDom.classList.add('badge-success');
+};
+
+window.dbpanelError = function (error) {
+  var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(error, 2, {
+    hoverPreviewEnabled: true,
+    theme: 'dark'
+  });
+  dataDom.appendChild(formatter.render());
+  totalDom.innerHTML = 'Error';
+  totalDom.classList.remove('badge-primary');
+  totalDom.classList.add('badge-danger');
 };
 
 window.controller = function () {
-  var controller = document.getElementById('controller-input').value;
-  var request = document.getElementById('request-parameter').value.replace(/\n/gi, '|');
-  var param = document.getElementById('controller-parameter').value;
+  var controller = document.getElementById('controller-input').value.replace(/\\/gi, '.');
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-  param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + request : param;
+  var rData = requestParams.value.replace(/\n/gi, '|');
+  var param = params.value;
+  param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + rData : param;
   param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
-  var dataDom = document.getElementById('data');
-  var tableDom = document.getElementById('table');
-  var totalDom = document.getElementById('total');
-  var ulOfPagination = document.getElementsByClassName('pagination')[0];
-  ulOfPagination.innerHTML = null;
-  dataDom.innerHTML = null;
-  tableDom.innerHTML = null;
-  totalDom.innerHTML = 'processing....';
-  totalDom.classList.remove('badge-success');
-  totalDom.classList.remove('badge-danger');
-  totalDom.classList.add('badge-primary');
-  axios.get('/dbpanel/controller/' + controller + '?parameters=' + param).then(function (response) {
-    dataDom.innerHTML = null;
-    var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(response.data, 2, {
-      hoverPreviewEnabled: true
-    });
-    dataDom.appendChild(formatter.render()); // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-    // hljs.highlightBlock(dataDom);
-
-    totalDom.innerHTML = 'Success';
-    totalDom.classList.remove('badge-primary');
-    totalDom.classList.add('badge-success');
-  })["catch"](function (exception) {
-    dataDom.innerHTML = JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g, '\\');
-    totalDom.innerHTML = 'Error';
-    totalDom.classList.remove('badge-primary');
-    totalDom.classList.add('badge-danger');
-  });
+  dbpanelProcessing();
+  var url = '/dbpanel/controller/' + controller + '?parameters=' + param;
+  dbpanelProcessed(url);
 };
 
 window.model = function () {
-  var model = document.getElementById('model-input').value;
-  var request = document.getElementById('request-parameter').value.replace(/\n/gi, '|');
-  var param = document.getElementById('model-parameter').value;
+  var model = document.getElementById('model-input').value.replace(/\\/gi, '.');
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-  param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + request : param;
+  var rData = requestParams.value.replace(/\n/gi, '|');
+  var param = params.value;
+  param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + rData : param;
   param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
-  var dataDom = document.getElementById('data');
-  var tableDom = document.getElementById('table');
-  var totalDom = document.getElementById('total');
-  var ulOfPagination = document.getElementsByClassName('pagination')[0];
-  ulOfPagination.innerHTML = null;
-  dataDom.innerHTML = null;
-  tableDom.innerHTML = null;
-  totalDom.innerHTML = 'processing....';
-  totalDom.classList.remove('badge-success');
-  totalDom.classList.remove('badge-danger');
-  totalDom.classList.add('badge-primary');
-  axios.get('/dbpanel/model/' + model + '?parameters=' + param).then(function (response) {
-    dataDom.innerHTML = null;
-    var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(response.data, 4, {
-      hoverPreviewEnabled: true
-    });
-    dataDom.appendChild(formatter.render()); // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-    // hljs.highlightBlock(dataDom);
-
-    totalDom.innerHTML = 'Success';
-    totalDom.classList.remove('badge-primary');
-    totalDom.classList.add('badge-success');
-  })["catch"](function (exception) {
-    dataDom.innerHTML = JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g, '\\');
-    totalDom.innerHTML = 'Error';
-    totalDom.classList.remove('badge-primary');
-    totalDom.classList.add('badge-danger');
-  });
+  dbpanelProcessing();
+  var url = '/dbpanel/model/' + model + '?parameters=' + param;
+  dbpanelProcessed(url);
 };
 
 window.other = function () {
-  var other = document.getElementById('other-input').value;
-  var request = document.getElementById('request-parameter').value.replace(/\n/g, '|');
-  var param = document.getElementById('other-parameter').value;
+  var other = document.getElementById('other-input').value.replace(/\\/gi, '.');
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-  param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + request : param;
+  var rData = requestParams.value.replace(/\n/gi, '|');
+  var param = params.value;
+  param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + rData : param;
   param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
-  var dataDom = document.getElementById('data');
-  var tableDom = document.getElementById('table');
-  var totalDom = document.getElementById('total');
-  var ulOfPagination = document.getElementsByClassName('pagination')[0];
-  ulOfPagination.innerHTML = null;
-  dataDom.innerHTML = null;
-  tableDom.innerHTML = null;
-  totalDom.innerHTML = 'processing....';
-  totalDom.classList.remove('badge-success');
-  totalDom.classList.remove('badge-danger');
-  totalDom.classList.add('badge-primary');
-  axios.get('/dbpanel/other/' + other + '?parameters=' + param).then(function (response) {
-    dataDom.innerHTML = null;
-    var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(response.data, 2, {
-      hoverPreviewEnabled: true
-    });
-    dataDom.appendChild(formatter.render()); // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-    // hljs.highlightBlock(dataDom);
-
-    totalDom.innerHTML = 'Success';
-    totalDom.classList.remove('badge-primary');
-    totalDom.classList.add('badge-success');
-  })["catch"](function (exception) {
-    dataDom.innerHTML = JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g, '\\');
-    totalDom.innerHTML = 'Error';
-    totalDom.classList.remove('badge-primary');
-    totalDom.classList.add('badge-danger');
-  });
+  dbpanelProcessing();
+  var url = '/dbpanel/other/' + other + '?parameters=' + param;
+  dbpanelProcessed(url);
 };
 
 window.command = function () {
   var command = document.getElementById('command-input').value;
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
   var param = dbpanel_auth_id ? '?dbpanel_auth_id=' + dbpanel_auth_id : '';
-  var dataDom = document.getElementById('data');
-  var tableDom = document.getElementById('table');
-  var totalDom = document.getElementById('total');
-  var ulOfPagination = document.getElementsByClassName('pagination')[0];
-  ulOfPagination.innerHTML = null;
-  dataDom.innerHTML = null;
-  tableDom.innerHTML = null;
-  totalDom.innerHTML = 'processing....';
-  totalDom.classList.remove('badge-success');
-  totalDom.classList.remove('badge-danger');
-  totalDom.classList.add('badge-primary');
-  axios.get('/dbpanel/command/' + command + param).then(function (response) {
-    dataDom.innerHTML = null;
-    var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(response.data, 2, {
-      hoverPreviewEnabled: true
-    });
-    dataDom.appendChild(formatter.render()); // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-    // hljs.highlightBlock(dataDom);
-
-    totalDom.innerHTML = 'Success';
-    totalDom.classList.remove('badge-primary');
-    totalDom.classList.add('badge-success');
-  })["catch"](function (exception) {
-    dataDom.innerHTML = JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g, '\\');
-    totalDom.innerHTML = 'Error';
-    totalDom.classList.remove('badge-primary');
-    totalDom.classList.add('badge-danger');
-  });
+  dbpanelProcessing();
+  var url = '/dbpanel/command/' + command + param;
+  dbpanelProcessed(url);
 };
 
 window.checkMethod = function () {

@@ -32,12 +32,10 @@ class Filter
     *
     **/
     public function loadTable($table=null){       
-            // $tableName = Str::plural($model);
+
             if($this->hasTable($table)){
                 session(['filter_table'=>$table]);
-                // $modelClass= Str::studly(Str::singular($table));
-                // $modelNamespace = config('dbpanel.model').'\\'.$modelClass;
-                // $model = new $modelNamespace;
+
                 $indexes= Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table);
                 foreach($indexes as $indexType => $value){
                     $this->indexes[$indexType] = $value->getColumns();
@@ -68,8 +66,8 @@ class Filter
                     'indexes'=>$this->indexes,
                     'lastID'=>$this->lastID,
                     'Columns' => $columnsWithType,
-                    // 'Driver' => $this->database->getConnection()->getDriverName(),
-                    'Params' => $this->database->connection->getDoctrineConnection()->getParams(),
+                    'Version' => $this->database->getConnection()->getPdo()->query('select version()')->fetchColumn(),
+                    'Database' => $this->database->connection->getDoctrineConnection()->getParams(),
                     // 'Table' => collect($this->database->connection->getDoctrineConnection()->getSchemaManager()->listTableDetails($table)),
                 ];
                 $this->filter=true;
@@ -119,7 +117,6 @@ class Filter
         $this->status['SQL']=$this->sql;
         $this->status['Bindings']=$this->bindings;
         $this->status['Log']=DB::getQueryLog();
-        // $this->status['methods'] =get_class(new DB);
         session()->forget('filters');
         session()->forget('status');
     

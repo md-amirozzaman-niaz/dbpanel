@@ -1,7 +1,13 @@
 import JSONFormatter from 'json-formatter-js'
 
+const dataDom = document.getElementById('data');
+const totalDom = document.getElementById('total');
+const tableDom = document.getElementById('table');
+const ulOfPagination = document.getElementsByClassName('pagination')[0];
+const requestParams = document.getElementById('request-parameter');
+const params = document.getElementById('parameters');
+
 function setPagination(pageNo,total){
-    let ulOfPagination = document.getElementsByClassName('pagination')[0];  
     ulOfPagination.innerHTML =null ;
     if(total>1){
         if(total > 10){
@@ -29,18 +35,10 @@ function setPagination(pageNo,total){
         }
     }  
 }
-
+  
 window.getData = function(pageNo=1){
     let url= document.getElementById('uri').value+"?"+document.getElementById('query').value+"&per_page="+document.getElementById('per_page').value+"&page="+pageNo;
-    let dataDom = document.getElementById('data');
-    let tableDom = document.getElementById('table');
-    let totalDom = document.getElementById('total');
-    dataDom.innerHTML=null;
-    tableDom.innerHTML=null;
-    totalDom.innerHTML='processing....';
-    totalDom.classList.remove('badge-success');
-    totalDom.classList.remove('badge-danger');
-    totalDom.classList.add('badge-primary');
+    dbpanelProcessing();
     axios.post('/dbpanel/database/'+url).then( 
         function(response){
           dataDom.innerHTML=null;
@@ -49,15 +47,10 @@ window.getData = function(pageNo=1){
 
           dataDom.appendChild(formatter.render());
            
-            // dataDom.innerHTML=JSON.stringify(response.data.result.data, undefined, 4).replace(/</g,'&lt');
-            // tableDom.innerHTML=JSON.stringify(response.data.filter_status, undefined, 4);
-            // totalDom.innerHTML=response.data.total;
             let tbleaFormatter = new JSONFormatter(response.data.filter_status,1,{
               hoverPreviewEnabled: true});
   
               tableDom.appendChild(tbleaFormatter.render());
-            // hljs.highlightBlock(dataDom);
-            // hljs.highlightBlock(tableDom);
             totalDom.innerHTML='Success';
             totalDom.classList.remove('badge-primary');
             totalDom.classList.add('badge-success');
@@ -65,25 +58,11 @@ window.getData = function(pageNo=1){
         })
         .catch(
         function(error){
-
-            dataDom.innerHTML=JSON.stringify(error.response.data, undefined, 4).replace(/\/\//g,'/');
-            totalDom.innerHTML='Error';
-            totalDom.classList.remove('badge-primary');
-            totalDom.classList.add('badge-danger');    
+            dbpanelError(error.esponse.data);
         });
 
 };
-window.controller =function(){
-    let controller = document.getElementById('controller-input').value;
-    let request = document.getElementById('request-parameter').value.replace(/\n/gi,'|');
-    let param = document.getElementById('controller-parameter').value;
-    let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-     param = document.getElementById('hadRequest').checked?param+'&hadRequest='+request:param;
-    param = dbpanel_auth_id?param+'&dbpanel_auth_id='+dbpanel_auth_id:param;
-    let dataDom = document.getElementById('data');
-    let tableDom = document.getElementById('table');
-    let totalDom = document.getElementById('total');
-    let ulOfPagination = document.getElementsByClassName('pagination')[0];  
+window.dbpanelProcessing=function(){
     ulOfPagination.innerHTML= null ;
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
@@ -91,139 +70,87 @@ window.controller =function(){
     totalDom.classList.remove('badge-success');
     totalDom.classList.remove('badge-danger');
     totalDom.classList.add('badge-primary');
-    axios.get('/dbpanel/controller/'+controller+'?parameters='+param).then( 
+}
+window.dbpanelProcessed=function(url){
+    axios.get(url).then( 
         function(response){ 
-            dataDom.innerHTML=null;
-            let formatter = new JSONFormatter(response.data,2,{
-              hoverPreviewEnabled: true});
-              dataDom.appendChild(formatter.render());
-            // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-            // hljs.highlightBlock(dataDom);
-            totalDom.innerHTML='Success';
-            totalDom.classList.remove('badge-primary');
-            totalDom.classList.add('badge-success');
+            dbpanelSuccess(response.data);
         })
         .catch(
         function(exception){
-            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
-            totalDom.innerHTML='Error';
-            totalDom.classList.remove('badge-primary');
-            totalDom.classList.add('badge-danger');
+            dbpanelError(exception.response.data);
         });
+}
+window.dbpanelSuccess =function(data){
+    
+    if(data["log"] || data["request"]){
+        let formatter = new JSONFormatter(data,4,{
+            hoverPreviewEnabled: true});
+        dataDom.appendChild(formatter.render());
+    }
+    else{
+        dataDom.innerHTML=data;
+        // dataDom.innerHTML=`<iframe id='dbpaneldump'></iframe>`;
+        // document.getElementById('dbpaneldump').contentDocument.body.innerHTML=data;
+    }
+    totalDom.innerHTML='Success';
+    totalDom.classList.remove('badge-primary');
+    totalDom.classList.add('badge-success');
+}
+window.dbpanelError = function(error){
+    let formatter = new JSONFormatter(error,2,{
+        hoverPreviewEnabled: true,theme:'dark'});
+        dataDom.appendChild(formatter.render());
+    totalDom.innerHTML='Error';
+    totalDom.classList.remove('badge-primary');
+    totalDom.classList.add('badge-danger');
+}
+
+window.controller =function(){
+    let controller = document.getElementById('controller-input').value.replace(/\\/gi,'.');
+    let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
+    let rData = requestParams.value.replace(/\n/gi,'|');
+    let param = params.value;
+    param = document.getElementById('hadRequest').checked?param+'&hadRequest='+rData:param;
+    param = dbpanel_auth_id?param+'&dbpanel_auth_id='+dbpanel_auth_id:param;
+    dbpanelProcessing();
+    let url='/dbpanel/controller/'+controller+'?parameters='+param;
+    dbpanelProcessed(url);
 }
 
 window.model =function(){
-    let model = document.getElementById('model-input').value;
-    let request = document.getElementById('request-parameter').value.replace(/\n/gi,'|');
-    let param = document.getElementById('model-parameter').value;
+    let model = document.getElementById('model-input').value.replace(/\\/gi,'.');
+
     let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-     param = document.getElementById('hadRequest').checked?param+'&hadRequest='+request:param;
+    let rData = requestParams.value.replace(/\n/gi,'|');
+    let param = params.value;
+    param = document.getElementById('hadRequest').checked?param+'&hadRequest='+rData:param;
     param = dbpanel_auth_id?param+'&dbpanel_auth_id='+dbpanel_auth_id:param;
-    
-    let dataDom = document.getElementById('data');
-    let tableDom = document.getElementById('table');
-    let totalDom = document.getElementById('total');
-    let ulOfPagination = document.getElementsByClassName('pagination')[0];  
-    ulOfPagination.innerHTML= null ;
-    dataDom.innerHTML=null;
-    tableDom.innerHTML=null;
-    totalDom.innerHTML='processing....';
-    totalDom.classList.remove('badge-success');
-    totalDom.classList.remove('badge-danger');
-    totalDom.classList.add('badge-primary');
-    axios.get('/dbpanel/model/'+model+'?parameters='+param).then( 
-        function(response){ 
-          dataDom.innerHTML=null;
-            let formatter = new JSONFormatter(response.data,4,{
-              hoverPreviewEnabled: true});
-              dataDom.appendChild(formatter.render());
-            // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-            // hljs.highlightBlock(dataDom);
-            totalDom.innerHTML='Success';
-            totalDom.classList.remove('badge-primary');
-            totalDom.classList.add('badge-success');
-        })
-        .catch(
-        function(exception){
-            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
-            totalDom.innerHTML='Error';
-            totalDom.classList.remove('badge-primary');
-            totalDom.classList.add('badge-danger');
-        });
+    dbpanelProcessing();
+    let url='/dbpanel/model/'+model+'?parameters='+param;
+    dbpanelProcessed(url);
 }
+
 window.other =function(){
-    let other = document.getElementById('other-input').value;
-    let request = document.getElementById('request-parameter').value.replace(/\n/g,'|');
-    let param = document.getElementById('other-parameter').value;
+    let other = document.getElementById('other-input').value.replace(/\\/gi,'.');
     let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-     param = document.getElementById('hadRequest').checked?param+'&hadRequest='+request:param;
+    let rData = requestParams.value.replace(/\n/gi,'|');
+    let param = params.value;
+    param = document.getElementById('hadRequest').checked?param+'&hadRequest='+rData:param;
     param = dbpanel_auth_id?param+'&dbpanel_auth_id='+dbpanel_auth_id:param;
-    let dataDom = document.getElementById('data');
-    let tableDom = document.getElementById('table');
-    let totalDom = document.getElementById('total');
-    let ulOfPagination = document.getElementsByClassName('pagination')[0];  
-    ulOfPagination.innerHTML= null ;
-    dataDom.innerHTML=null;
-    tableDom.innerHTML=null;
-    totalDom.innerHTML='processing....';
-    totalDom.classList.remove('badge-success');
-    totalDom.classList.remove('badge-danger');
-            totalDom.classList.add('badge-primary');
-    axios.get('/dbpanel/other/'+other+'?parameters='+param).then( 
-        function(response){ 
-          dataDom.innerHTML=null;
-          let formatter = new JSONFormatter(response.data,2,{
-            hoverPreviewEnabled: true});
-            dataDom.appendChild(formatter.render());
-            // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-            // hljs.highlightBlock(dataDom);
-            totalDom.innerHTML='Success';
-            totalDom.classList.remove('badge-primary');
-            totalDom.classList.add('badge-success');
-        })
-        .catch(
-        function(exception){
-            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
-            totalDom.innerHTML='Error';
-            totalDom.classList.remove('badge-primary');
-            totalDom.classList.add('badge-danger');
-        });
+
+    dbpanelProcessing();
+    let url='/dbpanel/other/'+other+'?parameters='+param;
+    dbpanelProcessed(url);
 }
 
 window.command =function(){
     let command = document.getElementById('command-input').value;
     let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
     let param = dbpanel_auth_id?'?dbpanel_auth_id='+dbpanel_auth_id:'';
-    let dataDom = document.getElementById('data');
-    let tableDom = document.getElementById('table');
-    let totalDom = document.getElementById('total');
-    let ulOfPagination = document.getElementsByClassName('pagination')[0];  
-    ulOfPagination.innerHTML= null ;
-    dataDom.innerHTML=null;
-    tableDom.innerHTML=null;
-    totalDom.innerHTML='processing....';
-    totalDom.classList.remove('badge-success');
-    totalDom.classList.remove('badge-danger');
-            totalDom.classList.add('badge-primary');
-    axios.get('/dbpanel/command/'+command+param).then( 
-        function(response){ 
-          dataDom.innerHTML=null;
-          let formatter = new JSONFormatter(response.data,2,{
-            hoverPreviewEnabled: true});
-            dataDom.appendChild(formatter.render());
-            // dataDom.innerHTML=JSON.stringify(response.data, undefined, 4).replace(/</g,'&lt');
-            // hljs.highlightBlock(dataDom);
-            totalDom.innerHTML='Success';
-            totalDom.classList.remove('badge-primary');
-            totalDom.classList.add('badge-success');
-        })
-        .catch(
-        function(exception){
-            dataDom.innerHTML=JSON.stringify(exception.response.data, undefined, 4).replace(/\\\\/g,'\\');      
-            totalDom.innerHTML='Error';
-            totalDom.classList.remove('badge-primary');
-            totalDom.classList.add('badge-danger');
-        });
+    dbpanelProcessing();
+    let url='/dbpanel/command/'+command+param;
+    dbpanelProcessed(url);
 }
 window.checkMethod =function(){
     let whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
