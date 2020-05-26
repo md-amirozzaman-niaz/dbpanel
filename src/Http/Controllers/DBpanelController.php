@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 
+
 class DBpanelController extends Controller
 {
     protected $parameters;
@@ -42,17 +43,56 @@ class DBpanelController extends Controller
         $controller_class = app($controller_namespace);
         $method = $controller[1];
 
+        $middlewareUsed = [];
+        $getThroughMiddlewares = collect($controller_class->middleware);
+        $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
+        if(!empty($$getThroughMiddlewares)){
+            foreach($getThroughMiddlewares as $getThroughMiddleware){
+                $middlewareArr = explode(':',$getThroughMiddleware['middleware']);
+                $middlewareKey = $middlewareArr[0];
+                $middlewareParams = explode(',',$middlewareArr[1]);
+                $methods = $getThroughMiddleware['options']['only'];
+                $mClassNameSpace = $appRouteMiddleware[$middlewareKey];
+                $middlewareClass = resolve($mClassNameSpace);
+                if(in_array($method,$methods)){
+                    $middlewareClass->handle($request, function ($next) {
+                        return $next;
+                    }, ...$middlewareParams);
+                    $middlewareUsed[]=$middlewareKey;
+                }
+            }
+        }
+        $actionString = $controller_namespace.'@'.$method;
+        $route = \Route::getRoutes();
+        $routeByAction = $route->getByAction($actionString);
+        $routeInfo =[];
+        if($routeByAction){
+            $routeInfo = [ 
+            'Http Method' => $routeByAction->methods,
+            'uri' => $routeByAction->uri,
+            'action' => $routeByAction->action,
+            'route Name' => $routeByAction->getName(),
+            ];
+        }
+        $routeMiddlewares =$routeByAction->action['middleware'];
+        foreach($routeMiddlewares as $routeMiddleware){
+            if($routeMiddleware !== 'api' && $routeMiddleware !== 'web'){
+                resolve($appRouteMiddleware[$routeMiddleware])->handle($request, function ($next) {
+                    return $next;
+                });
+            }
+        }
         if(request()->has('hadRequest') && strpos(request('hadRequest'),'@') > 0){
             $this->setRequest($request);
             
             $data = $controller_class->$method($request,...$parameters);
-            return ['log'=> DB::getQueryLog(),'response'=>$this->getReturnData($data),'Auth User Info'=>$user];
+            return ['log'=> DB::getQueryLog(),'response'=>$this->getReturnData($data),'route'=>$routeInfo,'Controller middleware'=>$middlewareUsed,'Auth User'=>$user];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
  
-        return ['log'=> DB::getQueryLog(),'response'=>$this->getReturnData($data),'Auth User Info'=>$user];
+        return ['log'=> DB::getQueryLog(),'response'=>$this->getReturnData($data),'route'=>$routeInfo,'Controller middleware'=>$route,'Auth User'=>$user];
     }
     protected function getView($view){
         return [
@@ -66,7 +106,7 @@ class DBpanelController extends Controller
            return collect(['data' =>$data,'type'=>'array']);
         }
         else if(class_basename($data) == 'View'){
-            return collect(['info' =>$this->getView($data),'type'=>get_class($data)]);
+            return collect(['Blade' =>$this->getView($data),'type'=>get_class($data)]);
         }
         else if(class_basename($data) == 'Response'){
             return collect(['data' => collect($data)->get('original'),'type'=>get_class($data)]);
@@ -95,13 +135,13 @@ class DBpanelController extends Controller
         if(request()->has('hadRequest') && strpos(request('hadRequest'),'@') > 0){
             $this->setRequest($request);
             $data = $model_class->$method($request,...$parameters);
-            return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User Info'=>$user];
+            return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User'=>$user];
         }
 
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $data = $parameters ? $model_class->$method(...$parameters) : $model_class->$method();
-        return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User Info'=>$user];
+        return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User'=>$user];
     }
     public function checkOther(Request $request,$other){
         $user = 'None';
@@ -125,14 +165,14 @@ class DBpanelController extends Controller
             $other_class = app($other_namespace);
             $data = $other_class->$method($request,...$parameters);
 
-            return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User Info'=>$user];
+            return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User'=>$user];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $other_class = app($other_namespace);
         $data = $parameters ? $other_class->$method(...$parameters) : $other_class->$method();
 
-        return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User Info'=>$user];
+        return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User'=>$user];
     } 
     public function run($command){
         Artisan::call($command);
@@ -142,6 +182,7 @@ class DBpanelController extends Controller
         $user = explode('@',request()->input('dbpanel_auth_id'));
         request()->request->remove('dbpanel_auth_id');
         Auth::loginUsingId($user[0]);
+        // request()->merge(['user'=>auth()->user()]);
         if(count($user)>1){
         $userCols =  $user[1];
         $cols=explode(',',$userCols);
