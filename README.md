@@ -112,11 +112,15 @@ If you had a more namespace from Controller or Model default namespace prefix, t
 ```
 ExtraNameSpace.ClassName@method
 ```
+or
+```
+ExtraNameSpace\ClassName@method
+```
 
 To pass parameter
 
 ```
-string|value,1055,name|45
+App\User 5|string|58,hello,78|12:58:59
 ```
 
 > Note: parameters are separated by `|`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.
