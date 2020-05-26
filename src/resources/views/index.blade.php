@@ -556,7 +556,7 @@
                         <pre><code>ExtraNameSpace.ClassName@method
                         </code></pre>
                         <p>To pass parameter</p>
-                        <pre><code>string|58,hello,78|12:58:59
+                        <pre><code>App\User 5|string|58,hello,78|12:58:59
                         </code></pre>
                         <blockquote>
                             <p>Note: parameters are separated by <code>|</code>. Array parameter value are <code>,</code> seprated. Numeric string value will auto converted as <code>int</code> type value. This was also applicable for array.</p>

@@ -46,14 +46,13 @@ class DBpanelController extends Controller
             $this->setRequest($request);
             
             $data = $controller_class->$method($request,...$parameters);
-            $returnData = class_basename($data) == 'View' ? $this->getView($data) : $data;
-            return ['log'=> DB::getQueryLog(),'data'=>$returnData,'Auth User Info'=>$user];
+            return ['log'=> DB::getQueryLog(),'response'=>$this->getReturnData($data),'Auth User Info'=>$user];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
-        $returnData = class_basename($data) == 'View' ? $this->getView($data) : $data;
-        return ['log'=> DB::getQueryLog(),'data'=>$returnData,'Auth User Info'=>$user];
+ 
+        return ['log'=> DB::getQueryLog(),'response'=>$this->getReturnData($data),'Auth User Info'=>$user];
     }
     protected function getView($view){
         return [
@@ -62,6 +61,23 @@ class DBpanelController extends Controller
             'with' => $view->getData()
         ];
     }
+    protected function getReturnData($data){
+        if(gettype($data) == "array"){
+           return collect(['data' =>$data,'type'=>'array']);
+        }
+        else if(class_basename($data) == 'View'){
+            return collect(['info' =>$this->getView($data),'type'=>get_class($data)]);
+        }
+        else if(class_basename($data) == 'Response'){
+            return collect(['data' => collect($data)->get('original'),'type'=>get_class($data)]);
+        }else if(class_basename($data) == 'JsonResponse'){
+            return collect(['data' => collect($data)->get('original'),'type'=>get_class($data)]);
+        }else if(gettype($data) == 'object'){
+            return collect(['data' => $data,'type'=>get_class($data)]);
+        } else{
+            return collect(['data' => $data,'type'=>'string']);
+        }
+    } 
     public function checkModel(Request $request,$model){
         $user = 'None';
         if(request()->has('dbpanel_auth_id')){
@@ -79,13 +95,13 @@ class DBpanelController extends Controller
         if(request()->has('hadRequest') && strpos(request('hadRequest'),'@') > 0){
             $this->setRequest($request);
             $data = $model_class->$method($request,...$parameters);
-            return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
+            return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User Info'=>$user];
         }
 
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $data = $parameters ? $model_class->$method(...$parameters) : $model_class->$method();
-        return ['log'=> DB::getQueryLog(),'data'=>$data,'Auth User Info'=>$user];
+        return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User Info'=>$user];
     }
     public function checkOther(Request $request,$other){
         $user = 'None';
@@ -108,15 +124,15 @@ class DBpanelController extends Controller
             };
             $other_class = app($other_namespace);
             $data = $other_class->$method($request,...$parameters);
-            $returnData = class_basename($data) == 'View' ? $this->getView($data) : $data;
-            return ['log'=> DB::getQueryLog(),'data'=>$returnData,'Auth User Info'=>$user];
+
+            return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User Info'=>$user];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $other_class = app($other_namespace);
         $data = $parameters ? $other_class->$method(...$parameters) : $other_class->$method();
-        $returnData = class_basename($data) == 'View' ? $this->getView($data) : $data;
-        return ['log'=> DB::getQueryLog(),'data'=>$returnData,'Auth User Info'=>$user];
+
+        return ['log'=> DB::getQueryLog(),'return'=>$this->getReturnData($data),'Auth User Info'=>$user];
     } 
     public function run($command){
         Artisan::call($command);
@@ -195,6 +211,11 @@ class DBpanelController extends Controller
                     return collect(explode(',',$i))->map(function($j){
                         return is_numeric($j) ? (int)$j : $j;
                     });
+                }else if(strpos($i,'\\') > -1){
+                    $c = explode(' ',$i);
+                    $n = '\\'.$c[0];
+                    $cl = new $n;
+                    return count($c)>1 ? $cl::find($c[1]) : $cl::first();
                 }
                 else{
                     return is_numeric($i) ? (int)$i : $i;
