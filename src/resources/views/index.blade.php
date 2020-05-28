@@ -684,6 +684,9 @@ filter.time@12:58:56
                         <div class="btn">table</div>
                         <div class="btn">json</div>
                     </div> --}}
+                    <div class="btn-open-file float-right d-none" id="open-file-in-editor" title="open file in editor" file-location="" onclick="openFileInEditor(this)">
+                        open file
+                    </div>
                 </label>
               <pre spellcheck="false" class="window"><div id="data" class="p-2"></div></pre>
             </div>

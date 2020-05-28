@@ -269,5 +269,11 @@ class DBpanelController extends Controller
             'request' => $request->all(),
             'parameters'=>$parameters ? $parameters : null
         ];
-    } 
+    }
+
+    public function openFile(){
+        //check base_path is already in file path
+        $file_path =strpos(request('file'),base_path()) !== false ? '"'.request('file').'"' : '"'.base_path().'/'.request('file').'"';
+        exec("code --goto ".$file_path);
+    }
 }

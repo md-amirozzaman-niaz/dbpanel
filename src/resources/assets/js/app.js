@@ -6,6 +6,7 @@ const tableDom = document.getElementById('table');
 const ulOfPagination = document.getElementsByClassName('pagination')[0];
 const requestParams = document.getElementById('request-parameter');
 const params = document.getElementById('parameters');
+const openFileDom=document.getElementById('open-file-in-editor');
 
 function setPagination(pageNo,total){
     ulOfPagination.innerHTML =null ;
@@ -63,6 +64,7 @@ window.getData = function(pageNo=1){
 
 };
 window.dbpanelProcessing=function(){
+
     ulOfPagination.innerHTML= null ;
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
@@ -94,18 +96,30 @@ window.dbpanelSuccess =function(data){
         // document.getElementById('dbpaneldump').contentDocument.body.innerHTML=data;
     }
     totalDom.innerHTML='Success';
+    openFileDom.classList.contains('d-none')? false:openFileDom.classList.add('d-none');
     totalDom.classList.remove('badge-primary');
     totalDom.classList.add('badge-success');
 }
 window.dbpanelError = function(error){
-    let formatter = new JSONFormatter(error,2,{
+    let fileLocation = error.file;
+    let line=error.line;
+    let formatter = new JSONFormatter(error,1,{
         hoverPreviewEnabled: true,theme:'dark'});
         dataDom.appendChild(formatter.render());
+    let url=fileLocation+':'+line;
+    openFileDom.setAttribute('file-location',url);
+    openFileDom.classList.contains('d-none')? openFileDom.classList.remove('d-none'):false;
     totalDom.innerHTML='Error';
     totalDom.classList.remove('badge-primary');
     totalDom.classList.add('badge-danger');
 }
-
+window.openFileInEditor=function(el){
+    let param= el.getAttribute('file-location');
+    axios.post('/__open-in-editor?file='+param).then( 
+        function(response){
+            console.log('file opened');
+        }).catch(function(error){ console.log(error)})
+}
 window.controller =function(){
     let controller = document.getElementById('controller-input').value.replace(/\\/gi,'.');
     let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
