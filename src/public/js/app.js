@@ -104,6 +104,7 @@ var tableDom = document.getElementById('table');
 var ulOfPagination = document.getElementsByClassName('pagination')[0];
 var requestParams = document.getElementById('request-parameter');
 var params = document.getElementById('parameters');
+var openFileDom = document.getElementById('open-file-in-editor');
 
 function setPagination(pageNo, total) {
   ulOfPagination.innerHTML = null;
@@ -192,19 +193,34 @@ window.dbpanelSuccess = function (data) {
   }
 
   totalDom.innerHTML = 'Success';
+  openFileDom.classList.contains('d-none') ? false : openFileDom.classList.add('d-none');
   totalDom.classList.remove('badge-primary');
   totalDom.classList.add('badge-success');
 };
 
 window.dbpanelError = function (error) {
-  var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(error, 2, {
+  var fileLocation = error.file;
+  var line = error.line;
+  var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(error, 1, {
     hoverPreviewEnabled: true,
     theme: 'dark'
   });
   dataDom.appendChild(formatter.render());
+  var url = fileLocation + ':' + line;
+  openFileDom.setAttribute('file-location', url);
+  openFileDom.classList.contains('d-none') ? openFileDom.classList.remove('d-none') : false;
   totalDom.innerHTML = 'Error';
   totalDom.classList.remove('badge-primary');
   totalDom.classList.add('badge-danger');
+};
+
+window.openFileInEditor = function (el) {
+  var param = el.getAttribute('file-location');
+  axios.post('/__open-in-editor?file=' + param).then(function (response) {
+    console.log('file opened');
+  })["catch"](function (error) {
+    console.log(error);
+  });
 };
 
 window.controller = function () {
