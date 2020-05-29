@@ -216,7 +216,7 @@ window.dbpanelError = function (error) {
 
 window.openFileInEditor = function (el) {
   var param = el.getAttribute('file-location');
-  axios.post('/__open-in-editor?file=' + param).then(function (response) {
+  axios.get('/__open-in-editor?file=' + param).then(function (response) {
     console.log('file opened');
   })["catch"](function (error) {
     console.log(error);
