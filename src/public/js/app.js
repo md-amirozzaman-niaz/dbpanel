@@ -177,19 +177,26 @@ window.dbpanelProcessed = function (url) {
   axios.get(url).then(function (response) {
     dbpanelSuccess(response.data);
   })["catch"](function (exception) {
-    dbpanelError(exception.response.data);
+    if (exception["response"]) {
+      dbpanelError(exception.response.data);
+    } else {
+      dbpanelError(exception);
+    }
   });
 };
 
 window.dbpanelSuccess = function (data) {
-  if (data["log"] || data["request"]) {
-    var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(data, 4, {
+  dataDom.innerHTML = null;
+
+  if (data["Database log"] || data["request"]) {
+    var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(data, 1, {
       hoverPreviewEnabled: true
     });
     dataDom.appendChild(formatter.render());
+  } else if (data.indexOf("sf-dump") > -1) {
+    dataDom.innerHTML = data;
   } else {
-    dataDom.innerHTML = data; // dataDom.innerHTML=`<iframe id='dbpaneldump'></iframe>`;
-    // document.getElementById('dbpaneldump').contentDocument.body.innerHTML=data;
+    dataDom.innerHTML = data; // hljs.highlightBlock(dataDom);   
   }
 
   totalDom.innerHTML = 'Success';
@@ -199,6 +206,7 @@ window.dbpanelSuccess = function (data) {
 };
 
 window.dbpanelError = function (error) {
+  dataDom.innerHTML = null;
   var fileLocation = error.file;
   var line = error.line;
   var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(error, 1, {
@@ -216,7 +224,7 @@ window.dbpanelError = function (error) {
 
 window.openFileInEditor = function (el) {
   var param = el.getAttribute('file-location');
-  axios.post('/__open-in-editor?file=' + param).then(function (response) {
+  axios.get('/__open-in-editor?file=' + param).then(function (response) {
     console.log('file opened');
   })["catch"](function (error) {
     console.log(error);
@@ -226,7 +234,7 @@ window.openFileInEditor = function (el) {
 window.controller = function () {
   var controller = document.getElementById('controller-input').value.replace(/\\/gi, '.');
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-  var rData = requestParams.value.replace(/\n/gi, '|');
+  var rData = requestParams.value.indexOf("{") === 0 ? requestParams.value : requestParams.value.replace(/\n/gi, '|');
   var param = params.value;
   param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + rData : param;
   param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
@@ -238,7 +246,7 @@ window.controller = function () {
 window.model = function () {
   var model = document.getElementById('model-input').value.replace(/\\/gi, '.');
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-  var rData = requestParams.value.replace(/\n/gi, '|');
+  var rData = requestParams.value.indexOf("{") === 0 ? requestParams.value : requestParams.value.replace(/\n/gi, '|');
   var param = params.value;
   param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + rData : param;
   param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
@@ -250,7 +258,7 @@ window.model = function () {
 window.other = function () {
   var other = document.getElementById('other-input').value.replace(/\\/gi, '.');
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-  var rData = requestParams.value.replace(/\n/gi, '|');
+  var rData = requestParams.value.indexOf("{") === 0 ? requestParams.value : requestParams.value.replace(/\n/gi, '|');
   var param = params.value;
   param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + rData : param;
   param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;

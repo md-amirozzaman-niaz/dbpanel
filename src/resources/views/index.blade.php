@@ -10,10 +10,10 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <link rel="icon" type="image/png" sizes="32x32" href="vendor/dbpanel/media/favicon.png">
         <!-- Styles -->
-         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" integrity="sha256-iAmWN8uaUdN6Y9FCf8srQdrx3eVVwouJ5QtEiyuTQ6A=" crossorigin="anonymous" />
-         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/fontawesome.min.css" integrity="sha256-CuUPKpitgFmSNQuPDL5cEfPOOJT/+bwUlhfumDJ9CI4=" crossorigin="anonymous" />
-         <link rel="stylesheet" href='vendor/dbpanel/css/style.css' />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/fontawesome.min.css" integrity="sha256-CuUPKpitgFmSNQuPDL5cEfPOOJT/+bwUlhfumDJ9CI4=" crossorigin="anonymous" />
+        <link rel="stylesheet" href='vendor/dbpanel/css/style.css' />
     </head>
     <body>
         <!-- developed by md.amirozzaman@gmail.com-->
@@ -571,6 +571,17 @@ filter.range.min@15,158,23
 filter.range.max@68
 filter.time@12:58:56
                             </code></pre>
+                            <br>or<pre><code>
+{
+    "husky": {
+        "hooks": {
+        "pre-commit": "npm test",
+        "pre-push": "npm test",
+        "...": "..."
+        }
+    }
+}
+                                </code></pre>
                             <h3>Return</h3>
                             <p>It will return a json with <code>log</code> and <code>data</code> . In <code>log</code> all database query,bindings and time are listed.If this method return any data,it will return with <code>data</code>.</p>
                             <blockquote>
@@ -688,7 +699,7 @@ filter.time@12:58:56
                         open file
                     </div>
                 </label>
-              <pre spellcheck="false" class="window"><div id="data" class="p-2"></div></pre>
+              <pre spellcheck="false" class="window"><div id="data" class="p-2 shell"></div></pre>
             </div>
             <div class="col-md-12">
                 <nav aria-label="Page navigation example">

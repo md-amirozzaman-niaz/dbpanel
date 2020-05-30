@@ -208,3 +208,6 @@ img{
     cursor: pointer;
     border: 1px solid #d2d2d2;
 }
+.json-formatter-row .json-formatter-toggler:after {
+    content: ">" !important;
+}
