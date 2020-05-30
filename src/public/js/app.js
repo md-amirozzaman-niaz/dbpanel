@@ -195,6 +195,8 @@ window.dbpanelSuccess = function (data) {
     dataDom.appendChild(formatter.render());
   } else if (data.indexOf("sf-dump") > -1) {
     dataDom.innerHTML = data;
+  } else if (data.indexOf("</") > -1) {
+    dataDom.innerHTML = data;
   } else {
     dataDom.innerHTML = data; // hljs.highlightBlock(dataDom);   
   }

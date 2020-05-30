@@ -210,4 +210,5 @@ img{
 }
 .json-formatter-row .json-formatter-toggler:after {
     content: ">" !important;
+    margin-bottom:3px;
 }

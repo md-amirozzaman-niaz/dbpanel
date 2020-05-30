@@ -98,6 +98,9 @@ window.dbpanelSuccess =function(data){
     else if(data.indexOf("sf-dump") > -1 ){
         dataDom.innerHTML=data;
     }
+    else if(data.indexOf("</") > -1 ){
+        dataDom.innerHTML='custom response';
+    }
     else{
          dataDom.innerHTML=data;
         // hljs.highlightBlock(dataDom);   
