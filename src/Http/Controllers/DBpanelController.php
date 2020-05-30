@@ -38,6 +38,7 @@ class DBpanelController extends Controller
 
         if (request()->has('dbpanel_auth_id')) {
             $user = $this->login();
+            $request->request->remove('dbpanel_auth_id');
         }
         $parameters = $this->setParameters();
 
@@ -91,18 +92,18 @@ class DBpanelController extends Controller
             }
         }
 
-        if (request()->has('hadRequest') && strpos(request('hadRequest'), '@') > 0) {
+        if (request()->has('hadRequest')) {
             $this->setRequest($request);
 
             $data = $controller_class->$method($request, ...$parameters);
 
-            return ['log' => DB::getQueryLog(), 'response' => $this->getReturnData($data), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
+            return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
         }
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
 
-        return ['log' => DB::getQueryLog(), 'response' => $this->getReturnData($data), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
+        return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
     }
 
     protected function getView($view)
@@ -137,6 +138,7 @@ class DBpanelController extends Controller
 
         if (request()->has('dbpanel_auth_id')) {
             $user = $this->login();
+            $request->request->remove('dbpanel_auth_id');
         }
         $parameters = $this->setParameters();
 
@@ -147,18 +149,18 @@ class DBpanelController extends Controller
         $model_class = app($model_namespace);
         $method = $model[1];
 
-        if (request()->has('hadRequest') && strpos(request('hadRequest'), '@') > 0) {
+        if (request()->has('hadRequest')) {
             $this->setRequest($request);
             $data = $model_class->$method($request, ...$parameters);
 
-            return ['log' => DB::getQueryLog(), 'return' => $this->getReturnData($data), 'Auth User' => $user];
+            return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
         }
 
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $data = $parameters ? $model_class->$method(...$parameters) : $model_class->$method();
 
-        return ['log' => DB::getQueryLog(), 'return' => $this->getReturnData($data), 'Auth User' => $user];
+        return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
     }
 
     public function checkOther(Request $request, $other)
@@ -167,33 +169,34 @@ class DBpanelController extends Controller
 
         if (request()->has('dbpanel_auth_id')) {
             $user = $this->login();
+            $request->request->remove('dbpanel_auth_id');
         }
 
         $parameters = $this->setParameters();
-
-        DB::connection()->enableQueryLog();
-
-        $other = explode('@', $other);
-        $other_namespace = config('dbpanel.other').str_replace('.', '\\', $other[0]);
-        $method = $other[1];
-
         if (request()->has('hadRequest')) {
             $this->setRequest($request);
+        }
+        DB::connection()->enableQueryLog();
 
-            if ($method == 'dd') {
-                return $this->dd($request, $parameters);
-            }
+        if ($other == 'request@dd') {
+            return $this->dd($request, $parameters);
+        }
+        $other = explode('@', trim($other));
+        $other_namespace = config('dbpanel.other').str_replace('.', '\\', $other[0]);
+        $method = $other[1];
+        if (request()->has('hadRequest')) {
+ 
             $other_class = app($other_namespace);
             $data = $other_class->$method($request, ...$parameters);
-
-            return ['log' => DB::getQueryLog(), 'return' => $this->getReturnData($data), 'Auth User' => $user];
+            return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
         }
+        $request->request->remove('dbpanel_auth_id');
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $other_class = app($other_namespace);
         $data = $parameters ? $other_class->$method(...$parameters) : $other_class->$method();
 
-        return ['log' => DB::getQueryLog(), 'return' => $this->getReturnData($data), 'Auth User' => $user];
+        return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
     }
 
     public function run($command)
@@ -206,7 +209,6 @@ class DBpanelController extends Controller
     public function login()
     {
         $user = explode('@', request()->input('dbpanel_auth_id'));
-        request()->request->remove('dbpanel_auth_id');
         Auth::loginUsingId($user[0]);
         // request()->merge(['user'=>auth()->user()]);
         if (count($user) > 1) {
@@ -230,6 +232,11 @@ class DBpanelController extends Controller
             $demo ='{"key":"value"}';
             $arr ? $request->merge($arr) : dd('your json is not in correct format',$demo,$r);
         }else{
+            if(strlen($r) < 2) {
+                $request->request->remove('parameters');
+                $request->request->remove('hadRequest');
+                return ;
+            }
             $pairs =
              collect(explode('|', $r))->map(function ($i) {
                  $keyValue = explode('@', $i);
@@ -306,9 +313,13 @@ class DBpanelController extends Controller
 
     public function dd(Request $request, $parameters)
     {
+        $user = $this->login();
+        $request->request->remove('parameters');
+        $request->request->remove('dbpanel_auth_id');
         return [
             'request' => $request->all(),
             'parameters' => $parameters ? $parameters : null,
+            'Auth User' => $user
         ];
     }
 

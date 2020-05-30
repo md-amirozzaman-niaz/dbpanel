@@ -138,6 +138,20 @@ filter.time@12:58:56
 ```
 > every formData are in a new line
 
+or Raw json
+
+```
+{
+    "husky": {
+        "hooks": {
+        "pre-commit": "npm test",
+        "pre-push": "npm test",
+        "...": "..."
+        }
+    }
+}
+```
+
 ### Return
 
 It will return a json with `log` and `data` . In `log` all database query,bindings and time are listed.If this method return any data,it will return with `data`.
