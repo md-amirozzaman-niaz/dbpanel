@@ -82,13 +82,14 @@ class DBpanelController extends Controller
                 'action' => $routeByAction->action,
                 'route Name' => $routeByAction->getName(),
             ];
-        }
-        $routeMiddlewares = $routeByAction->action['middleware'];
-        foreach ($routeMiddlewares as $routeMiddleware) {
-            if ($routeMiddleware !== 'api' && $routeMiddleware !== 'web') {
-                resolve($appRouteMiddleware[$routeMiddleware])->handle($request, function ($next) {
-                    return $next;
-                });
+        
+            $routeMiddlewares = $routeByAction->action['middleware'];
+            foreach ($routeMiddlewares as $routeMiddleware) {
+                if ($routeMiddleware !== 'api' && $routeMiddleware !== 'web') {
+                    resolve($appRouteMiddleware[$routeMiddleware])->handle($request, function ($next) {
+                        return $next;
+                    });
+                }
             }
         }
 
