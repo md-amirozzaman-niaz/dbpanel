@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Niaz\DBpanel\Http\Filters\Filter;
 use Illuminate\Support\Facades\Artisan;
+use ReflectionClass;
+use ReflectionParameter;
+
 
 class DBpanelController extends Controller
 {
@@ -46,6 +49,10 @@ class DBpanelController extends Controller
 
         $controller = explode('@', $controller);
         $controller_namespace = config('dbpanel.controller').str_replace('.', '\\', $controller[0]);
+        // $r = new ReflectionClass(new $controller_namespace);
+        // $m= new ReflectionParameter($controller_namespace, 'index');
+        // dd($r->getMethod('index')->getParameters());
+
         $controller_class = app($controller_namespace);
         $method = $controller[1];
 
@@ -91,13 +98,20 @@ class DBpanelController extends Controller
                     });
                 }
             }
+            $url = action(str_replace('.', '\\', $controller[0]).'@index',['df'=>'asd','id'=>67]);
+            // dd($url);
+            $request = Request::create($url, $routeByAction->methods[0]);
+            $response = app()->handle($request);
+            dd($response);
+            // return ['response' => $this->getReturnData($response), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
         }
-
+        
+        // dd($response->getOriginalContent());
         if (request()->has('hadRequest')) {
             $this->setRequest($request);
 
             $data = $controller_class->$method($request, ...$parameters);
-
+            
             return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
         }
         $request->request->remove('parameters');

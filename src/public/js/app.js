@@ -164,6 +164,11 @@ window.getData = function () {
 };
 
 window.dbpanelProcessing = function () {
+  if (totalDom.innerText == 'processing....') {
+    console.log('one process is already runing');
+    return;
+  }
+
   ulOfPagination.innerHTML = null;
   dataDom.innerHTML = null;
   tableDom.innerHTML = null;
@@ -175,7 +180,11 @@ window.dbpanelProcessing = function () {
 
 window.dbpanelProcessed = function (url) {
   axios.get(url).then(function (response) {
-    dbpanelSuccess(response.data);
+    if (response['data']) {
+      dbpanelSuccess(response.data);
+    } else {
+      dbpanelSuccess(response);
+    }
   })["catch"](function (exception) {
     if (exception["response"]) {
       dbpanelError(exception.response.data);
@@ -196,7 +205,7 @@ window.dbpanelSuccess = function (data) {
   } else if (data.indexOf("sf-dump") > -1) {
     dataDom.innerHTML = data;
   } else if (data.indexOf("</") > -1) {
-    dataDom.innerHTML = data;
+    dataDom.innerHTML = 'custom response';
   } else {
     dataDom.innerHTML = data; // hljs.highlightBlock(dataDom);   
   }

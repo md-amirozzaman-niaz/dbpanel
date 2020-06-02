@@ -64,7 +64,10 @@ window.getData = function(pageNo=1){
 
 };
 window.dbpanelProcessing=function(){
-
+    if(totalDom.innerText=='processing....'){
+        console.log('one process is already runing');
+        return;
+    }
     ulOfPagination.innerHTML= null ;
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
@@ -76,7 +79,11 @@ window.dbpanelProcessing=function(){
 window.dbpanelProcessed=function(url){
     axios.get(url).then( 
         function(response){ 
-            dbpanelSuccess(response.data);
+            if(response['data']){
+                dbpanelSuccess(response.data);
+            }else{
+                dbpanelSuccess(response); 
+            }
         })
         .catch(
         function(exception){
@@ -95,7 +102,7 @@ window.dbpanelSuccess =function(data){
          });
         dataDom.appendChild(formatter.render());
     }
-    else if(data.indexOf("sf-dump") > -1 ){
+    else if(data.indexOf("sf-dump") > -1 ) {
         dataDom.innerHTML=data;
     }
     else if(data.indexOf("</") > -1 ){
