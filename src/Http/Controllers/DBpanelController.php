@@ -49,17 +49,21 @@ class DBpanelController extends Controller
 
         $controller = explode('@', $controller);
         $controller_namespace = config('dbpanel.controller').str_replace('.', '\\', $controller[0]);
+        $method = $controller[1];
+
+        // get class information
+        // https://www.php.net/manual/en/reflectionclass.getmethod.php
         // $r = new ReflectionClass(new $controller_namespace);
-        // $m= new ReflectionParameter($controller_namespace, 'index');
-        // dd($r->getMethod('index')->getParameters());
+        // dd($r->getConstants($method)->getParameters());
 
         $controller_class = app($controller_namespace);
-        $method = $controller[1];
+        
 
         $middlewareUsed = [];
         $getThroughMiddlewares = collect($controller_class->middleware);
         $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
-        // dd($getThroughMiddlewares);
+        $appMiddlewareGroups = app('\App\Http\Kernel')->getMiddlewareGroups();
+        // dd($appMiddlewareGroups);
         if (! empty($getThroughMiddlewares)) {
             foreach ($getThroughMiddlewares as $getThroughMiddleware) {
                 $middlewareArr = explode(':', $getThroughMiddleware['middleware']);
@@ -105,17 +109,28 @@ class DBpanelController extends Controller
         
             $routeMiddlewares = $routeByAction->action['middleware'];
             foreach ($routeMiddlewares as $routeMiddleware) {
-                if ($routeMiddleware !== 'api' && $routeMiddleware !== 'web') {
-                    resolve($appRouteMiddleware[$routeMiddleware])->handle($request, function ($next) {
+                if (array_key_exists($routeMiddleware,$appRouteMiddleware)) {
+                    $m = explode(':',$appRouteMiddleware[$routeMiddleware]);
+                    $p = explode(',',$m[1]);
+                    resolve($m[0])->handle($request, function ($next) {
                         return $next;
-                    });
+                    },...$p);
                 }
+
+                // if (array_key_exists($routeMiddleware,$appMiddlewareGroups)) {
+                //     $j = explode(':',$appMiddlewareGroups[$routeMiddleware][0]);
+                //     resolve($appRouteMiddleware[$j[0]])->handle($request, function ($next) {
+                //         return $next;
+                //     },...explode(',',$j[1]));
+                // }
             }
-            $url = action(str_replace('.', '\\', $controller[0]).'@index',['df'=>'asd','id'=>67]);
+            // run method by route action calling
+
+            // $url = action(str_replace('.', '\\', $controller[0]).'@index',['df'=>'asd','id'=>67]);
             // dd($url);
-            $request = Request::create($url, $routeByAction->methods[0]);
-            $response = app()->handle($request);
-            dd($response);
+            // $request = Request::create($url, $routeByAction->methods[0]);
+            // $response = app()->handle($request);
+            // dd($response);
             // return ['response' => $this->getReturnData($response), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
         }
         
@@ -157,7 +172,7 @@ class DBpanelController extends Controller
             return collect(['data' => $data, 'type' => get_class($data)]);
         }
 
-        return collect(['data' => $data, 'type' => 'string']);
+        return collect(['data' => e($data), 'type' => 'string']);
     }
 
     public function checkModel(Request $request, $model)
@@ -191,6 +206,9 @@ class DBpanelController extends Controller
         return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
     }
 
+    /**
+     * check any method of any namespace
+     */
     public function checkOther(Request $request, $other)
     {
         $user = 'None';
@@ -227,6 +245,10 @@ class DBpanelController extends Controller
         return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
     }
 
+    /**
+     * run artisan command
+     */
+
     public function run($command)
     {
         Artisan::call($command);
@@ -234,11 +256,13 @@ class DBpanelController extends Controller
         return Artisan::output();
     }
 
+    /**
+     * log in with ID
+     */
     public function login()
     {
         $user = explode('@', request()->input('dbpanel_auth_id'));
         Auth::loginUsingId($user[0]);
-        // request()->merge(['user'=>auth()->user()]);
         if (count($user) > 1) {
             $userCols = $user[1];
             $cols = explode(',', $userCols);
@@ -249,6 +273,9 @@ class DBpanelController extends Controller
         return auth()->user();
     }
 
+    /**
+     * set Request
+     */
     public function setRequest($request)
     {
         $r = trim(request('hadRequest'));
