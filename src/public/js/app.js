@@ -142,6 +142,11 @@ function setPagination(pageNo, total) {
 
 window.getData = function () {
   var pageNo = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+  if (dbpanelBeforeProcess()) {
+    return;
+  }
+
   var url = document.getElementById('uri').value + "?" + document.getElementById('query').value + "&per_page=" + document.getElementById('per_page').value + "&page=" + pageNo;
   dbpanelProcessing();
   axios.post('/dbpanel/database/' + url).then(function (response) {
@@ -163,6 +168,13 @@ window.getData = function () {
   });
 };
 
+window.dbpanelBeforeProcess = function () {
+  if (totalDom.innerText == 'processing....') {
+    console.log('one process is already runing');
+    return true;
+  }
+};
+
 window.dbpanelProcessing = function () {
   ulOfPagination.innerHTML = null;
   dataDom.innerHTML = null;
@@ -175,7 +187,11 @@ window.dbpanelProcessing = function () {
 
 window.dbpanelProcessed = function (url) {
   axios.get(url).then(function (response) {
-    dbpanelSuccess(response.data);
+    if (response['data']) {
+      dbpanelSuccess(response.data);
+    } else {
+      dbpanelSuccess(response);
+    }
   })["catch"](function (exception) {
     if (exception["response"]) {
       dbpanelError(exception.response.data);
@@ -196,7 +212,7 @@ window.dbpanelSuccess = function (data) {
   } else if (data.indexOf("sf-dump") > -1) {
     dataDom.innerHTML = data;
   } else if (data.indexOf("</") > -1) {
-    dataDom.innerHTML = data;
+    dataDom.innerHTML = 'custom response';
   } else {
     dataDom.innerHTML = data; // hljs.highlightBlock(dataDom);   
   }
@@ -209,16 +225,22 @@ window.dbpanelSuccess = function (data) {
 
 window.dbpanelError = function (error) {
   dataDom.innerHTML = null;
-  var fileLocation = error.file;
-  var line = error.line;
-  var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(error, 1, {
-    hoverPreviewEnabled: true,
-    theme: 'dark'
-  });
-  dataDom.appendChild(formatter.render());
-  var url = fileLocation + ':' + line;
-  openFileDom.setAttribute('file-location', url);
-  openFileDom.classList.contains('d-none') ? openFileDom.classList.remove('d-none') : false;
+
+  if (error == 'Error: Network Error') {
+    dataDom.innerHTML = error;
+  } else {
+    var fileLocation = error.file;
+    var line = error.line;
+    var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(error, 1, {
+      hoverPreviewEnabled: true,
+      theme: 'dark'
+    });
+    dataDom.appendChild(formatter.render());
+    var url = fileLocation + ':' + line;
+    openFileDom.setAttribute('file-location', url);
+    openFileDom.classList.contains('d-none') ? openFileDom.classList.remove('d-none') : false;
+  }
+
   totalDom.innerHTML = 'Error';
   totalDom.classList.remove('badge-primary');
   totalDom.classList.add('badge-danger');
@@ -279,6 +301,10 @@ window.command = function () {
 };
 
 window.checkMethod = function () {
+  if (dbpanelBeforeProcess()) {
+    return;
+  }
+
   var whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
 
   if (whichMethod == 'controller') {
