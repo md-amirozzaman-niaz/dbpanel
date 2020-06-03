@@ -38,6 +38,9 @@ function setPagination(pageNo,total){
 }
   
 window.getData = function(pageNo=1){
+    if(dbpanelBeforeProcess()){
+        return ;
+    }
     let url= document.getElementById('uri').value+"?"+document.getElementById('query').value+"&per_page="+document.getElementById('per_page').value+"&page="+pageNo;
     dbpanelProcessing();
     axios.post('/dbpanel/database/'+url).then( 
@@ -63,11 +66,14 @@ window.getData = function(pageNo=1){
         });
 
 };
-window.dbpanelProcessing=function(){
+window.dbpanelBeforeProcess=function(){
     if(totalDom.innerText=='processing....'){
         console.log('one process is already runing');
-        return;
+        return true;
     }
+}
+window.dbpanelProcessing=function(){
+
     ulOfPagination.innerHTML= null ;
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
@@ -77,6 +83,7 @@ window.dbpanelProcessing=function(){
     totalDom.classList.add('badge-primary');
 }
 window.dbpanelProcessed=function(url){
+
     axios.get(url).then( 
         function(response){ 
             if(response['data']){
@@ -93,6 +100,7 @@ window.dbpanelProcessed=function(url){
                 dbpanelError(exception);
             }
         });
+
 }
 window.dbpanelSuccess =function(data){
     dataDom.innerHTML=null;
@@ -119,6 +127,9 @@ window.dbpanelSuccess =function(data){
 }
 window.dbpanelError = function(error){
     dataDom.innerHTML=null;
+    if(error == 'Error: Network Error'){
+        dataDom.innerHTML=error;
+    }else{
     let fileLocation = error.file;
     let line=error.line;
     let formatter = new JSONFormatter(error,1,{
@@ -127,6 +138,7 @@ window.dbpanelError = function(error){
     let url=fileLocation+':'+line;
     openFileDom.setAttribute('file-location',url);
     openFileDom.classList.contains('d-none')? openFileDom.classList.remove('d-none'):false;
+    }
     totalDom.innerHTML='Error';
     totalDom.classList.remove('badge-primary');
     totalDom.classList.add('badge-danger');
@@ -139,6 +151,7 @@ window.openFileInEditor=function(el){
         }).catch(function(error){ console.log(error)})
 }
 window.controller =function(){
+    
     let controller = document.getElementById('controller-input').value.replace(/\\/gi,'.');
     let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
     let rData = requestParams.value.indexOf("{") === 0 ? requestParams.value :requestParams.value.replace(/\n/gi,'|');
@@ -185,6 +198,9 @@ window.command =function(){
     dbpanelProcessed(url);
 }
 window.checkMethod =function(){
+    if(dbpanelBeforeProcess()){
+        return ;
+    }
     let whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
     if(whichMethod == 'controller'){
         window.controller();

@@ -59,20 +59,33 @@ class DBpanelController extends Controller
         $middlewareUsed = [];
         $getThroughMiddlewares = collect($controller_class->middleware);
         $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
-
-        if (! empty($$getThroughMiddlewares)) {
+        // dd($getThroughMiddlewares);
+        if (! empty($getThroughMiddlewares)) {
             foreach ($getThroughMiddlewares as $getThroughMiddleware) {
                 $middlewareArr = explode(':', $getThroughMiddleware['middleware']);
                 $middlewareKey = $middlewareArr[0];
-                $middlewareParams = explode(',', $middlewareArr[1]);
-                $methods = $getThroughMiddleware['options']['only'];
-                $mClassNameSpace = $appRouteMiddleware[$middlewareKey];
-                $middlewareClass = resolve($mClassNameSpace);
+                if(count($middlewareArr)>1){
+                    $middlewareParams = explode(',', $middlewareArr[1]);
+                }
+                $methods = array_key_exists('except',$getThroughMiddleware['options']) ?  $getThroughMiddleware['options']['except']: null;
+                if(!$methods){
+                    $methods= array_key_exists('only',$getThroughMiddleware['options']) ? $getThroughMiddleware['options']['only'] :$getThroughMiddleware['options'];
+                }
+                $checkForMethodToBeMiddlewared= array_key_exists('except',$getThroughMiddleware['options']) ?  !in_array($method, $methods):in_array($method, $methods);
+                if ($checkForMethodToBeMiddlewared) {
 
-                if (in_array($method, $methods)) {
+                    $mClassNameSpace = $appRouteMiddleware[$middlewareKey];
+                    $middlewareClass = resolve($mClassNameSpace);
+
+                    if(count($middlewareArr)>1){
                     $middlewareClass->handle($request, function ($next) {
                         return $next;
                     }, ...$middlewareParams);
+                    }else{
+                        $middlewareClass->handle($request, function ($next) {
+                            return $next;
+                        });
+                    }
                     $middlewareUsed[] = $middlewareKey;
                 }
             }
