@@ -177,7 +177,9 @@ filter.time@12:58:56
                     </div>
                     <div class="form-check mt-2">
                         <input type="checkbox" id="hadRequest" spellcheck="false" name="hadRequest" class="form-check-input mt-2">
-                        <label class="form-check-label pt-1" for="hadRequest">Illuminate\Support\Request </label>
+                        <label class="form-check-label pt-1" for="hadRequest">Illuminate\Support\Request </label><br>
+                        <input type="checkbox" id="otherRequest" spellcheck="false" name="otherRequest" class="form-check-input mt-2">
+                        <label class="form-check-label pt-1" for="otherRequest">Custom Request</label>
                     </div>
                     <div class="form-group">
                         <textarea id="request-parameter" spellcheck="false" rows="12" class="form-control mt-2" ></textarea>

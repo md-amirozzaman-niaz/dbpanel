@@ -114,9 +114,9 @@ class Filter
     public function status(){
         $this->status['FilterUsed'] = session('filters');
         $this->status['retrieveRows'] = $this->retrieveRows;
-        $this->status['SQL']=$this->sql;
-        $this->status['Bindings']=$this->bindings;
-        $this->status['Log']=DB::getQueryLog();
+        // $this->status['SQL']=$this->sql;
+        // $this->status['Bindings']=$this->bindings;
+        // $this->status['Log']=DB::getQueryLog();
         session()->forget('filters');
         session()->forget('status');
     
@@ -134,7 +134,7 @@ class Filter
     public function getData(){
 
         $this->setQuery();
-        DB::connection()->enableQueryLog();
+        // DB::connection()->enableQueryLog();
         $paginateData = $this->query->paginate($this->parameters('per_page'));
 
         $this->sql = $this->query->toSql();
