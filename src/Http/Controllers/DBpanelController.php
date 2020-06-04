@@ -57,43 +57,10 @@ class DBpanelController extends Controller
         // dd($r->getConstants($method)->getParameters());
 
         $controller_class = app($controller_namespace);
-        
-
-        $middlewareUsed = [];
-        $getThroughMiddlewares = collect($controller_class->middleware);
         $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
         $appMiddlewareGroups = app('\App\Http\Kernel')->getMiddlewareGroups();
-        // dd($appMiddlewareGroups);
-        if (! empty($getThroughMiddlewares)) {
-            foreach ($getThroughMiddlewares as $getThroughMiddleware) {
-                $middlewareArr = explode(':', $getThroughMiddleware['middleware']);
-                $middlewareKey = $middlewareArr[0];
-                if(count($middlewareArr)>1){
-                    $middlewareParams = explode(',', $middlewareArr[1]);
-                }
-                $methods = array_key_exists('except',$getThroughMiddleware['options']) ?  $getThroughMiddleware['options']['except']: null;
-                if(!$methods){
-                    $methods= array_key_exists('only',$getThroughMiddleware['options']) ? $getThroughMiddleware['options']['only'] :$getThroughMiddleware['options'];
-                }
-                $checkForMethodToBeMiddlewared= array_key_exists('except',$getThroughMiddleware['options']) ?  !in_array($method, $methods):in_array($method, $methods);
-                if ($checkForMethodToBeMiddlewared) {
-
-                    $mClassNameSpace = $appRouteMiddleware[$middlewareKey];
-                    $middlewareClass = resolve($mClassNameSpace);
-
-                    if(count($middlewareArr)>1){
-                    $middlewareClass->handle($request, function ($next) {
-                        return $next;
-                    }, ...$middlewareParams);
-                    }else{
-                        $middlewareClass->handle($request, function ($next) {
-                            return $next;
-                        });
-                    }
-                    $middlewareUsed[] = $middlewareKey;
-                }
-            }
-        }
+        $middlewareUsed=$this->getThroughControllerMiddleware($request,$controller_class,$method);
+        
         $actionString = $controller_namespace.'@'.$method;
         $route = \Route::getRoutes();
         $routeByAction = $route->getByAction($actionString);
@@ -125,16 +92,13 @@ class DBpanelController extends Controller
                 // }
             }
             // run method by route action calling
-
-            // $url = action(str_replace('.', '\\', $controller[0]).'@index',['df'=>'asd','id'=>67]);
-            // dd($url);
+            // $routeParam = $parameters->toArray();
+            // $url = action(str_replace('.', '\\', $controller[0]).'@index',$routeParam);
             // $request = Request::create($url, $routeByAction->methods[0]);
             // $response = app()->handle($request);
-            // dd($response);
-            // return ['response' => $this->getReturnData($response), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
+            // return ['response' => $this->getReturnData($response->getOriginalContent()), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
         }
         
-        // dd($response->getOriginalContent());
         if (request()->has('hadRequest')) {
             $this->setRequest($request);
 
@@ -146,7 +110,7 @@ class DBpanelController extends Controller
         $request->request->remove('hadRequest');
         $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
 
-        return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
+        return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
     }
 
     protected function getView($view)
@@ -156,6 +120,43 @@ class DBpanelController extends Controller
             'path' => str_replace('/', '\\', $view->getPath()),
             'with' => $view->getData(),
         ];
+    }
+    protected function getThroughControllerMiddleware($request,$controller_class,$method){
+        $middlewareUsed = [];
+        $getThroughMiddlewares = collect($controller_class->middleware);
+        $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
+        $appMiddlewareGroups = app('\App\Http\Kernel')->getMiddlewareGroups();
+        if (! empty($getThroughMiddlewares)) {
+            foreach ($getThroughMiddlewares as $getThroughMiddleware) {
+                $middlewareArr = explode(':', $getThroughMiddleware['middleware']);
+                $middlewareKey = $middlewareArr[0];
+                if(count($middlewareArr)>1){
+                    $middlewareParams = explode(',', $middlewareArr[1]);
+                }
+                $methods = array_key_exists('except',$getThroughMiddleware['options']) ?  $getThroughMiddleware['options']['except']: null;
+                if(!$methods){
+                    $methods= array_key_exists('only',$getThroughMiddleware['options']) ? $getThroughMiddleware['options']['only'] :$getThroughMiddleware['options'];
+                }
+                $checkForMethodToBeMiddlewared= array_key_exists('except',$getThroughMiddleware['options']) ?  !in_array($method, $methods):in_array($method, $methods);
+                if ($checkForMethodToBeMiddlewared) {
+
+                    $mClassNameSpace = $appRouteMiddleware[$middlewareKey];
+                    $middlewareClass = resolve($mClassNameSpace);
+
+                    if(count($middlewareArr)>1){
+                    $middlewareClass->handle($request, function ($next) {
+                        return $next;
+                    }, ...$middlewareParams);
+                    }else{
+                        $middlewareClass->handle($request, function ($next) {
+                            return $next;
+                        });
+                    }
+                    $middlewareUsed[] = $middlewareKey;
+                }
+            }
+        }
+        return $middlewareUsed;
     }
 
     protected function getReturnData($data)
@@ -172,7 +173,7 @@ class DBpanelController extends Controller
             return collect(['data' => $data, 'type' => get_class($data)]);
         }
 
-        return collect(['data' => e($data), 'type' => 'string']);
+        return collect(['data' => e($data), 'type' => 'HTML or string']);
     }
 
     public function checkModel(Request $request, $model)

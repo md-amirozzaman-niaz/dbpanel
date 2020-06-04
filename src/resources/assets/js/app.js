@@ -130,14 +130,17 @@ window.dbpanelError = function(error){
     if(error == 'Error: Network Error'){
         dataDom.innerHTML=error;
     }else{
-    let fileLocation = error.file;
-    let line=error.line;
+   
     let formatter = new JSONFormatter(error,1,{
         hoverPreviewEnabled: true,theme:'dark'});
         dataDom.appendChild(formatter.render());
-    let url=fileLocation+':'+line;
-    openFileDom.setAttribute('file-location',url);
-    openFileDom.classList.contains('d-none')? openFileDom.classList.remove('d-none'):false;
+    if(error['file']){
+        let fileLocation = error.file;
+        let line=error.line;
+        let url=fileLocation+':'+line;
+        openFileDom.setAttribute('file-location',url);
+        openFileDom.classList.contains('d-none')? openFileDom.classList.remove('d-none'):false;
+    }
     }
     totalDom.innerHTML='Error';
     totalDom.classList.remove('badge-primary');

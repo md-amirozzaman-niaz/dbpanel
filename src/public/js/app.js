@@ -229,16 +229,19 @@ window.dbpanelError = function (error) {
   if (error == 'Error: Network Error') {
     dataDom.innerHTML = error;
   } else {
-    var fileLocation = error.file;
-    var line = error.line;
     var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(error, 1, {
       hoverPreviewEnabled: true,
       theme: 'dark'
     });
     dataDom.appendChild(formatter.render());
-    var url = fileLocation + ':' + line;
-    openFileDom.setAttribute('file-location', url);
-    openFileDom.classList.contains('d-none') ? openFileDom.classList.remove('d-none') : false;
+
+    if (error['file']) {
+      var fileLocation = error.file;
+      var line = error.line;
+      var url = fileLocation + ':' + line;
+      openFileDom.setAttribute('file-location', url);
+      openFileDom.classList.contains('d-none') ? openFileDom.classList.remove('d-none') : false;
+    }
   }
 
   totalDom.innerHTML = 'Error';
