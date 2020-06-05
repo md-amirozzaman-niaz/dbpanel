@@ -61,8 +61,12 @@ window.getData = function(pageNo=1){
             setPagination(response.data.result.current_page,response.data.result.last_page);
         })
         .catch(
-        function(error){
-            dbpanelError(error.esponse.data);
+        function(exception){
+            if(exception["response"]){
+                dbpanelError(exception.response.data);
+            }else{
+                dbpanelError(exception);
+            }
         });
 
 };

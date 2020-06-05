@@ -165,8 +165,12 @@ window.getData = function () {
     totalDom.classList.remove('badge-primary');
     totalDom.classList.add('badge-success');
     setPagination(response.data.result.current_page, response.data.result.last_page);
-  })["catch"](function (error) {
-    dbpanelError(error.esponse.data);
+  })["catch"](function (exception) {
+    if (exception["response"]) {
+      dbpanelError(exception.response.data);
+    } else {
+      dbpanelError(exception);
+    }
   });
 };
 
