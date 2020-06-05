@@ -73,14 +73,13 @@ window.dbpanelBeforeProcess=function(){
     }
 }
 window.dbpanelProcessing=function(){
-
-    ulOfPagination.innerHTML= null ;
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
     totalDom.innerHTML='processing....';
     totalDom.classList.remove('badge-success');
     totalDom.classList.remove('badge-danger');
     totalDom.classList.add('badge-primary');
+    openFileDom.classList.contains('d-none')? false:openFileDom.classList.add('d-none');
 }
 window.dbpanelProcessed=function(url){
 
@@ -110,6 +109,16 @@ window.dbpanelSuccess =function(data){
          });
         dataDom.appendChild(formatter.render());
     }
+    else if (typeof data === "object") {
+        var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(
+            data,
+            1,
+            {
+                hoverPreviewEnabled: true
+            }
+        );
+        dataDom.appendChild(formatter.render());
+    }
     else if(data.indexOf("sf-dump") > -1 ) {
         dataDom.innerHTML=data;
     }
@@ -121,7 +130,6 @@ window.dbpanelSuccess =function(data){
         // hljs.highlightBlock(dataDom);   
     }
     totalDom.innerHTML='Success';
-    openFileDom.classList.contains('d-none')? false:openFileDom.classList.add('d-none');
     totalDom.classList.remove('badge-primary');
     totalDom.classList.add('badge-success');
 }
@@ -157,9 +165,10 @@ window.controller =function(){
     
     let controller = document.getElementById('controller-input').value.replace(/\\/gi,'.');
     let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
+    let dbpanel_custom_namespace = document.getElementById("otherRequest").value;
     let rData = requestParams.value.indexOf("{") === 0 ? requestParams.value :requestParams.value.replace(/\n/gi,'|');
     let param = params.value;
-    param = document.getElementById('hadRequest').checked?param+'&hadRequest='+rData:param;
+    param = document.getElementById('hadRequest').checked?param+'&hadRequest='+rData +"&dbpanel_custom_namespace=" +dbpanel_custom_namespace:param;
     param = dbpanel_auth_id?param+'&dbpanel_auth_id='+dbpanel_auth_id:param;
     dbpanelProcessing();
     let url='/dbpanel/controller/'+controller+'?parameters='+param;
@@ -204,6 +213,7 @@ window.checkMethod =function(){
     if(dbpanelBeforeProcess()){
         return ;
     }
+    ulOfPagination.innerHTML= null ;
     let whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
     if(whichMethod == 'controller'){
         window.controller();

@@ -97,6 +97,8 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var json_formatter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! json-formatter-js */ "./node_modules/json-formatter-js/dist/json-formatter.umd.js");
 /* harmony import */ var json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(json_formatter_js__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 var dataDom = document.getElementById('data');
 var totalDom = document.getElementById('total');
@@ -176,13 +178,13 @@ window.dbpanelBeforeProcess = function () {
 };
 
 window.dbpanelProcessing = function () {
-  ulOfPagination.innerHTML = null;
   dataDom.innerHTML = null;
   tableDom.innerHTML = null;
   totalDom.innerHTML = 'processing....';
   totalDom.classList.remove('badge-success');
   totalDom.classList.remove('badge-danger');
   totalDom.classList.add('badge-primary');
+  openFileDom.classList.contains('d-none') ? false : openFileDom.classList.add('d-none');
 };
 
 window.dbpanelProcessed = function (url) {
@@ -205,6 +207,12 @@ window.dbpanelSuccess = function (data) {
   dataDom.innerHTML = null;
 
   if (data["Database log"] || data["request"]) {
+    var _formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(data, 1, {
+      hoverPreviewEnabled: true
+    });
+
+    dataDom.appendChild(_formatter.render());
+  } else if (_typeof(data) === "object") {
     var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(data, 1, {
       hoverPreviewEnabled: true
     });
@@ -218,7 +226,6 @@ window.dbpanelSuccess = function (data) {
   }
 
   totalDom.innerHTML = 'Success';
-  openFileDom.classList.contains('d-none') ? false : openFileDom.classList.add('d-none');
   totalDom.classList.remove('badge-primary');
   totalDom.classList.add('badge-success');
 };
@@ -261,9 +268,10 @@ window.openFileInEditor = function (el) {
 window.controller = function () {
   var controller = document.getElementById('controller-input').value.replace(/\\/gi, '.');
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
+  var dbpanel_custom_namespace = document.getElementById("otherRequest").value;
   var rData = requestParams.value.indexOf("{") === 0 ? requestParams.value : requestParams.value.replace(/\n/gi, '|');
   var param = params.value;
-  param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + rData : param;
+  param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + rData + "&dbpanel_custom_namespace=" + dbpanel_custom_namespace : param;
   param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
   dbpanelProcessing();
   var url = '/dbpanel/controller/' + controller + '?parameters=' + param;
@@ -308,6 +316,7 @@ window.checkMethod = function () {
     return;
   }
 
+  ulOfPagination.innerHTML = null;
   var whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
 
   if (whichMethod == 'controller') {
