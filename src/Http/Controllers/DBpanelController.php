@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Niaz\DBpanel\Http\Filters\Filter;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 
 class DBpanelController extends Controller
 {
@@ -421,6 +422,13 @@ class DBpanelController extends Controller
         // $this->setRequest($request);
         //     $this->setParameters();
         // dd($request->all());
-        return ['message'=>"saved",'collection'=>$request->all()];
+        // config()->prepend('dbpanel.collections', $request->all());
+        $request->merge(['created_at'=>now()]);
+        config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('type')),$request->all());
+        $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
+        $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
+        fwrite($fp, '<?php return ' . $str . ';');
+        fclose($fp);
+        return ['message'=>"saved",'collection'=> config('dbpanel_collections')];
     }
 }
