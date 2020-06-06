@@ -157,6 +157,11 @@ filter.time@12:58:56
                 </ul>
                 <div class="tab-content p-2"  id="mySideBarTabContent">
                     <div class=" tab-pane fade show active" id="controller-type" role="tabpanel" aria-labelledby="controller-type-tab">
+                        <div class="form-inline">
+                            <input type="text" id="label" spellcheck="false" class="form-control" placeholder="save as...">
+                            <input type="button" onclick="save()" class="btn btn-sm ml-1 mr-1" value="save">
+                            <input type="button" onclick="load()" class="btn btn-sm" value="load">
+                        </div>
                         <input type="text" id="controller-input" spellcheck="false" class="form-control mt-2" placeholder="Controller@method">
                         <small>Namespace: {{config('dbpanel.controller')}}</small>                       
                     </div>
@@ -188,7 +193,6 @@ filter.time@12:58:56
                     </div>
                     <input type="text" id="dbpanel_auth_id" class="form-control mt-2" placeholder="auth user id...">
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
-                    <input type="button" onclick="save()" class="btn btn-block mt-2" value="save">
                     <div class="mt-2">
                         developed by © <a href="http://me.amirozzaman.com">niaz@dev</a>
                     </div>

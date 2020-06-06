@@ -58,7 +58,7 @@ class DBpanelController extends Controller
         $controller_class = app($controller_namespace);
         $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
         $appMiddlewareGroups = app('\App\Http\Kernel')->getMiddlewareGroups();
-        $middlewareUsed = $this->getThroughControllerMiddleware($request, $controller_class, $method);
+        $middlewareUsed = [];
 
         $actionString = $controller_namespace.'@'.$method;
         $route = \Route::getRoutes();
@@ -74,6 +74,11 @@ class DBpanelController extends Controller
             ];
 
             $routeMiddlewares = $routeByAction->action['middleware'];
+            $routeParam = $parameters->toArray();
+            $url = action(str_replace('.', '\\', $controller[0]).'@index',[45,12]);
+            $crequest = Request::create($url, $routeByAction->methods[0]);
+            $response = app()->handle($crequest);
+            // dd ($response->status());
             foreach ($routeMiddlewares as $routeMiddleware) {
                 if (array_key_exists($routeMiddleware, $appRouteMiddleware)) {
                     $m = explode(':', $appRouteMiddleware[$routeMiddleware]);
@@ -85,10 +90,11 @@ class DBpanelController extends Controller
 
                 if (array_key_exists($routeMiddleware, $appMiddlewareGroups)) {
                     $j = explode(':', $appMiddlewareGroups[$routeMiddleware][0]);
-
-                    if (count($j) > 1) {
+                    // dd(get_class($request),$request);
+                    if (count($j) > 1 && $j[0]=='throttle') {
                         resolve($appRouteMiddleware[$j[0]])->handle($request, function ($next) {
-                            return $next;
+                            
+                            return app('\Symfony\Component\HttpFoundation\Response');
                         }, ...explode(',', $j[1]));
                     } else {
                         resolve($appRouteMiddleware['auth'])->handle($request, function ($next) {
@@ -107,7 +113,7 @@ class DBpanelController extends Controller
 
         if (request()->has('hadRequest')) {
             $this->setRequest($request);
-
+            
             if ($request->has('dbpanel_custom_namespace')) {
                 $customR = app($request->input('dbpanel_custom_namespace'));
                 $data = $controller_class->$method($customR, ...$parameters);
@@ -407,5 +413,13 @@ class DBpanelController extends Controller
         //check base_path is already in file path
         $file_path = strpos(request('file'), base_path()) !== false ? '"'.request('file').'"' : '"'.base_path().'/'.request('file').'"';
         exec('code --goto '.$file_path);
+    }
+
+    public function save(Request $request)
+    {
+        // $this->setRequest($request);
+        //     $this->setParameters();
+        // dd($request->all());
+        return ['message'=>"saved",'collection'=>$request->all()];
     }
 }
