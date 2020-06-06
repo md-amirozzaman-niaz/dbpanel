@@ -301,9 +301,9 @@ window.save = function () {
   var dbpanel_custom_namespace = document.getElementById("otherRequest").value;
   var rData = requestParams.value.indexOf("{") === 0 ? requestParams.value : requestParams.value.replace(/\n/gi, '|');
   var param = params.value;
-  param = document.getElementById('hadRequest').checked ? param + '&hadRequest=' + rData + "&dbpanel_custom_namespace=" + dbpanel_custom_namespace + "&label=" + label : param;
-  param = dbpanel_auth_id ? param + '&dbpanel_auth_id=' + dbpanel_auth_id : param;
-  var url = '/dbpanel/save?type=' + controller + '&parameters=' + param;
+  param = '&hadRequest=' + rData + "&dbpanel_custom_namespace=" + dbpanel_custom_namespace + "&label=" + label;
+  param = param + '&dbpanel_auth_id=' + dbpanel_auth_id;
+  var url = '/dbpanel/save?controller=' + controller + '&parameters=' + param;
   dbpanelProcessed(url);
 };
 

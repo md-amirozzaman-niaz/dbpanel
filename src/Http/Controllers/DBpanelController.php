@@ -419,12 +419,9 @@ class DBpanelController extends Controller
 
     public function save(Request $request)
     {
-        // $this->setRequest($request);
-        //     $this->setParameters();
-        // dd($request->all());
-        // config()->prepend('dbpanel.collections', $request->all());
-        $request->merge(['created_at'=>now()]);
-        config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('type')),$request->all());
+        $request->merge(['controller_prefix_namespace'=>config('dbpanel.controller')]);
+        $request->merge(['created_at'=>time()]);
+        config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('controller')),$request->all());
         $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
         $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
         fwrite($fp, '<?php return ' . $str . ';');
