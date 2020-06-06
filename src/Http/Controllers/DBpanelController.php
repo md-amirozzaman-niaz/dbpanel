@@ -58,6 +58,7 @@ class DBpanelController extends Controller
         $controller_class = app($controller_namespace);
         $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
         $appMiddlewareGroups = app('\App\Http\Kernel')->getMiddlewareGroups();
+        // $middlewareUsed = $this->getThroughControllerMiddleware($request,$controller_class,$method);
         $middlewareUsed = [];
 
         $actionString = $controller_namespace.'@'.$method;
