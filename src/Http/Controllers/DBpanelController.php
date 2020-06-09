@@ -2,14 +2,14 @@
 
 namespace Niaz\DBpanel\Http\Controllers;
 
+use ReflectionClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Niaz\DBpanel\Http\Filters\Filter;
 use Illuminate\Support\Facades\Artisan;
-use ReflectionClass;
-use ReflectionParameter;
-
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Arr;
 
 class DBpanelController extends Controller
 {
@@ -37,7 +37,8 @@ class DBpanelController extends Controller
 
     public function checkController(Request $request, $controller)
     {
-        $user = 'None';
+        $user = auth()->user();
+        // dd(app($request->input('dbpanel_custom_namespace')));
 
         if (request()->has('dbpanel_auth_id')) {
             $user = $this->login();
@@ -59,8 +60,9 @@ class DBpanelController extends Controller
         $controller_class = app($controller_namespace);
         $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
         $appMiddlewareGroups = app('\App\Http\Kernel')->getMiddlewareGroups();
-        $middlewareUsed=$this->getThroughControllerMiddleware($request,$controller_class,$method);
-        
+        // $middlewareUsed = $this->getThroughControllerMiddleware($request,$controller_class,$method);
+        $middlewareUsed = [];
+
         $actionString = $controller_namespace.'@'.$method;
         $route = \Route::getRoutes();
         $routeByAction = $route->getByAction($actionString);
@@ -73,23 +75,36 @@ class DBpanelController extends Controller
                 'action' => $routeByAction->action,
                 'route Name' => $routeByAction->getName(),
             ];
-        
+
             $routeMiddlewares = $routeByAction->action['middleware'];
+            $routeParam = $parameters->toArray();
+            $url = action(str_replace('.', '\\', $controller[0]).'@index',[45,12]);
+            $crequest = Request::create($url, $routeByAction->methods[0]);
+            $response = app()->handle($crequest);
+            // dd ($response->status());
             foreach ($routeMiddlewares as $routeMiddleware) {
-                if (array_key_exists($routeMiddleware,$appRouteMiddleware)) {
-                    $m = explode(':',$appRouteMiddleware[$routeMiddleware]);
-                    $p = explode(',',$m[1]);
+                if (array_key_exists($routeMiddleware, $appRouteMiddleware)) {
+                    $m = explode(':', $appRouteMiddleware[$routeMiddleware]);
+                    $p = count($m) > 1 ? explode(',', $m[1]) : [];
                     resolve($m[0])->handle($request, function ($next) {
                         return $next;
-                    },...$p);
+                    }, ...$p);
                 }
 
-                // if (array_key_exists($routeMiddleware,$appMiddlewareGroups)) {
-                //     $j = explode(':',$appMiddlewareGroups[$routeMiddleware][0]);
-                //     resolve($appRouteMiddleware[$j[0]])->handle($request, function ($next) {
-                //         return $next;
-                //     },...explode(',',$j[1]));
-                // }
+                if (array_key_exists($routeMiddleware, $appMiddlewareGroups)) {
+                    $j = explode(':', $appMiddlewareGroups[$routeMiddleware][0]);
+                    // dd(get_class($request),$request);
+                    if (count($j) > 1 && $j[0]=='throttle') {
+                        resolve($appRouteMiddleware[$j[0]])->handle($request, function ($next) {
+                            
+                            return app('\Symfony\Component\HttpFoundation\Response');
+                        }, ...explode(',', $j[1]));
+                    } else {
+                        resolve($appRouteMiddleware['auth'])->handle($request, function ($next) {
+                            return $next;
+                        });
+                    }
+                }
             }
             // run method by route action calling
             // $routeParam = $parameters->toArray();
@@ -98,12 +113,19 @@ class DBpanelController extends Controller
             // $response = app()->handle($request);
             // return ['response' => $this->getReturnData($response->getOriginalContent()), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
         }
-        
+
         if (request()->has('hadRequest')) {
             $this->setRequest($request);
-
-            $data = $controller_class->$method($request, ...$parameters);
             
+            if ($request->has('dbpanel_custom_namespace')) {
+                $customR = app($request->input('dbpanel_custom_namespace'));
+                $data = $controller_class->$method($customR, ...$parameters);
+                // dd($data);
+
+                return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
+            }
+            $data = $controller_class->$method($request, ...$parameters);
+
             return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
         }
         $request->request->remove('parameters');
@@ -121,33 +143,38 @@ class DBpanelController extends Controller
             'with' => $view->getData(),
         ];
     }
-    protected function getThroughControllerMiddleware($request,$controller_class,$method){
+
+    protected function getThroughControllerMiddleware($request, $controller_class, $method)
+    {
         $middlewareUsed = [];
         $getThroughMiddlewares = collect($controller_class->middleware);
         $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
         $appMiddlewareGroups = app('\App\Http\Kernel')->getMiddlewareGroups();
+
         if (! empty($getThroughMiddlewares)) {
             foreach ($getThroughMiddlewares as $getThroughMiddleware) {
                 $middlewareArr = explode(':', $getThroughMiddleware['middleware']);
                 $middlewareKey = $middlewareArr[0];
-                if(count($middlewareArr)>1){
+
+                if (count($middlewareArr) > 1) {
                     $middlewareParams = explode(',', $middlewareArr[1]);
                 }
-                $methods = array_key_exists('except',$getThroughMiddleware['options']) ?  $getThroughMiddleware['options']['except']: null;
-                if(!$methods){
-                    $methods= array_key_exists('only',$getThroughMiddleware['options']) ? $getThroughMiddleware['options']['only'] :$getThroughMiddleware['options'];
-                }
-                $checkForMethodToBeMiddlewared= array_key_exists('except',$getThroughMiddleware['options']) ?  !in_array($method, $methods):in_array($method, $methods);
-                if ($checkForMethodToBeMiddlewared) {
+                $methods = array_key_exists('except', $getThroughMiddleware['options']) ? $getThroughMiddleware['options']['except'] : null;
 
+                if (! $methods) {
+                    $methods = array_key_exists('only', $getThroughMiddleware['options']) ? $getThroughMiddleware['options']['only'] : $getThroughMiddleware['options'];
+                }
+                $checkForMethodToBeMiddlewared = array_key_exists('except', $getThroughMiddleware['options']) ? ! in_array($method, $methods) : in_array($method, $methods);
+
+                if ($checkForMethodToBeMiddlewared) {
                     $mClassNameSpace = $appRouteMiddleware[$middlewareKey];
                     $middlewareClass = resolve($mClassNameSpace);
 
-                    if(count($middlewareArr)>1){
-                    $middlewareClass->handle($request, function ($next) {
-                        return $next;
-                    }, ...$middlewareParams);
-                    }else{
+                    if (count($middlewareArr) > 1) {
+                        $middlewareClass->handle($request, function ($next) {
+                            return $next;
+                        }, ...$middlewareParams);
+                    } else {
                         $middlewareClass->handle($request, function ($next) {
                             return $next;
                         });
@@ -156,6 +183,7 @@ class DBpanelController extends Controller
                 }
             }
         }
+
         return $middlewareUsed;
     }
 
@@ -178,7 +206,7 @@ class DBpanelController extends Controller
 
     public function checkModel(Request $request, $model)
     {
-        $user = 'None';
+        $user = auth()->user();
 
         if (request()->has('dbpanel_auth_id')) {
             $user = $this->login();
@@ -197,22 +225,22 @@ class DBpanelController extends Controller
             $this->setRequest($request);
             $data = $model_class->$method($request, ...$parameters);
 
-            return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
+            return ['return' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'Auth User' => $user];
         }
 
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
         $data = $parameters ? $model_class->$method(...$parameters) : $model_class->$method();
 
-        return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
+        return ['return' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'Auth User' => $user];
     }
 
     /**
-     * check any method of any namespace
+     * check any method of any namespace.
      */
     public function checkOther(Request $request, $other)
     {
-        $user = 'None';
+        $user = auth()->user();
 
         if (request()->has('dbpanel_auth_id')) {
             $user = $this->login();
@@ -220,6 +248,7 @@ class DBpanelController extends Controller
         }
 
         $parameters = $this->setParameters();
+
         if (request()->has('hadRequest')) {
             $this->setRequest($request);
         }
@@ -231,11 +260,12 @@ class DBpanelController extends Controller
         $other = explode('@', trim($other));
         $other_namespace = config('dbpanel.other').str_replace('.', '\\', $other[0]);
         $method = $other[1];
+
         if (request()->has('hadRequest')) {
- 
             $other_class = app($other_namespace);
             $data = $other_class->$method($request, ...$parameters);
-            return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
+
+            return ['return' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'Auth User' => $user];
         }
         $request->request->remove('dbpanel_auth_id');
         $request->request->remove('parameters');
@@ -243,13 +273,12 @@ class DBpanelController extends Controller
         $other_class = app($other_namespace);
         $data = $parameters ? $other_class->$method(...$parameters) : $other_class->$method();
 
-        return ['return' => $this->getReturnData($data),'Database log' => DB::getQueryLog(), 'Auth User' => $user];
+        return ['return' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'Auth User' => $user];
     }
 
     /**
-     * run artisan command
+     * run artisan command.
      */
-
     public function run($command)
     {
         Artisan::call($command);
@@ -258,12 +287,13 @@ class DBpanelController extends Controller
     }
 
     /**
-     * log in with ID
+     * log in with ID.
      */
     public function login()
     {
         $user = explode('@', request()->input('dbpanel_auth_id'));
         Auth::loginUsingId($user[0]);
+
         if (count($user) > 1) {
             $userCols = $user[1];
             $cols = explode(',', $userCols);
@@ -275,23 +305,24 @@ class DBpanelController extends Controller
     }
 
     /**
-     * set Request
+     * set Request.
      */
     public function setRequest($request)
     {
         $r = trim(request('hadRequest'));
-        $checkJson = strpos($r, '{') >-1? true : false;
+        $checkJson = strpos($r, '{') > -1 ? true : false;
 
-        if($checkJson){
-            $r = str_replace('|','',$r);
-            $arr = json_decode($r,true);
-            $demo ='{"key":"value"}';
-            $arr ? $request->merge($arr) : dd('your json is not in correct format',$demo,$r);
-        }else{
-            if(strlen($r) < 2) {
+        if ($checkJson) {
+            $r = str_replace('|', '', $r);
+            $arr = json_decode($r, true);
+            $demo = '{"key":"value"}';
+            $arr ? $request->merge($arr) : dd('your json is not in correct format', $demo, $r);
+        } else {
+            if (strlen($r) < 2) {
                 $request->request->remove('parameters');
                 $request->request->remove('hadRequest');
-                return ;
+
+                return;
             }
             $pairs =
              collect(explode('|', $r))->map(function ($i) {
@@ -372,10 +403,11 @@ class DBpanelController extends Controller
         $user = $this->login();
         $request->request->remove('parameters');
         $request->request->remove('dbpanel_auth_id');
+
         return [
             'request' => $request->all(),
             'parameters' => $parameters ? $parameters : null,
-            'Auth User' => $user
+            'Auth User' => $user,
         ];
     }
 
@@ -384,5 +416,20 @@ class DBpanelController extends Controller
         //check base_path is already in file path
         $file_path = strpos(request('file'), base_path()) !== false ? '"'.request('file').'"' : '"'.base_path().'/'.request('file').'"';
         exec('code --goto '.$file_path);
+    }
+
+    public function save(Request $request)
+    {
+        // $request->merge(['controller_prefix_namespace'=>config('dbpanel.controller')]);
+        // $request->merge(['created_at'=>time()]);
+        // config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('controller')),$request->all());
+        // $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
+        // $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
+        // fwrite($fp, '<?php return ' . $str . ';');
+        // fclose($fp);
+        // return ['message'=>"saved",'collection'=> config('dbpanel_collections')];
+        $c=config('dbpanel_collections');
+
+        return data_get($c,'Api.PipelineExampleController@data');
     }
 }

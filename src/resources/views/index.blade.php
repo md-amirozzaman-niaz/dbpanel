@@ -60,16 +60,16 @@
                         <p>for <em>variant</em>,</p>
                         <ul>
                         <li>use <code>!</code> for not equal</li>
-                        <li>use <code>&lt;</code> for less than</li>
-                        <li>use <code>&gt;</code> for greater than</li>
+                        <li>use <code><</code> for less than</li>
+                        <li>use <code>></code> for greater than</li>
                         <li>use <code>,</code> for <em>and</em> condition</li>
                         <li>use <code>|</code> for <em>or</em> condition</li>
                         </ul>
                         <p>Example <em>(value)</em>:</p>
                         <ul>
-                        <li><code>product_price:500</code> <code>discount:&lt;20</code></li>
-                        <li><code>product_id:&lt;200,product_price:&gt;500</code></li>
-                        <li><code>product_price:&lt;300|discount:&gt;15</code></li>
+                        <li><code>product_price:500</code> <code>discount:<20</code></li>
+                        <li><code>product_id:<200,product_price:>500</code></li>
+                        <li><code>product_price:<300|discount:>15</code></li>
                         </ul>
                         <h4><a id="user-content-join-key" class="anchor" aria-hidden="true" href="#join-key"></a>join <em>(key)</em></h4>
                         <p>Example <em>(value)</em>:</p>
@@ -139,7 +139,7 @@ filter.time@12:58:56
                         </article>                
                 </div>
             </div>
-        </div><form class="row p-2">
+        </div><form class="row">
             <div class="col-md-3 p-0 sidebar">
                 <ul class="nav nav-tabs pl-2 pt-2" id="mySideBarTab" role="tablist">
                     <li class="nav-item">
@@ -157,6 +157,11 @@ filter.time@12:58:56
                 </ul>
                 <div class="tab-content p-2"  id="mySideBarTabContent">
                     <div class=" tab-pane fade show active" id="controller-type" role="tabpanel" aria-labelledby="controller-type-tab">
+                        <div class="form-inline">
+                            <input type="text" id="label" spellcheck="false" class="form-control" placeholder="save as...">
+                            <input type="button" onclick="save()" class="btn btn-sm ml-1 mr-1" value="save">
+                            <input type="button" onclick="load()" class="btn btn-sm" value="load">
+                        </div>
                         <input type="text" id="controller-input" spellcheck="false" class="form-control mt-2" placeholder="Controller@method">
                         <small>Namespace: {{config('dbpanel.controller')}}</small>                       
                     </div>
@@ -178,22 +183,24 @@ filter.time@12:58:56
                     <div class="form-check mt-2">
                         <input type="checkbox" id="hadRequest" spellcheck="false" name="hadRequest" class="form-check-input mt-2">
                         <label class="form-check-label pt-1" for="hadRequest">Illuminate\Support\Request </label><br>
-                        <input type="checkbox" id="otherRequest" spellcheck="false" name="otherRequest" class="form-check-input mt-2">
-                        <label class="form-check-label pt-1" for="otherRequest">Custom Request</label>
+                        {{-- <input type="checkbox" id="otherRequest" spellcheck="false" name="otherRequest" class="form-check-input mt-2"> --}}
+                    </div>    
+                    <div class="form-group">
+                        <input type="text" class="form-control mt-1" id="otherRequest" spellcheck="false" name="otherRequest" placeholder="custom request namespace....">
                     </div>
                     <div class="form-group">
                         <textarea id="request-parameter" spellcheck="false" rows="12" class="form-control mt-2" ></textarea>
                     </div>
                     <input type="text" id="dbpanel_auth_id" class="form-control mt-2" placeholder="auth user id...">
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
-                    <div>
+                    <div class="mt-2">
                         developed by © <a href="http://me.amirozzaman.com">niaz@dev</a>
                     </div>
                 </div>
 
             </div>
-            <div class="col-md-9 row pr-0">
-            <div class="col-md-12 row m-0">
+            <div class="col-md-9 row pt-2 main pr-0">
+            <div class="col-md-12 row m-0 h-0">
                 <div class="col-md-2 p-0">
                     <div class="input-group">                
                         <div class="input-group-prepend">
@@ -233,7 +240,7 @@ filter.time@12:58:56
                     <input type="button" class="btn brl-0" onclick="getData()" value="Get Data">
                 </div>
             </div>
-            <div class="col-md-8 mt-2 pr-0">
+            <div class="col-md-8 pr-0">
             <div class="form-group">
                 <label class="header">
                     Console
@@ -248,7 +255,7 @@ filter.time@12:58:56
                 </label>
               <pre spellcheck="false" class="window"><div id="data" class="p-2 shell"></div></pre>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 pl-0">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-right" style="height:60px;">
                       <li class="nav-item"><a class="nav-link"></a></li>
@@ -256,7 +263,7 @@ filter.time@12:58:56
                   </nav>
                 </div>
         </div>
-        <div class="col-md-4 mt-2 pl-0 pr-0">
+        <div class="col-md-4 pl-0 pr-0">
             <div class="form-group">
                 <label class="header">Table</label>
                 <pre spellcheck="false" class="window"><div id="table" class="p-2"></div></pre>
