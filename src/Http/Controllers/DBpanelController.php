@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Niaz\DBpanel\Http\Filters\Filter;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Arr;
 
 class DBpanelController extends Controller
 {
@@ -419,13 +420,16 @@ class DBpanelController extends Controller
 
     public function save(Request $request)
     {
-        $request->merge(['controller_prefix_namespace'=>config('dbpanel.controller')]);
-        $request->merge(['created_at'=>time()]);
-        config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('controller')),$request->all());
-        $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
-        $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
-        fwrite($fp, '<?php return ' . $str . ';');
-        fclose($fp);
-        return ['message'=>"saved",'collection'=> config('dbpanel_collections')];
+        // $request->merge(['controller_prefix_namespace'=>config('dbpanel.controller')]);
+        // $request->merge(['created_at'=>time()]);
+        // config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('controller')),$request->all());
+        // $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
+        // $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
+        // fwrite($fp, '<?php return ' . $str . ';');
+        // fclose($fp);
+        // return ['message'=>"saved",'collection'=> config('dbpanel_collections')];
+        $c=config('dbpanel_collections');
+
+        return data_get($c,'Api.PipelineExampleController@data');
     }
 }
