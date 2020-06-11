@@ -307,6 +307,25 @@ window.save = function () {
   dbpanelProcessed(url);
 };
 
+window.load = function () {
+  var label = document.getElementById('label').value;
+  var url = '/dbpanel/load?controller=' + label;
+  axios.get(url).then(function (response) {
+    document.getElementById('controller-input').value = response.data['controller'];
+    document.getElementById('dbpanel_auth_id').value = response.data['dbpanel_auth_id'];
+    document.getElementById('hadRequest').checked = response.data['hadRequest'] ? true : false;
+    requestParams.value = response.data['hadRequest'];
+    params.value = response.data['parameters'];
+    document.getElementById("otherRequest").value = response.data['dbpanel_custom_namespace'];
+  })["catch"](function (exception) {
+    if (exception["response"]) {
+      dbpanelError(exception.response.data);
+    } else {
+      dbpanelError(exception);
+    }
+  });
+};
+
 window.other = function () {
   var other = document.getElementById('other-input').value.replace(/\\/gi, '.');
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;

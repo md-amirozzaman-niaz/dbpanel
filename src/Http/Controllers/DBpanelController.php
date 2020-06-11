@@ -27,7 +27,11 @@ class DBpanelController extends Controller
         $filter = new Filter;
         $filtered = $filter->loadTable($table);
         // $filtered_query = $filtered->query();
-
+        if(request()->has('delete')){
+            $row = DB::table($table)->where('id',request('delete'))->get();
+            DB::table($table)->where('id',request('delete'))->delete();
+            return ['result' => ['data'=>$row],'filter_status' => 'deleted successfully'];
+        }
         $filtered_data = $filtered->getData();
 
         $count = ! is_string($filtered_data) ? count($filtered_data) : 'Error';
@@ -420,16 +424,20 @@ class DBpanelController extends Controller
 
     public function save(Request $request)
     {
-        // $request->merge(['controller_prefix_namespace'=>config('dbpanel.controller')]);
-        // $request->merge(['created_at'=>time()]);
-        // config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('controller')),$request->all());
-        // $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
-        // $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
-        // fwrite($fp, '<?php return ' . $str . ';');
-        // fclose($fp);
-        // return ['message'=>"saved",'collection'=> config('dbpanel_collections')];
-        $c=config('dbpanel_collections');
+        $request->merge(['controller_prefix_namespace'=>config('dbpanel.controller')]);
+        $request->merge(['created_at'=>time()]);
+        config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('controller')),$request->all());
+        $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
+        $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
+        fwrite($fp, '<?php return ' . $str . ';');
+        fclose($fp);
+        return ['message'=>"saved",'collection'=> config('dbpanel_collections')];
+    }
 
-        return data_get($c,'Api.PipelineExampleController@data');
+    public function load(Request $request){
+        $i=$request->input('controller');
+        $c = config('dbpanel_collections');
+
+        return data_get($c,$i);
     }
 }
