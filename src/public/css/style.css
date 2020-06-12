@@ -16,6 +16,22 @@ body{
 	background: #f5f7f9;
 	border-right: 1px solid;
 	border-color: #bcc7d0;
+	overflow:hidden;
+}
+#loadModal{
+	position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #f1efef;
+    top: 0px;
+    left: 100%;
+	transition-duration: 300ms;
+}
+#loadModal.active{
+	left: 0px;
+}
+.loader-list{
+	background: rgba(255, 255, 255, 0.37);
 }
 #output{
 	height:70vh;

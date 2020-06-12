@@ -162,7 +162,7 @@ filter.time@12:58:56
                             <div type="button" onclick="save()" class="btn btn-sm ml-1 mr-1" title="save">
                                 <i class="far fa-bookmark" aria-hidden="true"></i>
                             </div>
-                            <div type="button" onclick="load()" class="btn btn-sm" title="load">
+                            <div type="button" onclick="loadToggle()" class="btn btn-sm" title="load">
                                 <i class="far fa-folder-open" aria-hidden="true"></i>
                             </div>
                             
@@ -202,7 +202,26 @@ filter.time@12:58:56
                         developed by © <a href="http://me.amirozzaman.com">niaz@dev</a>
                     </div>
                 </div>
-
+                <div id="loadModal" class="shadow">
+                    <div class="btn-primary btn-block p-2" onclick="loadToggle()">
+                        <i class="fas fa-arrow-left"></i> Collection
+                    </div>
+                    <ul class="nav loader-list p-2">
+                    @foreach(config('dbpanel_collections') as $k=>$v)
+                    <li>{{$k}}
+                        <ul class="nav loader-list mt-1">
+                        @foreach($v as $ki=>$vi)
+                        <li>
+                            <i class="fas fa-arrow-left mr-1" onclick="load(this)" data-key="{{$k.'.'.$ki}}"></i>
+                            {{date("Y-m-d H:m A",$vi['created_at'])}}
+                        <span class="badge badge-sm badge-primary">{{$vi['label']}}</span>
+                        </li>
+                        @endforeach
+                        </ul>
+                    </li>
+                    @endforeach
+                    </ul>
+                </div>
             </div>
             <div class="col-md-9 row pt-2 main pr-0">
             <div class="col-md-12 row m-0 h-0">

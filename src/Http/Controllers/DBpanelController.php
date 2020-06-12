@@ -466,7 +466,7 @@ class DBpanelController extends Controller
     {
         $request->merge(['controller_prefix_namespace'=>config('dbpanel.controller')]);
         $request->merge(['created_at'=>time()]);
-        config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('controller')),$request->all());
+        config()->push('dbpanel_collections.'.str_replace('.','\\',$request->input('controller')),$request->all());
         $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
         $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
         fwrite($fp, '<?php return ' . $str . ';');
