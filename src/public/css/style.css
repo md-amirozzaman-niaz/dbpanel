@@ -36,9 +36,9 @@ body{
 	border-bottom-left-radius: 3px;
 	border-bottom-right-radius: 3px;
 }
-/* #mySideBarTab {
-	background: #EFEBE9;
-} */
+#mySideBarTab {
+	background: #f9f9f9;
+}
 #mySideBarTab .nav-link.active {
 	color: #495057 !important;
 	background-color: #f5f7f9;

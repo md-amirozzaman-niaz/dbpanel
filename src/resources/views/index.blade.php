@@ -157,10 +157,15 @@ filter.time@12:58:56
                 </ul>
                 <div class="tab-content p-2"  id="mySideBarTabContent">
                     <div class=" tab-pane fade show active" id="controller-type" role="tabpanel" aria-labelledby="controller-type-tab">
-                        <div class="form-inline">
-                            <input type="text" id="label" spellcheck="false" class="form-control" placeholder="save as...">
-                            <input type="button" onclick="save()" class="btn btn-sm ml-1 mr-1" value="save">
-                            <input type="button" onclick="load()" class="btn btn-sm" value="load">
+                        <div class="form-row mr-0 ml-0">
+                            <input type="text" id="label" spellcheck="false" class="col form-control pl-2" placeholder="label">
+                            <div type="button" onclick="save()" class="btn btn-sm ml-1 mr-1" title="save">
+                                <i class="far fa-bookmark" aria-hidden="true"></i>
+                            </div>
+                            <div type="button" onclick="load()" class="btn btn-sm" title="load">
+                                <i class="far fa-folder-open" aria-hidden="true"></i>
+                            </div>
+                            
                         </div>
                         <input type="text" id="controller-input" spellcheck="false" class="form-control mt-2" placeholder="Controller@method">
                         <small>Namespace: {{config('dbpanel.controller')}}</small>                       
