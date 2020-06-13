@@ -30,8 +30,34 @@ body{
 #loadModal.active{
 	left: 0px;
 }
-.loader-list{
+.outer-list,.inner-list{
 	background: rgba(255, 255, 255, 0.37);
+}
+.outer-list > li {
+	border: 1px solid #d3d3d3;
+    padding: 0.25em 0.5em;
+	border-radius: 3px;
+	cursor: pointer;
+	width: 100%;
+}
+.inner-list{
+	height:0px;
+	overflow:hidden;
+	transition-duration: 300ms;
+	padding: 0.25em;
+}
+.inner-list > li{
+	width:100%;
+	padding:0.15em;
+	cursor: pointer;
+	padding: 0.25em 0.5em;
+	border-radius: 3px;
+}
+.inner-list > li:hover{
+	background: #c9d7e4;
+}
+.outer-list > li.active > .inner-list{
+	height: auto;
 }
 #output{
 	height:70vh;
@@ -64,18 +90,21 @@ body{
 	color: #b3b3b3;
 	background-color: #eff3f6;
 	background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);
-	font-size: 13px;
+	font-size: 12px;
+}
+.page-link {
+	padding: .45rem .75rem !important;
 }
 .form-control{
-	font-size:14px;
+	font-size:12px;
 }
 .btn{
 	border: 1px solid #d2d2d2;
 	color: #24292e;
 	background-color: #eff3f6;
 	background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);
-	font-size: 13px;
-	padding: 7px;
+	font-size: 12px;
+	/* padding: 7px; */
 }
 .brl-0{
 	border-left: 0px;
@@ -156,7 +185,7 @@ kbd, code{
 	border-radius: 3px;
 }
 a.nav-link{
-	color: #c6c7c7 !important;
+	color: #b1b3b3 !important;
 }
 thead {
 	background: #f8f9fb;
@@ -280,4 +309,16 @@ color:inherit
 .hljs a:focus, .hljs a:hover{
 color:inherit;
 text-decoration:underline
+}
+.badge-bug{
+	background: #ec6d64;
+}
+.badge-guest{
+	background: #03A9F4;
+}
+.badge-auth{
+	background: #8BC34A;
+}
+.badge-test{
+	background: #9E9E9E;
 }

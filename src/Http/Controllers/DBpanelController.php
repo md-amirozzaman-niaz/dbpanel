@@ -83,11 +83,7 @@ class DBpanelController extends Controller
             ];
 
             $routeMiddlewares = $routeByAction->action['middleware'];
-            $routeParam = $parameters->toArray();
-            $url = action(str_replace('.', '\\', $controller[0]).'@index',[45,12]);
-            $crequest = Request::create($url, $routeByAction->methods[0]);
-            $response = app()->handle($crequest);
-            // dd ($response->status());
+
             foreach ($routeMiddlewares as $routeMiddleware) {
                 if (array_key_exists($routeMiddleware, $appRouteMiddleware)) {
                     $m = explode(':', $appRouteMiddleware[$routeMiddleware]);
@@ -99,7 +95,6 @@ class DBpanelController extends Controller
 
                 if (array_key_exists($routeMiddleware, $appMiddlewareGroups)) {
                     $j = explode(':', $appMiddlewareGroups[$routeMiddleware][0]);
-                    // dd(get_class($request),$request);
                     if (count($j) > 1 && $j[0]=='throttle') {
                         resolve($appRouteMiddleware[$j[0]])->handle($request, function ($next) {
                             

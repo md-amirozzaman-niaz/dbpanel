@@ -27,7 +27,9 @@
             <div class="tab-content p-2 active" style="background:#fff;" id="myTabContent">
                 <div class="info-table tab-pane fade active show" id="help" role="tabpanel" aria-labelledby="help-tab">
                     <article class="markdown-body entry-content" itemprop="text">
-                        <h1><a id="user-content-dbpanel" class="anchor" aria-hidden="true" href="#dbpanel"></a>dbpanel</h1>                                                                      
+                        <h3>Demo</h3>
+<p>Suppose, From `products` table to get ids <code>1 to 50</code> where product price range greater than <em>10</em> and less than <em>50</em>. Return only <code>title</code> and <code>price</code> column.</p><pre>
+<code>id=1-50&where=product_price:>10|product_price:<50&return_only=title,price </code></pre>
                         <p>Select a <code>table</code> name from table option and enter some query string with some <code>key</code> name are filter name as follows:</p>
                         <h4><a id="user-content-id-key" class="anchor" aria-hidden="true" href="#id-key">
                             </a>id <em>(key)</em></h4>
@@ -96,7 +98,10 @@
                         <p>Example <em>(value)</em>:</p>
                         <ul>
                         <li><code>id,name,email</code> <code>name,email,phone</code></li>
+                        
                         </ul>
+                        <h4>Delete</h4>
+                        <p>To delete your filtered data just pass <code>&delete</code></p>
                         <h3>To Check Controller or Model or Other Method</h3>
                         <p>Just type your Controller or Model or any other class name and method as</p>
                         <pre><code>ClassName@method
@@ -199,22 +204,22 @@ filter.time@12:58:56
                     <input type="text" id="dbpanel_auth_id" class="form-control mt-2" placeholder="auth user id...">
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
                     <div class="mt-2">
-                        developed by © <a href="http://me.amirozzaman.com">niaz@dev</a>
+                        <b>dbpanel</b> <em>{{config('dbpanel.version')}}</em> - developed by © <a href="http://me.amirozzaman.com">niaz@dev</a>
                     </div>
                 </div>
                 <div id="loadModal" class="shadow">
                     <div class="btn-primary btn-block p-2" onclick="loadToggle()">
                         <i class="fas fa-arrow-left"></i> Collection
                     </div>
-                    <ul class="nav loader-list p-2">
+                    <ul class="nav outer-list p-2">
                     @foreach(config('dbpanel_collections') as $k=>$v)
-                    <li>{{$k}}
-                        <ul class="nav loader-list mt-1">
+                    <li onclick="activeToggle(this)">{{$k}}
+                        <ul class="nav mt-1 inner-list">
                         @foreach($v as $ki=>$vi)
-                        <li>
-                            <i class="fas fa-arrow-left mr-1" onclick="load(this)" data-key="{{$k.'.'.$ki}}"></i>
-                            {{date("Y-m-d H:m A",$vi['created_at'])}}
-                        <span class="badge badge-sm badge-primary">{{$vi['label']}}</span>
+                        <li onclick="load(this)" data-key="{{$k.'.'.$ki}}">
+                            {{-- <i class="fas fa-arrow-left mr-1"></i> --}}
+                        <span class="badge badge-sm badge-primary float-right badge-{{$vi['label']}}">{{$vi['label']}}</span>
+                        <small> {{date("Y-m-d H:m A",$vi['created_at'])}}</small>
                         </li>
                         @endforeach
                         </ul>
@@ -257,7 +262,7 @@ filter.time@12:58:56
                         <div class="input-group-prepend">
                             <div class="input-group-text brr-0">Query</div>
                         </div>
-                        <input type="url" class="form-control brr-0" id="query" placeholder="filter your data table....">
+                        <input type="url" class="form-control brr-0" id="query" placeholder="each filter are separeted by '&' ">
                     </div>
                 </div>
                 <div class="col-md-1 p-0">

@@ -312,22 +312,31 @@ window.loadToggle = function () {
   modal.classList.toggle('active');
 };
 
+window.activeToggle = function (el) {
+  el.classList.toggle('active');
+};
+
 window.load = function (v) {
   var url = '/dbpanel/load?controller=' + v.getAttribute('data-key');
-  loadToggle();
   axios.get(url).then(function (response) {
     document.getElementById('label').value = response.data['label'];
     document.getElementById('controller-input').value = response.data['controller'];
-    document.getElementById('dbpanel_auth_id').value = response.data['dbpanel_auth_id'];
+    document.getElementById('dbpanel_auth_id').value = response.data['dbpanel_auth_id'] ? response.data['dbpanel_auth_id'] : '';
     document.getElementById('hadRequest').checked = response.data['hadRequest'] ? true : false;
 
     if (response.data['hadRequest']) {
       requestParams.value = response.data['hadRequest'].indexOf("{") === 0 ? JSON.stringify(JSON.parse(response.data['hadRequest']), undefined, 4) : response.data['hadRequest'].replace(/\|/gi, '\n');
       ;
+    } else {
+      requestParams.value = '';
     }
 
-    params.value = response.data['parameters'];
-    document.getElementById("otherRequest").value = response.data['dbpanel_custom_namespace'];
+    params.value = response.data['parameters'] ? response.data['parameters'] : '';
+    document.getElementById("otherRequest").value = response.data['dbpanel_custom_namespace'] ? response.data['dbpanel_custom_namespace'] : '';
+    setTimeout(function () {
+      loadToggle();
+      controller();
+    }, 300);
   })["catch"](function (exception) {
     if (exception["response"]) {
       dbpanelError(exception.response.data);
