@@ -1,6 +1,11 @@
 # dbpanel
 
 dbpanel is a developer tool for laravel application. You can access your laravel application's database easily and fastest way. There are some cool filter available with this package. You might look around your table's column type and index. You can console your controller methods database query log and its return data structure. How many query it going to be used in run time and how long it will take for those query. To use this package follow the instruction below.
+## Demo
+Suppose, From `products` to get ids `1 to 50` where product price range greater than 10 and less than 50. Return only `title` and `price` column.
+```
+id=1-50&where=product_price:>10|product_price:<50&return_only=title,price
+```
 
 ### Installation
 
@@ -98,6 +103,10 @@ Example *(value)*:
 
 Example *(value)*:
 + `id,name,email` `name,email,phone`
+
+#### Delete
+
+To delete your filtered data just pass `&delete`
 
 ### To Check Controller or Model or Other Method
 

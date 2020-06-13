@@ -26,11 +26,15 @@ class DBpanelController extends Controller
     {
         $filter = new Filter;
         $filtered = $filter->loadTable($table);
-        // $filtered_query = $filtered->query();
+        
         if(request()->has('delete')){
-            $row = DB::table($table)->where('id',request('delete'))->get();
-            DB::table($table)->where('id',request('delete'))->delete();
-            return ['result' => ['data'=>$row],'filter_status' => 'deleted successfully'];
+            $filtered_query = $filtered->getQuery();
+            $row=$filtered_query->get();
+            $filtered_query->delete();
+            return [
+                'result' => ['data'=>$row],
+                'filter_status' => 'deleted successfully'
+            ];
         }
         $filtered_data = $filtered->getData();
 
@@ -42,8 +46,6 @@ class DBpanelController extends Controller
     public function checkController(Request $request, $controller)
     {
         $user = auth()->user();
-        // dd(app($request->input('dbpanel_custom_namespace')));
-
         if (request()->has('dbpanel_auth_id')) {
             $user = $this->login();
             $request->request->remove('dbpanel_auth_id');
@@ -81,11 +83,7 @@ class DBpanelController extends Controller
             ];
 
             $routeMiddlewares = $routeByAction->action['middleware'];
-            $routeParam = $parameters->toArray();
-            $url = action(str_replace('.', '\\', $controller[0]).'@index',[45,12]);
-            $crequest = Request::create($url, $routeByAction->methods[0]);
-            $response = app()->handle($crequest);
-            // dd ($response->status());
+
             foreach ($routeMiddlewares as $routeMiddleware) {
                 if (array_key_exists($routeMiddleware, $appRouteMiddleware)) {
                     $m = explode(':', $appRouteMiddleware[$routeMiddleware]);
@@ -97,7 +95,6 @@ class DBpanelController extends Controller
 
                 if (array_key_exists($routeMiddleware, $appMiddlewareGroups)) {
                     $j = explode(':', $appMiddlewareGroups[$routeMiddleware][0]);
-                    // dd(get_class($request),$request);
                     if (count($j) > 1 && $j[0]=='throttle') {
                         resolve($appRouteMiddleware[$j[0]])->handle($request, function ($next) {
                             
@@ -124,7 +121,6 @@ class DBpanelController extends Controller
             if ($request->has('dbpanel_custom_namespace')) {
                 $customR = app($request->input('dbpanel_custom_namespace'));
                 $data = $controller_class->$method($customR, ...$parameters);
-                // dd($data);
 
                 return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
             }
@@ -132,8 +128,7 @@ class DBpanelController extends Controller
 
             return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
         }
-        $request->request->remove('parameters');
-        $request->request->remove('hadRequest');
+        $this->removeParameters($request);
         $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
 
         return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
@@ -191,17 +186,30 @@ class DBpanelController extends Controller
         return $middlewareUsed;
     }
 
+    /**
+     * @param mixed data
+     * @return collection
+     */
+
     protected function getReturnData($data)
     {
         if (gettype($data) == 'array') {
             return collect(['data' => $data, 'type' => 'array']);
-        } elseif (class_basename($data) == 'View') {
+        } 
+        
+        if (class_basename($data) == 'View') {
             return collect(['Blade' => $this->getView($data), 'type' => get_class($data)]);
-        } elseif (class_basename($data) == 'Response') {
+        } 
+        
+        if (class_basename($data) == 'Response') {
             return collect(['data' => collect($data)->get('original'), 'type' => get_class($data)]);
-        } elseif (class_basename($data) == 'JsonResponse') {
+        }
+        
+        if (class_basename($data) == 'JsonResponse') {
             return collect(['data' => collect($data)->get('original'), 'type' => get_class($data)]);
-        } elseif (gettype($data) == 'object') {
+        } 
+        
+        if (gettype($data) == 'object') {
             return collect(['data' => $data, 'type' => get_class($data)]);
         }
 
@@ -232,8 +240,7 @@ class DBpanelController extends Controller
             return ['return' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'Auth User' => $user];
         }
 
-        $request->request->remove('parameters');
-        $request->request->remove('hadRequest');
+        $this->removeParameters($request);
         $data = $parameters ? $model_class->$method(...$parameters) : $model_class->$method();
 
         return ['return' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'Auth User' => $user];
@@ -241,6 +248,11 @@ class DBpanelController extends Controller
 
     /**
      * check any method of any namespace.
+     * 
+     * @param Request $request
+     * @param string $other
+     * 
+     * @return mixed
      */
     public function checkOther(Request $request, $other)
     {
@@ -271,9 +283,7 @@ class DBpanelController extends Controller
 
             return ['return' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'Auth User' => $user];
         }
-        $request->request->remove('dbpanel_auth_id');
-        $request->request->remove('parameters');
-        $request->request->remove('hadRequest');
+        $this->removeParameters($request);
         $other_class = app($other_namespace);
         $data = $parameters ? $other_class->$method(...$parameters) : $other_class->$method();
 
@@ -282,7 +292,11 @@ class DBpanelController extends Controller
 
     /**
      * run artisan command.
+     * 
+     * @param string $command
+     * @return Artisan command output
      */
+
     public function run($command)
     {
         Artisan::call($command);
@@ -292,6 +306,7 @@ class DBpanelController extends Controller
 
     /**
      * log in with ID.
+     * @return authinicate user
      */
     public function login()
     {
@@ -310,7 +325,12 @@ class DBpanelController extends Controller
 
     /**
      * set Request.
+     * 
+     * @param request 
+     * @return void
+     * 
      */
+
     public function setRequest($request)
     {
         $r = trim(request('hadRequest'));
@@ -323,9 +343,7 @@ class DBpanelController extends Controller
             $arr ? $request->merge($arr) : dd('your json is not in correct format', $demo, $r);
         } else {
             if (strlen($r) < 2) {
-                $request->request->remove('parameters');
-                $request->request->remove('hadRequest');
-
+                $this->removeParameters($request);
                 return;
             }
             $pairs =
@@ -378,9 +396,14 @@ class DBpanelController extends Controller
             }
         }
         $this->parameters = $request->parameters;
-        $request->request->remove('parameters');
-        $request->request->remove('hadRequest');
+        $this->removeParameters($request);
     }
+
+    /**
+     * set parameters for the class which need to called
+     * 
+     * @return mixed  Array|Collect
+     */
 
     public function setParameters()
     {
@@ -402,11 +425,23 @@ class DBpanelController extends Controller
             }) : [];
     }
 
+    public function removeParameters($request){
+
+        $request->request->remove('parameters');
+        $request->request->remove('hadRequest');
+    }
+    /**
+     * dump request object, parameters, authinticate user info on console of dbpanel application
+     * 
+     * @param Request  $request
+     * @param array  $parameters
+     * 
+     * @return array
+     */
     public function dd(Request $request, $parameters)
     {
         $user = $this->login();
-        $request->request->remove('parameters');
-        $request->request->remove('dbpanel_auth_id');
+        $this->removeParameters($request);
 
         return [
             'request' => $request->all(),
@@ -426,7 +461,7 @@ class DBpanelController extends Controller
     {
         $request->merge(['controller_prefix_namespace'=>config('dbpanel.controller')]);
         $request->merge(['created_at'=>time()]);
-        config()->push('dbpanel_collections.'.str_replace('\\','.',$request->input('controller')),$request->all());
+        config()->push('dbpanel_collections.'.str_replace('.','\\',$request->input('controller')),$request->all());
         $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
         $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
         fwrite($fp, '<?php return ' . $str . ';');

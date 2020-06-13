@@ -17,10 +17,6 @@ return [
      */
     'other' => '\\',
 
-    
-    /**
-     * src|link of a image of database design 
-     */
-    'design' => '\vendor\dbpanel\media\demo.png'
+    'version' => 'v0.1.10'
     
 ];

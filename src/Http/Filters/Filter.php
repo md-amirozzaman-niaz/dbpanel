@@ -104,6 +104,10 @@ class Filter
             $this->query = $query->select(DB::raw($this->checkReturnColumnExist()));
         }
     }
+    public function getQuery(){
+        $this->setQuery();
+        return $this->query;
+    }
     /*
     * set some status 
     * 
