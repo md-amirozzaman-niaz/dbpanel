@@ -170,7 +170,7 @@ window.controller =function(){
     let controller = document.getElementById('controller-input').value.replace(/\\/gi,'.');
     let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
     let dbpanel_custom_namespace = document.getElementById("otherRequest").value;
-    let rData = requestParams.value.indexOf("{") === 0 ? requestParams.value :requestParams.value.replace(/\n/gi,'|');
+    let rData = requestParams.value.indexOf("{") === 0 ? requestParams.value :requestParams.value.replace(/^\s+|\s+$/g, '').replace(/\n/gi,'|');
     let param = params.value;
     param = document.getElementById('hadRequest').checked?param+'&hadRequest='+rData +"&dbpanel_custom_namespace=" +dbpanel_custom_namespace:param;
     param = dbpanel_auth_id?param+'&dbpanel_auth_id='+dbpanel_auth_id:param;
@@ -183,7 +183,7 @@ window.model =function(){
     let model = document.getElementById('model-input').value.replace(/\\/gi,'.');
 
     let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
-    let rData = requestParams.value.indexOf("{") === 0 ? requestParams.value :requestParams.value.replace(/\n/gi,'|');
+    let rData = requestParams.value.indexOf("{") === 0 ? requestParams.value :requestParams.value.replace(/^\s+|\s+$/g, '').replace(/\n/gi,'|');
     let param = params.value;
     param = document.getElementById('hadRequest').checked?param+'&hadRequest='+rData:param;
     param = dbpanel_auth_id?param+'&dbpanel_auth_id='+dbpanel_auth_id:param;
@@ -196,7 +196,7 @@ window.save=function(){
     let label = document.getElementById('label').value;
     let dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
     let dbpanel_custom_namespace = document.getElementById("otherRequest").value;
-    let rData = requestParams.value.indexOf("{") === 0 ? requestParams.value :requestParams.value;
+    let rData = requestParams.value.indexOf("{") === 0 ? requestParams.value.replace( /  +/g, ' ' ) :requestParams.value.replace(/^\s+|\s+$/g, '').replace(/\n/gi,'|');
     let param = params.value;
     param = '&hadRequest='+rData +"&dbpanel_custom_namespace=" +dbpanel_custom_namespace+"&label="+label;
     param = param+'&dbpanel_auth_id='+dbpanel_auth_id;
@@ -216,7 +216,9 @@ window.load=function(v){
             document.getElementById('controller-input').value=response.data['controller'];
             document.getElementById('dbpanel_auth_id').value=response.data['dbpanel_auth_id'];
             document.getElementById('hadRequest').checked=response.data['hadRequest']?true:false;
-            requestParams.value=response.data['hadRequest'];
+            if(response.data['hadRequest']){
+                requestParams.value=response.data['hadRequest'].indexOf("{") === 0 ? JSON.stringify(JSON.parse(response.data['hadRequest']), undefined, 4) :response.data['hadRequest'].replace(/\|/gi,'\n');;
+            }
             params.value=response.data['parameters'];
             document.getElementById("otherRequest").value=response.data['dbpanel_custom_namespace'];
 
