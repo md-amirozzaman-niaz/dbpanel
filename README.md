@@ -4,7 +4,7 @@ dbpanel is a developer tool for laravel application. You can access your laravel
 ## Demo
 Suppose, From `products` to get ids `1 to 50` where product price range greater than 10 and less than 50. Return only `title` and `price` column.
 ```
-id=1-50&where=product_price:>10|product_price:<50&return_only=title,price
+id=1-50&where=price:>10,price:<50&return_only=name,price
 ```
 
 ### Installation
