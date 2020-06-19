@@ -275,6 +275,25 @@ class DBpanelController extends Controller
         }
         $other = explode('@', trim($other));
         $other_namespace = config('dbpanel.other').str_replace('.', '\\', $other[0]);
+        $r = new ReflectionClass(new $other_namespace);
+        $methods =$r->getMethods();
+        $retr = [];
+        foreach($methods as $method){
+            $c = $r->getMethod($method->name)->getDocComment();
+            $p = $r->getMethod($method->name)->getParameters();
+            $rt = $r->getMethod($method->name)->getReturnType();
+            $des = str_replace('*','',substr($c,0,strpos($c,'@')));
+            $retr[$method->name]=[
+                'param' => $p,
+                'doc' => $des,
+                'class'=>$method->class,
+                'returnType'=>$rt
+                ]
+            ;
+        }
+        return [ $other_namespace=>$retr];
+        // return $r->getProperty('json')->getDocComment();
+        // return $r->getParentClass()->getMethods();
         $method = $other[1];
 
         if (request()->has('hadRequest')) {

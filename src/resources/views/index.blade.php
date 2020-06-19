@@ -29,7 +29,7 @@
                     <article class="markdown-body entry-content" itemprop="text">
                         <h3>Demo</h3>
 <p>Suppose, From `products` table to get ids <code>1 to 50</code> where product price range greater than <em>10</em> and less than <em>50</em>. Return only <code>title</code> and <code>price</code> column.</p><pre>
-<code>id=1-50&where=product_price:>10|product_price:<50&return_only=title,price </code></pre>
+<code>id=1-50&where=product_price:>10,product_price:<50&return_only=title,price </code></pre>
                         <p>Select a <code>table</code> name from table option and enter some query string with some <code>key</code> name are filter name as follows:</p>
                         <h4><a id="user-content-id-key" class="anchor" aria-hidden="true" href="#id-key">
                             </a>id <em>(key)</em></h4>
