@@ -275,24 +275,40 @@ class DBpanelController extends Controller
         }
         $other = explode('@', trim($other));
         $other_namespace = config('dbpanel.other').str_replace('.', '\\', $other[0]);
-        $r = new ReflectionClass(new $other_namespace);
-        $methods =$r->getMethods();
-        $retr = [];
-        foreach($methods as $method){
-            $c = $r->getMethod($method->name)->getDocComment();
-            $p = $r->getMethod($method->name)->getParameters();
-            $rt = $r->getMethod($method->name)->getReturnType();
-            $des = str_replace('*','',substr($c,0,strpos($c,'@')));
-            $retr[$method->name]=[
-                'param' => $p,
-                'doc' => $des,
-                'class'=>$method->class,
-                'returnType'=>$rt
+        
+        if(count($other) < 2){
+            $r = new ReflectionClass($other_namespace); 
+            $methods =$r->getMethods();
+            $retr = [];
+            foreach($methods as $method){
+                $c = $r->getMethod($method->name)->getDocComment();
+                $p = $r->getMethod($method->name)->getParameters();
+                $des = explode('*',$c);
+                $k = [];
+                foreach($des as $d){
+                    preg_match('/[a-zA-z0-9]/',$d,$m);
+                    if(count($m)>0){ 
+                        array_push($k,trim($d));
+                    };
+                }
+                $retr[$method->name]=[
+                    'param' => empty($p)? null : $p,
+                    'doc' => $k,
+                    'class'=>$method->class
+                    ]
+                ;
+            }
+            return [ $r->getName()=>[
+                'methods'=>$retr,
+                'Parent Class' => $r->getParentClass(),
+                'Interfaces' => $r->getInterfaces(),
+                'Properties' => $r->getProperties(),
+                'Traits' => $r->getTraits(),
+                'File Name' =>$r->getFileName()
                 ]
-            ;
+            ];
         }
-        return [ $other_namespace=>$retr];
-        // return $r->getProperty('json')->getDocComment();
+        // return $r->g etProperty('json')->getDocComment();
         // return $r->getParentClass()->getMethods();
         $method = $other[1];
 

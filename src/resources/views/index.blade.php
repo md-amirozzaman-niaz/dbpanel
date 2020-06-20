@@ -28,15 +28,19 @@
                 <div class="info-table tab-pane fade active show" id="help" role="tabpanel" aria-labelledby="help-tab">
                     <article class="markdown-body entry-content" itemprop="text">
                         <h3>Demo</h3>
-<p>Suppose, From `products` table to get ids <code>1 to 50</code> where product price range greater than <em>10</em> and less than <em>50</em>. Return only <code>title</code> and <code>price</code> column.</p><pre>
+<p>Suppose, From <code>products</code> table to get ids <code>1 to 50</code> where product price range greater than <em>10</em> and less than <em>50</em>. Return only <code>title</code> and <code>price</code> column.</p><pre>
 <code>id=1-50&where=product_price:>10,product_price:<50&return_only=title,price </code></pre>
                         <p>Select a <code>table</code> name from table option and enter some query string with some <code>key</code> name are filter name as follows:</p>
                         <h4><a id="user-content-id-key" class="anchor" aria-hidden="true" href="#id-key">
                             </a>id <em>(key)</em></h4>
-                        <p>Example <em>(value)</em>: <code>5</code> <code>5-100</code></p>
+                        <p>Example <em>(value)</em>: <code>5</code> <code>5-100</code>
+                        <br> <code>&id=1-50</code>
+                        </p>
                         <h4><a id="user-content-sort-key" class="anchor" aria-hidden="true" href="#sort-key">
                             </a>sort <em>(key)</em></h4>
-                        <p>Example <em>(value</em>: <code>email:asc</code> <code>name:desc</code>  <code>desc</code></p>
+                        <p>Example <em>(value</em>: <code>email:asc</code> <code>name:desc</code>  <code>desc</code>
+                            <br> <code>&sort=title:desc</code>
+                        </p>
                         <h4><a id="user-content-is-key" class="anchor" aria-hidden="true" href="#is-key">
                             </a>is <em>(key)</em></h4>
                         <p>Example <em>(value)</em>: <code>active:0</code> <code>active:1</code>  <code>date:2020-04-29</code></p>
@@ -145,7 +149,7 @@ filter.time@12:58:56
                 </div>
             </div>
         </div><form class="row">
-            <div class="col-md-3 p-0 sidebar">
+            <div class="col-md-3 p-0 sidebar shadow">
                 <ul class="nav nav-tabs pl-2 pt-2" id="mySideBarTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="controller-type-tab" data-toggle="tab" href="#controller-type" role="tab" aria-controls="controller-type" aria-selected="true">Controller</a>
@@ -187,27 +191,27 @@ filter.time@12:58:56
                         <input type="text" id="command-input" spellcheck="false" class="form-control mt-2" placeholder="commands.....">
                         <small>For `php artisan route:list` need to pass `route:list`</small>        
                     </div>
-                    <div class="form-group">
+                    <div >
                         <input type="text" id="parameters" spellcheck="false" class="form-control mt-2" placeholder="parameters">
                     </div>
                     <div class="form-check mt-2">
                         <input type="checkbox" id="hadRequest" spellcheck="false" name="hadRequest" class="form-check-input mt-2">
-                        <label class="form-check-label pt-1" for="hadRequest">Illuminate\Support\Request </label><br>
+                        <label class="form-check-label pt-1" for="hadRequest">Illuminate\Http\Request </label><br>
                         {{-- <input type="checkbox" id="otherRequest" spellcheck="false" name="otherRequest" class="form-check-input mt-2"> --}}
                     </div>    
-                    <div class="form-group">
+                    <div>
                         <input type="text" class="form-control mt-1" id="otherRequest" spellcheck="false" name="otherRequest" placeholder="custom request namespace....">
                     </div>
-                    <div class="form-group">
+                    <div >
                         <textarea id="request-parameter" spellcheck="false" rows="12" class="form-control mt-2" ></textarea>
                     </div>
-                    <input type="text" id="dbpanel_auth_id" class="form-control mt-2" placeholder="auth user id...">
+                    <input type="text" id="dbpanel_auth_id" class="form-control mt-1" placeholder="auth user id...">
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
                     <div class="mt-2">
                         <b>dbpanel</b> <em>{{config('dbpanel.version')}}</em> - developed by © <a href="http://me.amirozzaman.com">niaz@dev</a>
                     </div>
                 </div>
-                <div id="loadModal" class="shadow">
+                <div id="loadModal">
                     <div class="btn-primary btn-block p-2" onclick="loadToggle()">
                         <i class="fas fa-arrow-left"></i> Collection
                     </div>
