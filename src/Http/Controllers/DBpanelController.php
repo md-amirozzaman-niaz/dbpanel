@@ -21,6 +21,11 @@ class DBpanelController extends Controller
 
         return view('dbpanel::index')->with(['tables' => $tables]);
     }
+    public function doc()
+    {
+
+        return view('dbpanel::doc');
+    }
 
     public function data($table)
     {
@@ -53,7 +58,7 @@ class DBpanelController extends Controller
         $parameters = $this->setParameters();
 
         DB::connection()->enableQueryLog();
-
+        $actionStr = str_replace('.', '\\',$controller);
         $controller = explode('@', $controller);
         $controller_namespace = config('dbpanel.controller').str_replace('.', '\\', $controller[0]);
         $method = $controller[1];
@@ -66,13 +71,14 @@ class DBpanelController extends Controller
         $controller_class = app($controller_namespace);
         $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
         $appMiddlewareGroups = app('\App\Http\Kernel')->getMiddlewareGroups();
-        // $middlewareUsed = $this->getThroughControllerMiddleware($request,$controller_class,$method);
+        $middlewareUsed = $this->getThroughControllerMiddleware($request,$controller_class,$method);
         $middlewareUsed = [];
 
         $actionString = $controller_namespace.'@'.$method;
         $route = \Route::getRoutes();
         $routeByAction = $route->getByAction($actionString);
         $routeInfo = [];
+        $url='no route';
 
         if ($routeByAction) {
             $routeInfo = [
@@ -100,16 +106,16 @@ class DBpanelController extends Controller
                             
                             return app('\Symfony\Component\HttpFoundation\Response');
                         }, ...explode(',', $j[1]));
-                    } else {
-                        resolve($appRouteMiddleware['auth'])->handle($request, function ($next) {
+                    } else if($j[0]=='auth'){
+                        resolve($appRouteMiddleware[$j[0]])->handle($request, function ($next) {
                             return $next;
                         });
                     }
                 }
             }
             // run method by route action calling
-            // $routeParam = $parameters->toArray();
-            // $url = action(str_replace('.', '\\', $controller[0]).'@index',$routeParam);
+            $routeParam = $parameters->toArray();
+            $url = action($actionStr,$routeParam);
             // $request = Request::create($url, $routeByAction->methods[0]);
             // $response = app()->handle($request);
             // return ['response' => $this->getReturnData($response->getOriginalContent()), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
@@ -122,16 +128,45 @@ class DBpanelController extends Controller
                 $customR = app($request->input('dbpanel_custom_namespace'));
                 $data = $controller_class->$method($customR, ...$parameters);
 
-                return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
+                return [
+                    'response' => $this->getReturnData($data),
+                    'Database log' => DB::getQueryLog(), 'route' => $routeInfo,
+                    'Controller middleware' => $middlewareUsed,
+                    'Auth User' => $user,
+                    'Url' =>$url,
+                    'Memory usage' => $this->convert(memory_get_usage()),
+                    'Session' => collect(session()->all())->except('filter_table'),
+                    'Cookie' => $request->cookie()
+                ];
             }
             $data = $controller_class->$method($request, ...$parameters);
 
-            return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
+            return [
+                'response' => $this->getReturnData($data),
+                'Database log' => DB::getQueryLog(),
+                'route' => $routeInfo,
+                'Controller middleware' => $middlewareUsed,
+                'Auth User' => $user,
+                'Url' =>$url,
+                'Memory usage' => $this->convert(memory_get_usage()),
+                'Session' => collect(session()->all())->except('filter_table'),
+                'Cookie' => $request->cookie()
+            ];
         }
         $this->removeParameters($request);
         $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
 
-        return ['response' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $middlewareUsed, 'Auth User' => $user];
+        return [
+            'response' => $this->getReturnData($data),
+            'Database log' => DB::getQueryLog(),
+            'route' => $routeInfo,
+            'Controller middleware' => $middlewareUsed,
+            'Auth User' => $user,
+            'Url' =>$url,
+            'Memory usage' => $this->convert(memory_get_usage()),
+            'Session' => collect(session()->all())->except('filter_table'),
+            'Cookie' => $request->cookie()
+        ];
     }
 
     protected function getView($view)
@@ -245,7 +280,11 @@ class DBpanelController extends Controller
 
         return ['return' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'Auth User' => $user];
     }
-
+    function convert($size)
+    {
+        $unit=array('b','kb','mb','gb','tb','pb');
+        return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+    }
     /**
      * check any method of any namespace.
      * 
@@ -457,7 +496,7 @@ class DBpanelController extends Controller
                 } else {
                     return is_numeric($i) ? (int) $i : $i;
                 }
-            }) : [];
+            }) : collect([]);
     }
 
     public function removeParameters($request){

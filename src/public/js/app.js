@@ -207,6 +207,21 @@ window.dbpanelProcessed = function (url) {
   });
 };
 
+window.loadRoute = function (event) {
+  if (event.keyCode === 13) {
+    var url = document.getElementById('address').value;
+    var data = {
+      'Url': url
+    };
+    changeRoute(data);
+  }
+};
+
+window.changeRoute = function (data) {
+  document.getElementById('webview').src = data.Url;
+  document.getElementById('address').value = data.Url;
+};
+
 window.dbpanelSuccess = function (data) {
   dataDom.innerHTML = null;
 
@@ -216,6 +231,10 @@ window.dbpanelSuccess = function (data) {
     });
 
     dataDom.appendChild(_formatter.render());
+
+    if (data['Url'] && data['Url'] !== 'no route') {
+      changeRoute(data);
+    }
   } else if (_typeof(data) === "object") {
     var formatter = new json_formatter_js__WEBPACK_IMPORTED_MODULE_0___default.a(data, 1, {
       hoverPreviewEnabled: true
@@ -301,8 +320,8 @@ window.save = function () {
   var dbpanel_custom_namespace = document.getElementById("otherRequest").value;
   var rData = requestParams.value.indexOf("{") === 0 ? requestParams.value.replace(/  +/g, ' ') : requestParams.value.replace(/^\s+|\s+$/g, '').replace(/\n/gi, '|');
   var param = params.value;
-  param = '&hadRequest=' + rData + "&dbpanel_custom_namespace=" + dbpanel_custom_namespace + "&label=" + label;
-  param = param + '&dbpanel_auth_id=' + dbpanel_auth_id;
+  param += '&hadRequest=' + rData + "&dbpanel_custom_namespace=" + dbpanel_custom_namespace + "&label=" + label;
+  param += '&dbpanel_auth_id=' + dbpanel_auth_id;
   var url = '/dbpanel/save?controller=' + controller + '&parameters=' + param;
   dbpanelProcessed(url);
 };
@@ -347,7 +366,8 @@ window.load = function (v) {
 };
 
 window.other = function () {
-  var other = document.getElementById('other-input').value.replace(/\\/gi, '.');
+  var namespace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var other = namespace ? document.getElementById('namespace-input').value.replace(/\\/gi, '.') : document.getElementById('other-input').value.replace(/\\/gi, '.');
   var dbpanel_auth_id = document.getElementById('dbpanel_auth_id').value;
   var rData = requestParams.value.indexOf("{") === 0 ? requestParams.value : requestParams.value.replace(/\n/gi, '|');
   var param = params.value;
@@ -381,6 +401,8 @@ window.checkMethod = function () {
     window.model();
   } else if (whichMethod == 'command') {
     window.command();
+  } else if (whichMethod == 'namespace') {
+    window.other('namespace');
   } else {
     window.other();
   }

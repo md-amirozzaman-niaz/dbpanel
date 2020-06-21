@@ -79,7 +79,7 @@ body{
 .window{
 	border: 1px solid #ced4da;
 	padding: 10px;
-	height:65vh;
+	height: calc(100vh - 160px);
 	font-size: 13px;
 	background: #f5f5f5;
 	border-top: 0px;
@@ -140,9 +140,13 @@ body{
 }
 .info-table{
 	height: calc(100vh - 60px);
-	overflow-y: scroll;
+	/* overflow-y: scroll;
 	padding: 10px;
-	position: relative;
+	position: relative; */
+}
+#address{
+	border-radius: 18px;
+    border: none;
 }
 .info-container.active{
 	right:0px;
@@ -204,7 +208,7 @@ kbd, code{
 }
 a.nav-link{
 	color: #666767 !important;
-	padding: .45rem 0.45rem;
+	padding: .65rem 0.45rem;
 }
 thead {
 	background: #f8f9fb;
@@ -354,4 +358,13 @@ text-decoration:underline
   
   ::placeholder {
 	color: #a5a5a5;
+  }
+  #myTabContent{
+	height: 100vh; 
+  }
+  iframe{
+	width: 100%;
+    background: #fff;
+	height: calc(100vh - 60px);
+	border:none;
   }
