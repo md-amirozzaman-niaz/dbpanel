@@ -215,6 +215,7 @@ window.save=function(){
     let param = params.value;
     param +='&hadRequest='+rData +"&dbpanel_custom_namespace=" +dbpanel_custom_namespace+"&label="+label;
     param +='&dbpanel_auth_id='+dbpanel_auth_id;
+    dbpanelProcessing();
     let url='/dbpanel/save?controller='+controller+'&parameters='+param;
     dbpanelProcessed(url);
 }
