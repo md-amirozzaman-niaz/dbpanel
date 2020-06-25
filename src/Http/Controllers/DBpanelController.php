@@ -41,6 +41,22 @@ class DBpanelController extends Controller
                 'filter_status' => 'deleted successfully'
             ];
         }
+        if(request()->has('update')){
+            $filtered_query = $filtered->getQuery();
+            $row=$filtered_query->get();
+            $update = [];
+            $updateKeyValue=explode(',',request('update'));
+            foreach($updateKeyValue as $key => $item){
+                $value = explode(":",$item);
+                $value[1] = $value[1] == 'null' ? null : $value[1];
+                $update[$value[0]]=$value[1];
+            };
+            $row=$filtered_query->update($update);
+            return [
+                'result' => ['data'=>$row.' rows changed.'],
+                'filter_status' => 'updated successfully'
+            ];
+        }
         $filtered_data = $filtered->getData();
 
         $count = ! is_string($filtered_data) ? count($filtered_data) : 'Error';
@@ -237,7 +253,7 @@ class DBpanelController extends Controller
         } 
         
         if (class_basename($data) == 'Response') {
-            return collect(['data' => collect($data)->get('original'), 'type' => get_class($data)]);
+            return collect(['Http Status' => $data->status(), 'type' => get_class($data)]);
         }
         
         if (class_basename($data) == 'JsonResponse') {
@@ -312,6 +328,7 @@ class DBpanelController extends Controller
         if ($other == 'request@dd') {
             return $this->dd($request, $parameters);
         }
+        $other = strpos($other,'.') > 0 ? $other : get_class($other());
         $other = explode('@', trim($other));
         $other_namespace = config('dbpanel.other').str_replace('.', '\\', $other[0]);
         

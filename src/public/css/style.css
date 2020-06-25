@@ -20,7 +20,7 @@ body{
 }
 .sidebar{
 	height: 100vh;
-	/* background: #f5f7f9; */
+	background: #f9f9f9;
 	border-right: 1px solid;
 	border-color: #bcc7d0;
 	overflow:hidden;
@@ -367,4 +367,15 @@ text-decoration:underline
     background: #fff;
 	height: calc(100vh - 60px);
 	border:none;
+  }
+  .dbpanel-overlay{
+	background: #75757569;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    position: absolute;
+    display: none;
+  }
+  .focus-dom{
+	  z-index: 2;
   }

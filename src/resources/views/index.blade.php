@@ -26,8 +26,10 @@
                 </div>
             </div>
             </div>
+            
             <form class="row">
-                <div class="col-md-3 p-0 sidebar shadow">
+                <div class="dbpanel-overlay"></div>
+                <div class="col-md-3 p-0 sidebar shadow focus-dom">
                 <ul class="nav nav-tabs pl-2" id="mySideBarTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="controller-type-tab" data-toggle="tab" href="#controller-type" role="tab" aria-controls="controller-type" aria-selected="true">Controller</a>
@@ -57,28 +59,28 @@
                             </div>
                             
                         </div>
-                        <input type="text" id="controller-input" spellcheck="false" class="form-control mt-2" placeholder="Controller@method">
+                        <input type="text" onkeydown="callCheckMethod(event)" id="controller-input" spellcheck="false" class="form-control mt-2 focus-in" placeholder="Controller@method">
                         <small>Namespace: {{config('dbpanel.controller')}}</small>                       
                     </div>
                     <div class=" tab-pane fade" id="model" role="tabpanel" aria-labelledby="history-tab">
-                        <input type="text" id="model-input" spellcheck="false" class="form-control mt-2" placeholder="model@method">
+                        <input type="text" id="model-input" onkeydown="callCheckMethod(event)" spellcheck="false" class="form-control mt-2 focus-in" placeholder="model@method">
                         <small>Namespace: {{config('dbpanel.model')}}</small>                 
                     </div>
                     <div class=" tab-pane fade" id="other" role="tabpanel" aria-labelledby="history-tab">
-                        <input type="text" id="other-input" spellcheck="false" class="form-control mt-2" value="request@dd" placeholder="other@method">
+                        <input type="text" id="other-input" onkeydown="callCheckMethod(event)" spellcheck="false" class="form-control mt-2 focus-in" value="request@dd" placeholder="other@method">
                         <small>Namespace: {{config('dbpanel.other')}}</small>
                     </div>
                     <div class="tab-pane fade" id="command" role="tabpanel" aria-labelledby="controller-type-tab">
-                        <input type="text" id="command-input" spellcheck="false" class="form-control mt-2" placeholder="commands.....">
+                        <input type="text" id="command-input" onkeydown="callCheckMethod(event)" spellcheck="false" class="form-control mt-2 focus-in" placeholder="commands.....">
                         <small>For `php artisan route:list` need to pass `route:list`</small>        
                     </div>
                     <div class="tab-pane fade" id="namespace" role="tabpanel" aria-labelledby="history-tab">
-                        <input type="text" id="namespace-input" spellcheck="false" class="form-control mt-2" value="request@dd" placeholder="other@method">
-                        <small>Namespace: {{config('dbpanel.other')}}</small>
+                        <input type="text" id="namespace-input" onkeydown="callCheckMethod(event)" spellcheck="false" class="form-control mt-2 focus-in" value="Illuminate\Foundation\Application" placeholder="Namespace or global methods name..">
+                        <small>Namespace lookup</small>
                     </div>
                     <hr>
                     <div >
-                        <input type="text" id="parameters" spellcheck="false" class="form-control mt-2" placeholder="parameters">
+                        <input type="text" id="parameters" spellcheck="false" class="form-control mt-2 focus-in" placeholder="parameters">
                     </div>
                     <div class="form-check mt-2">
                         <input type="checkbox" id="hadRequest" spellcheck="false" name="hadRequest" class="form-check-input mt-2">
@@ -86,12 +88,12 @@
                         {{-- <input type="checkbox" id="otherRequest" spellcheck="false" name="otherRequest" class="form-check-input mt-2"> --}}
                     </div>    
                     <div>
-                        <input type="text" class="form-control mt-1" id="otherRequest" spellcheck="false" name="otherRequest" placeholder="custom request namespace....">
+                        <input type="text" class="form-control mt-1 focus-in" id="otherRequest" spellcheck="false" name="otherRequest" placeholder="custom request namespace....">
                     </div>
                     <div >
-                        <textarea id="request-parameter" spellcheck="false" rows="12" class="form-control mt-2" ></textarea>
+                        <textarea id="request-parameter" spellcheck="false" rows="12" class="form-control mt-2 focus-in" ></textarea>
                     </div>
-                    <input type="text" id="dbpanel_auth_id" class="form-control mt-1" placeholder="auth user id...">
+                    <input type="text" id="dbpanel_auth_id" class="form-control mt-1 focus-in" placeholder="auth user id...">
                     <input type="button" onclick="checkMethod()" class="btn btn-block mt-2" value="check">
                     <div class="mt-2">
                         <b>dbpanel</b> <em>{{config('dbpanel.version')}}</em> - developed by © <a href="http://me.amirozzaman.com">niaz@dev</a>
@@ -152,7 +154,7 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text brr-0">Query</div>
                             </div>
-                            <input type="url" class="form-control brr-0" id="query" placeholder="each filter are separeted by '&' ">
+                            <input type="url" onkeydown="callGetData(event)" class="form-control brr-0" id="query" placeholder="each filter are separeted by '&' ">
                         </div>
                     </div>
                     <div class="col-md-1 p-0">
@@ -192,11 +194,6 @@
             </form>
         </div>
     </body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha256-bd8XIKzrtyJ1O5Sh3Xp3GiuMIzWC42ZekvrMMD4GxRg=" crossorigin="anonymous"></script>
-    <script src='vendor/dbpanel/js/app.js'></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+    <script src='vendor/dbpanel/js/app.js'></script>
 </html>
