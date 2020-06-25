@@ -4,7 +4,7 @@ dbpanel is a developer tool for laravel application. You can access your laravel
 ## Demo
 Suppose, From `products` to get ids `1 to 50` where product price range greater than 10 and less than 50. Return only `title` and `price` column.
 ```
-id=1-50&where=price:>10,price:<50&return_only=name,price
+id=1-50&where=product_price:>10,product_price:<50&return_only=title,price
 ```
 
 ### Installation
@@ -27,25 +27,25 @@ Select a `table` name from table option and enter some query string with some `k
 
 #### id *(key)*
 
-Example *(value)*: `5` `5-100`
+Example: `&id=5` `&id=5-100`
 
 #### sort *(key)*
 
-Example *(value)*: `email:asc` `name:desc`  `desc`
+Example: `&sort=email:asc` `&sort=name:desc`  `&sort=desc`
 
 #### is *(key)*
 
-Example *(value)*: `active:0` `active:1`  `date:2020-04-29`
+Example: `&is=active:0` `&is=active:1`  `&is=date:2020-04-29`
 
 #### date *(key)*
 
 single date
 
-Example *(value)*: `updated_at:2020-04-29`
+Example: `&date=updated_at:2020-04-29`
 
 range of date
 
-Example *(value)*: `created_at:2020-04-19:2020-04-21`
+Example: `&date=created_at:2020-04-19:2020-04-21`
 
 #### lookup *(key)*
 
@@ -56,9 +56,9 @@ for *variant*,
 + use `,` for *and* condition
 + use `|` for *or* condition
 
-Example *(value)*:
+Example:
 
-`email:start$` `email:$end` `email:$anywhere$` `email:!$.com` 
+`&lookup=email:start$` `&lookup=email:$end` `&lookup=email:$anywhere$` `&lookup=email:!$.com` 
 
 #### where *(key)*
 for *variant*,
@@ -69,21 +69,21 @@ for *variant*,
 + use `,` for *and* condition
 + use `|` for *or* condition
 
-Example *(value)*:
+Example:
 
-+ `product_price:500` `discount:<20` 
-+ `product_id:<200,product_price:>500`
-+ `product_price:<300|discount:>15`
++ `&where=product_price:500` `&where=discount:<20` 
++ `&where=product_id:<200,product_price:>500`
++ `&where=product_price:<300|discount:>15`
 
 #### join *(key)*
 
-Example *(value)*:
+Example:
 
-+ `initialTable:Column:firstTable:Column`
++ `&join=initialTable:Column:firstTable:Column`
 
 *initialColumn=firstColumn* and *firstColumn=secondColumn*
 
-+ `initialTable:Column:firstTable:Column,firstable:Column:secondTable:Column:`
++ `&join=initialTable:Column:firstTable:Column,firstable:Column:secondTable:Column:`
 
 > **Note**: when use **join** Not to use any similar `column` name related filter
 > it will thrown error.
@@ -92,21 +92,25 @@ Example *(value)*:
 
 for *alias* use `@`
 
-Example *(value)*:
+Example:
 
-+ `id,name,email` `name,email,phone`
-+ `id,name@user_name,email@user_email`
-+ `name@employee_name,phone@employee_phone`
-+ `users.name@employee_name,address,website`
++ `&return_only=id,name,email` `&return_only=name,email,phone`
++ `&return_only=id,name@user_name,email@user_email`
++ `&return_only=name@employee_name,phone@employee_phone`
++ `&return_only=users.name@employee_name,address,website`
 
 #### return_except *(key)*
 
-Example *(value)*:
-+ `id,name,email` `name,email,phone`
+Example:
++ `&return_except=id,name,email` `&return_except=name,email,phone`
 
 #### Delete
 
 To delete your filtered data just pass `&delete`
+
+#### Update
+
+Example : `&update=column_name:value,column_name:value`
 
 ### To Check Controller or Model or Other Method
 
