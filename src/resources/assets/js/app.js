@@ -1,4 +1,9 @@
 import JSONFormatter from 'json-formatter-js'
+import $ from "jquery";
+import 'bootstrap';
+const axios = require('axios').default;
+import hljs from 'highlight.js';
+
 
 const dataDom = document.getElementById('data');
 const totalDom = document.getElementById('total');
@@ -26,7 +31,7 @@ function setPagination(pageNo,total){
                 ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" >...</a></li>';
                 ulOfPagination.innerHTML += '<li class="page-item"><a class="page-link" onclick="getData('+total+')">'+total+'</a></li>';
             }
-            ulOfPagination.innerHTML += '<li class="page-item"><div class="d-flex"><input type="number" id="pageNumber" class="form-control brr-0" value=""><div class="btn brl-0" onclick="getDataFromGoTo()">Go</div></div></li>';
+            ulOfPagination.innerHTML += '<li class="page-item"><div class="d-flex"><input type="number" onkeydown="callGo(event)" id="pageNumber" class="form-control brr-0" value=""><div class="btn brl-0"  onclick="getDataFromGoTo()">Go</div></div></li>';
         }else{
 
             for(var i=1;i < total+1;i++){
@@ -108,11 +113,27 @@ window.dbpanelProcessed=function(url){
 window.loadRoute=function(event){
     if(event.keyCode === 13){
         let url =document.getElementById('address').value;
-        let data = {'Url':url};
-        changeRoute(data);
+        if(url !=="/dbpanel"){
+            let data = {'Url':url};
+            changeRoute(data);
+        }
     }
 }
-
+window.callGo=function(event){
+    if(event.keyCode === 13){
+        getDataFromGoTo();
+    }
+}
+window.callCheckMethod=function(event){
+    if(event.keyCode === 13){
+        checkMethod();
+    }
+}
+window.callGetData=function(event){
+    if(event.keyCode === 13){
+        getData();
+    }
+}
 window.changeRoute=function(data){
     document.getElementById('webview').src = data.Url;
         document.getElementById('address').value = data.Url;
@@ -281,6 +302,7 @@ window.checkMethod =function(){
     if(dbpanelBeforeProcess()){
         return ;
     }
+    $('.dbpanel-overlay').removeClass('d-block');
     ulOfPagination.innerHTML= null ;
     let whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
     if(whichMethod == 'controller'){
@@ -314,3 +336,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         hljs.highlightBlock(block);
     });
 });
+
+$( document ).ready($('.focus-in').on('focus',function(){
+    if(!$('.dbpanel-overlay').hasClass('d-block')){
+        $('.dbpanel-overlay').addClass('d-block');
+    }
+}));
+
+$( document ).ready($('.dbpanel-overlay').on('click',function(){
+    $('.dbpanel-overlay').removeClass('d-block');
+}));
