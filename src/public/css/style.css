@@ -20,9 +20,10 @@ body{
 }
 .sidebar{
 	height: 100vh;
-	background: #f9f9f9;
-	border-right: 1px solid;
-	border-color: #bcc7d0;
+	background: #eaecec;
+	/* border-right: 1px solid;
+	border-color: #d7dbde; */
+	box-shadow: 1px 0px 5px 0px #848484;
 	overflow:hidden;
 }
 #loadModal{
@@ -87,15 +88,17 @@ body{
 #mySideBarTab {
 	background: #f9f9f9;
 	background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+	background-image: linear-gradient(to bottom, #626263, #626263);
 	font-size:11px;
 }
 #mySideBarTab .nav-link.active {
-	color: #495057 !important;
+	/* color: #495057 !important; */
+	color: #3e9eff !important;
 	/* background-color: #f9f9f9;
 	border-color: #dee2e6 #dee2e6 #f9f9f9; */
 	border-color:transparent;
 	background: none;
-	border-bottom: 2px solid #03A9F4;
+	/* border-bottom: 2px solid #03A9F4; */
 }
 #mySideBarTab .nav-link:hover {
     border-color:transparent !important;
@@ -207,7 +210,8 @@ kbd, code{
 	border-radius: 3px;
 }
 a.nav-link{
-	color: #666767 !important;
+	/* color: #666767 !important; */
+	color: #fbfbfb !important;
 	padding: .65rem 0.45rem;
 }
 thead {
