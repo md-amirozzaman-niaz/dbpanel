@@ -29,7 +29,7 @@
             
             <form class="row">
                 <div class="dbpanel-overlay"></div>
-                <div class="col-md-3 p-0 sidebar shadow focus-dom">
+                <div class="col-md-3 p-0 sidebar focus-dom">
                 <ul class="nav nav-tabs pl-2" id="mySideBarTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="controller-type-tab" data-toggle="tab" href="#controller-type" role="tab" aria-controls="controller-type" aria-selected="true">Controller</a>

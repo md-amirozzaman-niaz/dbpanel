@@ -2,6 +2,7 @@ import JSONFormatter from 'json-formatter-js'
 import $ from "jquery";
 import 'bootstrap';
 const axios = require('axios').default;
+const Vue = require('vue').default;
 import hljs from 'highlight.js';
 
 
