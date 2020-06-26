@@ -88,8 +88,11 @@ body{
 #mySideBarTab {
 	background: #f9f9f9;
 	background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
-	background-image: linear-gradient(to bottom, #626263, #626263);
+	background-image: linear-gradient(to bottom, #2f2f2f, #212121);
 	font-size:11px;
+}
+#mySideBarTab .nav-link{
+	border:none;
 }
 #mySideBarTab .nav-link.active {
 	/* color: #495057 !important; */
@@ -102,8 +105,11 @@ body{
 }
 #mySideBarTab .nav-link:hover {
     border-color:transparent !important;
-    background: #e3e3e3;
+    /* background: #e3e3e3;
+	border-radius: 0px; */
+	background: #505050;
     border-radius: 0px;
+    border: 0px;
 }
 .input-group-text{
 	color: #b3b3b3;
