@@ -32,7 +32,7 @@ If your application not used controller namespace property, then you need to set
 ```
   'controller' => '',  // deafult 'controller' => 'App\\Http\\Controllers\\',
 ```
-### Usage :telescope:
+### Usage :package:
 
 Visit Route:
 
@@ -44,7 +44,7 @@ Visit Route:
 Just type your Controller or Model or any other class name and method as 
 
 ```
-ClassName@method
+NameSpace\ClassName@method
 ```
 
 If you had a more namespace from Controller or Model default namespace prefix, then
@@ -196,5 +196,8 @@ To delete your filtered data just pass `&delete`
 Example : `&update=column_name:value,column_name:value`
 
 
+## Lisence
+
+[MIT Lisence]( https://github.com/md-amirozzaman-niaz/dbpanel/blob/License.md)
 
 
