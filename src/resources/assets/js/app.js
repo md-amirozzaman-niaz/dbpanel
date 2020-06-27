@@ -83,6 +83,7 @@ window.dbpanelBeforeProcess=function(){
     }
 }
 window.dbpanelProcessing=function(){
+    $('.dbpanel-overlay').removeClass('d-block');
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
     totalDom.innerHTML='processing....';
@@ -303,7 +304,6 @@ window.checkMethod =function(){
     if(dbpanelBeforeProcess()){
         return ;
     }
-    $('.dbpanel-overlay').removeClass('d-block');
     ulOfPagination.innerHTML= null ;
     let whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
     if(whichMethod == 'controller'){

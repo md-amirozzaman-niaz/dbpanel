@@ -131,7 +131,6 @@ class DBpanelController extends Controller
             }
             // run method by route action calling
             $routeParam = $parameters->toArray();
-            dd($actionStr);
             $url = action($actionStr,$routeParam);
             // $request = Request::create($url, $routeByAction->methods[0]);
             // $response = app()->handle($request);
