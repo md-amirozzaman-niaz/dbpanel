@@ -2,10 +2,11 @@
 
 ## Introduction 
 
-dbpanel is a developer tool for laravel application. You can test your `controller`'s action methods by calling its namepspace and save them for future check. Run artisan command, namespace lookup will return available methods and all their associated doc.
+dbpanel is a developer tool for laravel application. You can test your `controller`'s action methods by calling its namepspace and save them for future check. You can also run artisan command, namespace lookup for available methods and all their associated doc and parameters type.
 
-You can also access your laravel application's database easily and fastest way in same panel. There are some cool filter available with this package. You might look around your table's column type and index also.
+You can also access your laravel application's database easily and fastest way in a same panel. There are some cool filter available with this package. You might look around your table's column type and index also.
 
+You can also open vue component in code editor (phpstorm,vscode) by clicking `open file` from vue chrome extention tool.
 
 ### Installation
 
@@ -92,7 +93,7 @@ It will return a json with `log` and `data` . In `log` all database query,bindin
 
 ### Run Artisan Command
 
-#### Database
+### Database
 
 Select a `table` name from table option and enter some query string with some `key` name are filter name as follows:
 
