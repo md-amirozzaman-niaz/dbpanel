@@ -549,11 +549,13 @@ class DBpanelController extends Controller
         $platform = $agent->platform();
         //check base_path is already in file path
         $file_path = strpos(request('file'), base_path()) !== false ? '"'.request('file').'"' : '"'.base_path().'/'.request('file').'"';
-      
+        $lineArr = explode(':',request('line'));
+        $line = $lineArr[0];
+        $col= count($lineArr) > 1 ? $lineArr[1] : '0';
         //to open in phpstorm
-        $windowsCommand = 'phpstorm.bat --line 0 '.$file_path;
-        $macosCommand = 'phpstorm --line 0 '.$file_path;
-        $linuxCommand = 'phpstorm.sh --line 0 '.$file_path;
+        $windowsCommand = 'phpstorm.bat --line '.$line.' '.$file_path;
+        $macosCommand = 'phpstorm --line '.$line.' '.$file_path;
+        $linuxCommand = 'phpstorm.sh --line '.$line.' '.$file_path;
         if(config('dbpanel.editor') == 'phpstorm'){
             if($platform == 'Windows'){
                 exec($windowsCommand);
@@ -566,7 +568,7 @@ class DBpanelController extends Controller
             return;
         }
         //to open in vscode
-        exec('code --goto '.$file_path);
+        exec('code --goto '.$file_path.':'.$line.':'.$col);
         return;
     }
 

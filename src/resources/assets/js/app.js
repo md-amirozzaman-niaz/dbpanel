@@ -187,7 +187,7 @@ window.dbpanelError = function(error){
     if(error['file']){
         let fileLocation = error.file;
         let line=error.line;
-        let url=fileLocation+':'+line;
+        let url=fileLocation+'&line='+line;
         openFileDom.setAttribute('file-location',url);
         openFileDom.classList.contains('d-none')? openFileDom.classList.remove('d-none'):false;
     }

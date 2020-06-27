@@ -17,6 +17,21 @@ composer require niaz/dbpanel --dev
 ```
 php artisan vendor:publish --tag=dbpanel --force
 ```
+### SetUp Configuration
+
+You need to edit `config/dbpanel.php` as your configuration
+
+If your default code editor is `phpstorm`,then need to set as
+
+```
+ 'editor'=>'phpstorm'  // 'editor'=>'vscode'
+```
+
+If your application not used controller namespace property, then you need to set this value as
+
+```
+  'controller' => '',  //'controller' => 'App\\Http\\Controllers\\',
+```
 ### Usage
 
 Visit Route:
@@ -32,12 +47,8 @@ Just type your Controller or Model or any other class name and method as
 ClassName@method
 ```
 
-If you had a more namespace from Controller or Model default namespace prefix, then pass those extra as `dot` notation.
+If you had a more namespace from Controller or Model default namespace prefix, then
 
-```
-ExtraNameSpace.ClassName@method
-```
-or
 ```
 ExtraNameSpace\ClassName@method
 ```

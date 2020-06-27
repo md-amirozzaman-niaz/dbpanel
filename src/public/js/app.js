@@ -196,6 +196,7 @@ window.dbpanelBeforeProcess = function () {
 };
 
 window.dbpanelProcessing = function () {
+  jquery__WEBPACK_IMPORTED_MODULE_1___default()('.dbpanel-overlay').removeClass('d-block');
   dataDom.innerHTML = null;
   tableDom.innerHTML = null;
   totalDom.innerHTML = 'processing....';
@@ -303,7 +304,7 @@ window.dbpanelError = function (error) {
     if (error['file']) {
       var fileLocation = error.file;
       var line = error.line;
-      var url = fileLocation + ':' + line;
+      var url = fileLocation + '&line=' + line;
       openFileDom.setAttribute('file-location', url);
       openFileDom.classList.contains('d-none') ? openFileDom.classList.remove('d-none') : false;
     }
@@ -428,7 +429,6 @@ window.checkMethod = function () {
     return;
   }
 
-  jquery__WEBPACK_IMPORTED_MODULE_1___default()('.dbpanel-overlay').removeClass('d-block');
   ulOfPagination.innerHTML = null;
   var whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
 
