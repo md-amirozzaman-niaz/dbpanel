@@ -6,9 +6,9 @@ dbpanel is a developer tool for laravel application. You can test your `controll
 
 You can also access your laravel application's database easily and fastest way in a same panel. There are some cool filter available with this package. You might look around your table's column type and index also.
 
-You can also open vue component in code editor (phpstorm,vscode) by clicking `open file` from vue chrome extention tool.
+:loudspeaker: You can also open vue component in code editor (phpstorm,vscode) by clicking `open file` from vue chrome extention tool.
 
-### Installation
+### Installation :satellite:
 
 ```
 composer require niaz/dbpanel --dev
@@ -17,20 +17,20 @@ composer require niaz/dbpanel --dev
 ```
 php artisan vendor:publish --tag=dbpanel --force
 ```
-### SetUp Configuration
+### SetUp Configuration :rocket:
 
 You need to edit `config/dbpanel.php` as your configuration
 
 If your default code editor is `phpstorm`,then need to set as
 
 ```
- 'editor'=>'phpstorm'  // 'editor'=>'vscode'
+ 'editor'=>'phpstorm'  // default 'editor'=>'vscode'
 ```
 
 If your application not used controller namespace property, then you need to set this value as
 
 ```
-  'controller' => '',  //'controller' => 'App\\Http\\Controllers\\',
+  'controller' => '',  // deafult 'controller' => 'App\\Http\\Controllers\\',
 ```
 ### Usage
 

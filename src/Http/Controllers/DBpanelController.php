@@ -565,11 +565,11 @@ class DBpanelController extends Controller
             }else if($platform == 'Ubuntu'){
                 exec($linuxCommand);
             }
-            return;
+   
         }
         //to open in vscode
         exec('code --goto '.$file_path.':'.$line.':'.$col);
-        return;
+ 
     }
 
     public function save(Request $request)
