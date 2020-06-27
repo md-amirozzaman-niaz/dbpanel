@@ -44,7 +44,7 @@ Visit Route:
 Just type your Controller or Model or any other class name and method as 
 
 ```
-NameSpace\ClassName@method
+ClassName@method
 ```
 
 If you had a more namespace from Controller or Model default namespace prefix, then
