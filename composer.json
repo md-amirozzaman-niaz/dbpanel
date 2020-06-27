@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "doctrine/dbal": "^2.10"
+        "doctrine/dbal": "^2.10",
+        "jenssegers/agent": "^2.6"
     },
     "autoload": {
         "psr-4": {

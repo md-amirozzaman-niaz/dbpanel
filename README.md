@@ -1,28 +1,111 @@
 # dbpanel
 
-dbpanel is a developer tool for laravel application. You can access your laravel application's database easily and fastest way. There are some cool filter available with this package. You might look around your table's column type and index. You can console your controller methods database query log and its return data structure. How many query it going to be used in run time and how long it will take for those query. To use this package follow the instruction below.
-## Demo
-Suppose, From `products` to get ids `1 to 50` where product price range greater than 10 and less than 50. Return only `title` and `price` column.
-```
-id=1-50&where=product_price:>10,product_price:<50&return_only=title,price
-```
+## Introduction 
 
-### Installation
+dbpanel is a developer tool for laravel application. You can test your `controller`'s action methods by calling its `namepspace@method` and save them for your future need. You can also run artisan command, namespace lookup for available methods and all their associated doc and parameters type.
+
+ :loudspeaker: You can also access your laravel application's `database` easily and fastest way in a same panel. There are some cool filter available with this package. You might look around your table's column type and index also. You can also update and delete your filtered data.
+
+:loudspeaker: You can also open vue component in code editor (phpstorm,vscode) by clicking `open file` from vue chrome extention tool.
+
+### Installation :satellite:
 
 ```
 composer require niaz/dbpanel --dev
 ```
-### Publish assets
+### Publish assets :electric_plug:
 ```
 php artisan vendor:publish --tag=dbpanel --force
 ```
-### Usage
+### SetUp Configuration :rocket:
+
+You need to edit `config/dbpanel.php` as your configuration
+
+If your default code editor is `phpstorm`,then need to set as
+
+```
+ 'editor'=>'phpstorm'  // default 'editor'=>'vscode'
+```
+
+If your application not used controller namespace property, then you need to set this value as
+
+```
+  'controller' => '',  // deafult 'controller' => 'App\\Http\\Controllers\\',
+```
+### Usage :package:
 
 Visit Route:
 
 ```
 /dbpanel
 ```
+### To Check Controller or Model or Other Method
+
+Just type your Controller or Model or any other class name and method as 
+
+```
+ClassName@method
+```
+
+If you had a more namespace from Controller or Model default namespace prefix, then
+
+```
+ExtraNameSpace\ClassName@method
+```
+
+To pass parameter
+
+```
+App\User 5|string|58,hello,78|12:58:59
+```
+
+> Note: parameters are separated by `|`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.
+
+To pass `request` instance 
+```
+prop.width.px@45
+prop.height.px@45
+filter.date.start@2020-11-12
+filter.date.end@2020-15-12
+filter.search@lorem ipsum
+filter.range.min@15
+filter.range.max@68
+filter.time@12:58:56
+```
+> every formData are in a new line
+
+or Raw json
+
+```
+{
+    "husky": {
+        "hooks": {
+        "pre-commit": "npm test",
+        "pre-push": "npm test",
+        "...": "..."
+        }
+    }
+}
+```
+
+### Return
+
+It will return a json with `log` and `data` . In `log` all database query,bindings and time are listed.If this method return any data,it will return with `data`.
+
+> Tip: you can test your request data from other tab by passing `request@dd`, `parameters` and `request` 
+
+### To pass auth for login with `ID`
+
+```
+5@id,name,email
+```
+
+> id_number@id,column_name,email
+
+### Run Artisan Command
+
+### Database
+
 Select a `table` name from table option and enter some query string with some `key` name are filter name as follows:
 
 #### id *(key)*
@@ -112,73 +195,9 @@ To delete your filtered data just pass `&delete`
 
 Example : `&update=column_name:value,column_name:value`
 
-### To Check Controller or Model or Other Method
 
-Just type your Controller or Model or any other class name and method as 
+## Lisence
 
-```
-ClassName@method
-```
-
-If you had a more namespace from Controller or Model default namespace prefix, then pass those extra as `dot` notation.
-
-```
-ExtraNameSpace.ClassName@method
-```
-or
-```
-ExtraNameSpace\ClassName@method
-```
-
-To pass parameter
-
-```
-App\User 5|string|58,hello,78|12:58:59
-```
-
-> Note: parameters are separated by `|`. Array parameter value are `,` seprated. Numeric string value will auto converted as `int` type value. This was also applicable for array.
-
-To pass `request` instance 
-```
-prop.width.px@45
-prop.height.px@45
-filter.date.start@2020-11-12
-filter.date.end@2020-15-12
-filter.search@lorem ipsum
-filter.range.min@15
-filter.range.max@68
-filter.time@12:58:56
-```
-> every formData are in a new line
-
-or Raw json
-
-```
-{
-    "husky": {
-        "hooks": {
-        "pre-commit": "npm test",
-        "pre-push": "npm test",
-        "...": "..."
-        }
-    }
-}
-```
-
-### Return
-
-It will return a json with `log` and `data` . In `log` all database query,bindings and time are listed.If this method return any data,it will return with `data`.
-
-> Tip: you can test your request data from other tab by passing `request@dd`, `parameters` and `request` 
-
-### To pass auth for login with `ID`
-
-```
-5@id,name,email
-```
-
-> id_number@id,column_name,email
-
-### Run Artisan Command
+[MIT Lisence]( https://github.com/md-amirozzaman-niaz/dbpanel/blob/License.md)
 
 

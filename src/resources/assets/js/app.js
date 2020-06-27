@@ -83,6 +83,7 @@ window.dbpanelBeforeProcess=function(){
     }
 }
 window.dbpanelProcessing=function(){
+    $('.dbpanel-overlay').removeClass('d-block');
     dataDom.innerHTML=null;
     tableDom.innerHTML=null;
     totalDom.innerHTML='processing....';
@@ -186,7 +187,7 @@ window.dbpanelError = function(error){
     if(error['file']){
         let fileLocation = error.file;
         let line=error.line;
-        let url=fileLocation+':'+line;
+        let url=fileLocation+'&line='+line;
         openFileDom.setAttribute('file-location',url);
         openFileDom.classList.contains('d-none')? openFileDom.classList.remove('d-none'):false;
     }
@@ -303,7 +304,6 @@ window.checkMethod =function(){
     if(dbpanelBeforeProcess()){
         return ;
     }
-    $('.dbpanel-overlay').removeClass('d-block');
     ulOfPagination.innerHTML= null ;
     let whichMethod = document.getElementById('mySideBarTab').getElementsByClassName('active')[0].innerText.trim().toLowerCase();
     if(whichMethod == 'controller'){

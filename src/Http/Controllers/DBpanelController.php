@@ -10,6 +10,7 @@ use Niaz\DBpanel\Http\Filters\Filter;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Arr;
+use Jenssegers\Agent\Agent;
 
 class DBpanelController extends Controller
 {
@@ -131,7 +132,6 @@ class DBpanelController extends Controller
             }
             // run method by route action calling
             $routeParam = $parameters->toArray();
-            dd($actionStr);
             $url = action($actionStr,$routeParam);
             // $request = Request::create($url, $routeByAction->methods[0]);
             // $response = app()->handle($request);
@@ -532,6 +532,7 @@ class DBpanelController extends Controller
      */
     public function dd(Request $request, $parameters)
     {
+        
         $user = $this->login();
         $this->removeParameters($request);
 
@@ -544,9 +545,31 @@ class DBpanelController extends Controller
 
     public function openFile()
     {
+        $agent = new Agent();
+        $platform = $agent->platform();
         //check base_path is already in file path
         $file_path = strpos(request('file'), base_path()) !== false ? '"'.request('file').'"' : '"'.base_path().'/'.request('file').'"';
-        exec('code --goto '.$file_path);
+        $lineArr = explode(':',request('line'));
+        $line = $lineArr[0];
+        $col= count($lineArr) > 1 ? $lineArr[1] : '0';
+        //to open in phpstorm
+        $windowsCommand = 'phpstorm.bat --line '.$line.' '.$file_path;
+        $macosCommand = 'phpstorm --line '.$line.' '.$file_path;
+        $linuxCommand = 'phpstorm.sh --line '.$line.' '.$file_path;
+        if(config('dbpanel.editor') == 'phpstorm'){
+            if($platform == 'Windows'){
+                exec($windowsCommand);
+            }
+            else if($platform == 'OS X'){
+                exec($macosCommand);
+            }else if($platform == 'Ubuntu'){
+                exec($linuxCommand);
+            }
+   
+        }
+        //to open in vscode
+        exec('code --goto '.$file_path.':'.$line.':'.$col);
+ 
     }
 
     public function save(Request $request)
