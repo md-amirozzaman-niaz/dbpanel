@@ -104,6 +104,7 @@
                         <i class="fas fa-arrow-left"></i> Collection
                     </div>
                     <ul class="nav outer-list p-2">
+                        @if(config()->has('dbpanel_collections'))
                     @foreach(config('dbpanel_collections') as $k=>$v)
                     <li onclick="activeToggle(this)">{{$k}}
                         <ul class="nav mt-1 inner-list">
@@ -117,6 +118,7 @@
                         </ul>
                     </li>
                     @endforeach
+                    @endif
                     </ul>
                 </div>
                 </div>
