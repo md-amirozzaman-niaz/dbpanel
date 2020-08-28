@@ -24,7 +24,6 @@ class DBpanelController extends Controller
     }
     public function doc()
     {
-
         return view('dbpanel::doc');
     }
 
@@ -33,7 +32,7 @@ class DBpanelController extends Controller
         $filter = new Filter;
         $filtered = $filter->loadTable($table);
         
-        if(request()->has('delete')){
+        if (request()->has('delete')) {
             $filtered_query = $filtered->getQuery();
             $row=$filtered_query->get();
             $filtered_query->delete();
@@ -42,13 +41,13 @@ class DBpanelController extends Controller
                 'filter_status' => 'deleted successfully'
             ];
         }
-        if(request()->has('update')){
+        if (request()->has('update')) {
             $filtered_query = $filtered->getQuery();
             $row=$filtered_query->get();
             $update = [];
-            $updateKeyValue=explode(',',request('update'));
-            foreach($updateKeyValue as $key => $item){
-                $value = explode(":",$item);
+            $updateKeyValue=explode(',', request('update'));
+            foreach ($updateKeyValue as $key => $item) {
+                $value = explode(":", $item);
                 $value[1] = $value[1] == 'null' ? null : $value[1];
                 $update[$value[0]]=$value[1];
             };
@@ -75,7 +74,7 @@ class DBpanelController extends Controller
         $parameters = $this->setParameters();
 
         DB::connection()->enableQueryLog();
-        $actionStr = str_replace('.', '\\',$controller);
+        $actionStr = str_replace('.', '\\', $controller);
         $controller = explode('@', $controller);
         $controller_namespace = config('dbpanel.controller').str_replace('.', '\\', $controller[0]);
         $method = $controller[1];
@@ -88,7 +87,7 @@ class DBpanelController extends Controller
         $controller_class = app($controller_namespace);
         $appRouteMiddleware = app('\App\Http\Kernel')->getRouteMiddleware();
         $appMiddlewareGroups = app('\App\Http\Kernel')->getMiddlewareGroups();
-        $middlewareUsed = $this->getThroughControllerMiddleware($request,$controller_class,$method);
+        $middlewareUsed = $this->getThroughControllerMiddleware($request, $controller_class, $method);
         $middlewareUsed = [];
 
         $actionString = $controller_namespace.'@'.$method;
@@ -120,10 +119,9 @@ class DBpanelController extends Controller
                     $j = explode(':', $appMiddlewareGroups[$routeMiddleware][0]);
                     if (count($j) > 1 && $j[0]=='throttle') {
                         resolve($appRouteMiddleware[$j[0]])->handle($request, function ($next) {
-                            
                             return app('\Symfony\Component\HttpFoundation\Response');
                         }, ...explode(',', $j[1]));
-                    } else if($j[0]=='auth'){
+                    } elseif ($j[0]=='auth') {
                         resolve($appRouteMiddleware[$j[0]])->handle($request, function ($next) {
                             return $next;
                         });
@@ -132,7 +130,7 @@ class DBpanelController extends Controller
             }
             // run method by route action calling
             $routeParam = $parameters->toArray();
-            $url = action($actionStr,$routeParam);
+            $url = action($actionStr, $routeParam);
             // $request = Request::create($url, $routeByAction->methods[0]);
             // $response = app()->handle($request);
             // return ['response' => $this->getReturnData($response->getOriginalContent()), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
@@ -146,7 +144,7 @@ class DBpanelController extends Controller
                 $data = $controller_class->$method($customR, ...$parameters);
 
                 return [
-                    'response' => $this->getReturnData($data),
+                    'response' => $this->getReturnData($data, $url),
                     'Database log' => DB::getQueryLog(), 'route' => $routeInfo,
                     'Controller middleware' => $middlewareUsed,
                     'Auth User' => $user,
@@ -159,7 +157,7 @@ class DBpanelController extends Controller
             $data = $controller_class->$method($request, ...$parameters);
 
             return [
-                'response' => $this->getReturnData($data),
+                'response' => $this->getReturnData($data, $url),
                 'Database log' => DB::getQueryLog(),
                 'route' => $routeInfo,
                 'Controller middleware' => $middlewareUsed,
@@ -174,7 +172,7 @@ class DBpanelController extends Controller
         $data = $parameters ? $controller_class->$method(...$parameters) : $controller_class->$method();
 
         return [
-            'response' => $this->getReturnData($data),
+            'response' => $this->getReturnData($data, $url),
             'Database log' => DB::getQueryLog(),
             'route' => $routeInfo,
             'Controller middleware' => $middlewareUsed,
@@ -243,15 +241,15 @@ class DBpanelController extends Controller
      * @return collection
      */
 
-    protected function getReturnData($data)
+    protected function getReturnData($data, $url=null)
     {
         if (gettype($data) == 'array') {
             return collect(['data' => $data, 'type' => 'array']);
-        } 
+        }
         
         if (class_basename($data) == 'View') {
             return collect(['Blade' => $this->getView($data), 'type' => get_class($data)]);
-        } 
+        }
         
         if (class_basename($data) == 'Response') {
             return collect(['Http Status' => $data->status(), 'type' => get_class($data)]);
@@ -259,8 +257,12 @@ class DBpanelController extends Controller
         
         if (class_basename($data) == 'JsonResponse') {
             return collect(['data' => collect($data)->get('original'), 'type' => get_class($data)]);
-        } 
-        
+        }
+        if (class_basename($data) == 'LengthAwarePaginator') {
+            //prepare url
+            $data->setPath($url);
+            return collect(['data' => $data, 'type' => get_class($data)]);
+        }
         if (gettype($data) == 'object') {
             return collect(['data' => $data, 'type' => get_class($data)]);
         }
@@ -297,17 +299,17 @@ class DBpanelController extends Controller
 
         return ['return' => $this->getReturnData($data), 'Database log' => DB::getQueryLog(), 'Auth User' => $user];
     }
-    function convert($size)
+    public function convert($size)
     {
         $unit=array('b','kb','mb','gb','tb','pb');
-        return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+        return @round($size/pow(1024, ($i=floor(log($size, 1024)))), 2).' '.$unit[$i];
     }
     /**
      * check any method of any namespace.
-     * 
+     *
      * @param Request $request
      * @param string $other
-     * 
+     *
      * @return mixed
      */
     public function checkOther(Request $request, $other)
@@ -329,23 +331,23 @@ class DBpanelController extends Controller
         if ($other == 'request@dd') {
             return $this->dd($request, $parameters);
         }
-        $other = strpos($other,'.') > 0 ? $other : get_class($other());
+        $other = strpos($other, '.') > 0 ? $other : get_class($other());
         $other = explode('@', trim($other));
         $other_namespace = config('dbpanel.other').str_replace('.', '\\', $other[0]);
         
-        if(count($other) < 2){
-            $r = new ReflectionClass($other_namespace); 
+        if (count($other) < 2) {
+            $r = new ReflectionClass($other_namespace);
             $methods =$r->getMethods();
             $retr = [];
-            foreach($methods as $method){
+            foreach ($methods as $method) {
                 $c = $r->getMethod($method->name)->getDocComment();
                 $p = $r->getMethod($method->name)->getParameters();
-                $des = explode('*',$c);
+                $des = explode('*', $c);
                 $k = [];
-                foreach($des as $d){
-                    preg_match('/[a-zA-z0-9]/',$d,$m);
-                    if(count($m)>0){ 
-                        array_push($k,trim($d));
+                foreach ($des as $d) {
+                    preg_match('/[a-zA-z0-9]/', $d, $m);
+                    if (count($m)>0) {
+                        array_push($k, trim($d));
                     };
                 }
                 $retr[$method->name]=[
@@ -384,7 +386,7 @@ class DBpanelController extends Controller
 
     /**
      * run artisan command.
-     * 
+     *
      * @param string $command
      * @return Artisan command output
      */
@@ -417,10 +419,10 @@ class DBpanelController extends Controller
 
     /**
      * set Request.
-     * 
-     * @param request 
+     *
+     * @param request
      * @return void
-     * 
+     *
      */
 
     public function setRequest($request)
@@ -493,7 +495,7 @@ class DBpanelController extends Controller
 
     /**
      * set parameters for the class which need to called
-     * 
+     *
      * @return mixed  Array|Collect
      */
 
@@ -517,22 +519,21 @@ class DBpanelController extends Controller
             }) : collect([]);
     }
 
-    public function removeParameters($request){
-
+    public function removeParameters($request)
+    {
         $request->request->remove('parameters');
         $request->request->remove('hadRequest');
     }
     /**
      * dump request object, parameters, authinticate user info on console of dbpanel application
-     * 
+     *
      * @param Request  $request
      * @param array  $parameters
-     * 
+     *
      * @return array
      */
     public function dd(Request $request, $parameters)
     {
-        
         $user = $this->login();
         $this->removeParameters($request);
 
@@ -549,45 +550,43 @@ class DBpanelController extends Controller
         $platform = $agent->platform();
         //check base_path is already in file path
         $file_path = strpos(request('file'), base_path()) !== false ? '"'.request('file').'"' : '"'.base_path().'/'.request('file').'"';
-        $lineArr = explode(':',request('line'));
+        $lineArr = explode(':', request('line'));
         $line = $lineArr[0];
         $col= count($lineArr) > 1 ? $lineArr[1] : '0';
         //to open in phpstorm
         $windowsCommand = 'phpstorm.bat --line '.$line.' '.$file_path;
         $macosCommand = 'phpstorm --line '.$line.' '.$file_path;
         $linuxCommand = 'phpstorm.sh --line '.$line.' '.$file_path;
-        if(config('dbpanel.editor') == 'phpstorm'){
-            if($platform == 'Windows'){
+        if (config('dbpanel.editor') == 'phpstorm') {
+            if ($platform == 'Windows') {
                 exec($windowsCommand);
-            }
-            else if($platform == 'OS X'){
+            } elseif ($platform == 'OS X') {
                 exec($macosCommand);
-            }else if($platform == 'Ubuntu'){
+            } elseif ($platform == 'Ubuntu') {
                 exec($linuxCommand);
             }
-   
         }
         //to open in vscode
         exec('code --goto '.$file_path.':'.$line.':'.$col);
- 
     }
 
     public function save(Request $request)
     {
         $request->merge(['controller_prefix_namespace'=>config('dbpanel.controller')]);
         $request->merge(['created_at'=>time()]);
-        config()->push('dbpanel_collections.'.str_replace('.','\\',$request->input('controller')),$request->all());
-        $fp = fopen(base_path() .'/config/dbpanel_collections.php' , 'w');
-        $str = str_replace(')',']',str_replace('array (','[',var_export(config('dbpanel_collections'), true)));
+        config()->push('dbpanel_collections.'.str_replace('.', '\\', $request->input('controller')), $request->all());
+        $fp = fopen(base_path() .'/config/dbpanel_collections.php', 'w');
+        $str = str_replace(')', ']', str_replace('array (', '[', var_export(config('dbpanel_collections'), true)));
         fwrite($fp, '<?php return ' . $str . ';');
         fclose($fp);
         return ['message'=>"saved",'collection'=> config('dbpanel_collections')];
     }
 
-    public function load(Request $request){
+    public function load(Request $request)
+    {
         $i=$request->input('controller');
         $c = config('dbpanel_collections');
 
-        return data_get($c,$i);
+        return data_get($c, $i);
     }
 }

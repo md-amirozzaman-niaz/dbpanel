@@ -274,6 +274,28 @@ margin-left: -2px;
 .json-formatter-open > .json-formatter-children.json-formatter-object.json-formatter-array:after {
 content: ']';
 }
+.json-formatter-row, .json-formatter-row a, .json-formatter-row a:hover {
+    margin-top: .45em;
+}
+.json-formatter-row .json-formatter-key {
+    color: #00008B;
+    padding-right: 0.2rem;
+    padding: .25em;
+    border-radius: 3px;
+    margin-right: .35em;
+    background: #d9e6f5;
+}
+
+.json-formatter-row .json-formatter-string, .json-formatter-row .json-formatter-stringifiable {
+    padding: .25em;
+    background: #e0eae7;
+    border-radius: 3px;
+    /* margin-top: .3em; */
+}
+.json-formatter-row .json-formatter-url {
+    background: #d8d8de;
+    color: #0c0c0c !important;
+}
 .btn-open-file{
 background: #ffffff;
 padding: 0px 5px;
