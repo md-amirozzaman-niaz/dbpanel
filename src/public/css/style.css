@@ -40,7 +40,6 @@ body{
 }
 .outer-list,.inner-list{
 	background: rgba(255, 255, 255, 0.37);
-	height: calc(100vh - 30px);
 }
 .outer-list > li {
 	border: 1px solid #d3d3d3;
@@ -48,6 +47,9 @@ body{
 	border-radius: 3px;
 	cursor: pointer;
 	width: 100%;
+	font-size: 12px;
+	font-weight: 600;
+	color: #6e6e6f;
 }
 .inner-list{
 	height:0px;
@@ -61,6 +63,7 @@ body{
 	cursor: pointer;
 	padding: 0.25em 0.5em;
 	border-radius: 3px;
+	color: #909090;
 }
 .inner-list > li:hover{
 	background: #c9d7e4;
