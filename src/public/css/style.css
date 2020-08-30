@@ -13,6 +13,10 @@ label.header{
 #total{
 	text-shadow: none;
 }
+
+#data,#table{
+	width:fit-content;
+}
 body{
 	background: #f9f9f9;
 	font-size: 13px;
@@ -285,13 +289,14 @@ content: ']';
     margin-right: .35em;
 	background: #d9e6f5;
 	/* background: #fbb0b0; */
-    box-shadow: 1px 1px 5px #d2d2d2;
+    box-shadow: 1px 1px 5px #bbbbbb;
 }
 
 .json-formatter-row .json-formatter-row {
     margin-left: 1rem;
     background: #c6c6e638;
-    padding: .45em;
+	padding: .45em;
+	width: inherit;
 }
 span.json-formatter-constructor-name {
     display: none;
