@@ -283,9 +283,19 @@ content: ']';
     padding: .25em;
     border-radius: 3px;
     margin-right: .35em;
-    background: #d9e6f5;
+	background: #d9e6f5;
+	/* background: #fbb0b0; */
+    box-shadow: 1px 1px 5px #d2d2d2;
 }
 
+.json-formatter-row .json-formatter-row {
+    margin-left: 1rem;
+    background: #c6c6e638;
+    padding: .45em;
+}
+span.json-formatter-constructor-name {
+    display: none;
+}
 .json-formatter-row .json-formatter-string, .json-formatter-row .json-formatter-stringifiable {
     padding: .25em;
     background: #e0eae7;
@@ -295,6 +305,11 @@ content: ']';
 .json-formatter-row .json-formatter-url {
     background: #d8d8de;
     color: #0c0c0c !important;
+}
+.json-formatter-row > span:before {
+    content: '=';
+    margin-right: 3px;
+    color: #8c8888;
 }
 .btn-open-file{
 background: #ffffff;
