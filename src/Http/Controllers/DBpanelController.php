@@ -130,7 +130,10 @@ class DBpanelController extends Controller
             }
             // run method by route action calling
             $routeParam = $parameters->toArray();
-            $url = action($actionStr, $routeParam);
+            // laravel < 8 version had 'controllerClass@method'
+            // $url = action($actionStr, $routeParam);
+            // in laravel 8 it has no effect.
+            $url = action([$controller_namespace, $method], $routeParam);
             // $request = Request::create($url, $routeByAction->methods[0]);
             // $response = app()->handle($request);
             // return ['response' => $this->getReturnData($response->getOriginalContent()), 'Database log' => DB::getQueryLog(), 'route' => $routeInfo, 'Controller middleware' => $route, 'Auth User' => $user];
