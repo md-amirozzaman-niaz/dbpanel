@@ -1,6 +1,6 @@
-<?php 
+<?php
 return [
-    'version' => 'v0.1.12',
+    'version' => 'v1.1.2',
 
     /**
      * controller name space
@@ -8,20 +8,20 @@ return [
     'controller' => 'App\\Http\\Controllers\\',
 
     /**
-     * model namespace 
+     * model namespace
      */
 
     'model' => 'App\\Models\\',
 
     /**
-     * other namespace 
+     * other namespace
      */
 
     'other' => '\\',
 
     /**
      * You can configure your codeEditor
-     * 
+     *
      * phpstorm,vscode
      */
     
