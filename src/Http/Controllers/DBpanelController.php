@@ -16,22 +16,28 @@ class DBpanelController extends Controller
 {
     protected $parameters;
 
+    //this controller process '/dbpanel' route
     public function index()
     {
         $tables = DB::select('SHOW TABLES');
 
         return view('dbpanel::index')->with(['tables' => $tables]);
     }
+
+    //this controller shows '/doc' route
     public function doc()
     {
         return view('dbpanel::doc');
     }
 
+    // filter, process and deliver database result
+
     public function data($table)
     {
         $filter = new Filter;
         $filtered = $filter->loadTable($table);
-        
+       
+        // perform delete action
         if (request()->has('delete')) {
             $filtered_query = $filtered->getQuery();
             $row=$filtered_query->get();
@@ -41,6 +47,9 @@ class DBpanelController extends Controller
                 'filter_status' => 'deleted successfully'
             ];
         }
+        
+        //perform update action
+
         if (request()->has('update')) {
             $filtered_query = $filtered->getQuery();
             $row=$filtered_query->get();
@@ -63,7 +72,9 @@ class DBpanelController extends Controller
 
         return ['result' => $filtered_data, 'filter_status' => $filter->status(), 'request' => request()->all(), 'total' => $count];
     }
-
+    public function checkRoute($uri){
+        return response()->json(\Route::getRoutes()->match(app('request')->create($uri)));
+    }
     public function checkController(Request $request, $controller)
     {
         $user = auth()->user();

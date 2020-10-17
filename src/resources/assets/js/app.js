@@ -300,6 +300,12 @@ window.command =function(){
     let url='/dbpanel/command/'+command+param;
     dbpanelProcessed(url);
 }
+window.route= function(){
+    let uri = document.getElementById('route-input').value;
+    dbpanelProcessing();
+    let url='/dbpanel/route/'+uri;
+    dbpanelProcessed(url);
+}
 window.checkMethod =function(){
     if(dbpanelBeforeProcess()){
         return ;
@@ -314,7 +320,10 @@ window.checkMethod =function(){
         window.command();
     }else if(whichMethod == 'namespace'){
         window.other('namespace');
-    }else{
+    }else if(whichMethod == 'namespace'){
+        window.route();
+    }
+    else{
         window.other();
     }
 }

@@ -43,6 +43,10 @@
                             role="tab" aria-controls="controller-type" aria-selected="true">Controller</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" id="route-type-tab" data-toggle="tab" href="#route-type"
+                            role="tab" aria-controls="route-type" aria-selected="true">Route</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" id="model-tab" data-toggle="tab" href="#model" role="tab"
                             aria-controls="model" aria-selected="true">Model</a>
                     </li>
@@ -76,6 +80,12 @@
                         <input type="text" onkeydown="callCheckMethod(event)" id="controller-input" spellcheck="false"
                             class="form-control mt-2 focus-in" placeholder="Controller@method">
                         <small>Namespace: {{config('dbpanel.controller')}}</small>
+                    </div>
+                    <div class=" tab-pane fade show" id="route-type" role="tabpanel"
+                        aria-labelledby="route-type-tab">
+                        
+                        <input type="text" onkeydown="callCheckMethod(event)" id="route-input" spellcheck="false"
+                            class="form-control mt-2" placeholder="your/route">
                     </div>
                     <div class=" tab-pane fade" id="model" role="tabpanel" aria-labelledby="history-tab">
                         <input type="text" id="model-input" onkeydown="callCheckMethod(event)" spellcheck="false"
