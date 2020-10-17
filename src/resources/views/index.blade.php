@@ -83,7 +83,14 @@
                     </div>
                     <div class=" tab-pane fade show" id="route-type" role="tabpanel"
                         aria-labelledby="route-type-tab">
-                        
+                        <select name="route-method-input" id="route-method-input" class="form-control">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PATCH">PATCH</option>
+                            <option value="PUT">PUT</option>
+                            <option value="DELETE">DELETE</option>
+                            <option value="ANY">ANY</option>
+                        </select>
                         <input type="text" onkeydown="callCheckMethod(event)" id="route-input" spellcheck="false"
                             class="form-control mt-2" placeholder="your/route">
                     </div>

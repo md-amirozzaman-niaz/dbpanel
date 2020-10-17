@@ -302,8 +302,9 @@ window.command =function(){
 }
 window.route= function(){
     let uri = document.getElementById('route-input').value;
+    let method = document.getElementById('route-method-input').value;
     dbpanelProcessing();
-    let url='/dbpanel/route?uri='+uri;
+    let url='/dbpanel/route?uri='+uri+'&method='+method;
     dbpanelProcessed(url);
 }
 window.checkMethod =function(){
