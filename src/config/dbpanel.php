@@ -1,6 +1,6 @@
 <?php
 return [
-    'version' => 'v1.1.2',
+    'version' => 'v1.1.3',
 
     /**
      * controller name space

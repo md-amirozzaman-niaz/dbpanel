@@ -303,7 +303,7 @@ window.command =function(){
 window.route= function(){
     let uri = document.getElementById('route-input').value;
     dbpanelProcessing();
-    let url='/dbpanel/route/'+uri;
+    let url='/dbpanel/route?uri='+uri;
     dbpanelProcessed(url);
 }
 window.checkMethod =function(){
@@ -320,7 +320,7 @@ window.checkMethod =function(){
         window.command();
     }else if(whichMethod == 'namespace'){
         window.other('namespace');
-    }else if(whichMethod == 'namespace'){
+    }else if(whichMethod == 'route'){
         window.route();
     }
     else{

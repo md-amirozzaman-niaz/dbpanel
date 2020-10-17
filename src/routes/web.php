@@ -6,7 +6,7 @@ use Niaz\DBpanel\Http\Controllers\DBpanelController;
 Route::group(['namespace' => 'Niaz\DBpanel\Http\Controllers'], function () {
     Route::get('/dbpanel', [DBpanelController::class,'index']);
     Route::any('/dbpanel/database/{table}', [DBpanelController::class,'data']);
-    Route::get('/dbpanel/route/{uri}', [DBpanelController::class,'checkRoute']);
+    Route::get('/dbpanel/route', [DBpanelController::class,'checkRoute']);
     Route::get('/dbpanel/controller/{controller}', [DBpanelController::class,'checkController']);
     Route::get('/dbpanel/model/{model}', [DBpanelController::class,'checkModel']);
     Route::get('/dbpanel/other/{other}', [DBpanelController::class,'checkOther']);

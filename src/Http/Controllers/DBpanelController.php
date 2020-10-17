@@ -72,7 +72,9 @@ class DBpanelController extends Controller
 
         return ['result' => $filtered_data, 'filter_status' => $filter->status(), 'request' => request()->all(), 'total' => $count];
     }
-    public function checkRoute($uri){
+    public function checkRoute()
+    {
+        $uri = request()->uri;
         return response()->json(\Route::getRoutes()->match(app('request')->create($uri)));
     }
     public function checkController(Request $request, $controller)
