@@ -568,7 +568,7 @@ class DBpanelController extends Controller
         //check base_path is already in file path
         $file_path = strpos(request('file'), base_path()) !== false ? '"'.request('file').'"' : '"'.base_path().'/'.request('file').'"';
         $lineArr = explode(':', request('line'));
-        $line = $lineArr[0];
+        $line = count($lineArr) > 0 ? $lineArr[0] : '0';
         $col= count($lineArr) > 1 ? $lineArr[1] : '0';
         //to open in phpstorm
         $windowsCommand = 'phpstorm.bat --line '.$line.' '.$file_path;
@@ -584,7 +584,9 @@ class DBpanelController extends Controller
             }
         }
         //to open in vscode
-        exec('code --goto '.$file_path.':'.$line.':'.$col);
+        else{
+            exec('code --goto '.$file_path.':'.$line.':'.$col);
+        }
     }
 
     public function save(Request $request)
